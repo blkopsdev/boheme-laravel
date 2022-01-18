@@ -13,13 +13,13 @@ return [
     |
     */
 
-    'failed' => 'Deze gegevens komen niet overeen met onze gegevens.',
-    'throttle' => 'Te veel inlogpogingen. Probeer het opnieuw over: seconds seconds.',
-    'forgot_password'   => 'Wachtwoord vergeten?',
-    'login'             => 'Inloggen',
-    'log_out'           => 'Uitloggen',
-    'remember_me'       => 'Remember mijn gegevens',
-    'password'          => 'Wachtwoord...',
+    'failed' => 'These credentials do not match our records.',
+    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'forgot_password'   => 'Forgot password?',
+    'login'             => 'Login',
+    'log_out'           => 'Log out',
+    'remember_me'       => 'Remember me',
+    'password'          => 'Password...',
     'email'             => 'Email...',
-    'register'          => 'Registreren'
+    'register'          => 'Register'
 ];

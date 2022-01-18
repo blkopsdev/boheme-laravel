@@ -1,75 +1,60 @@
 <div class="sidebar" data-color="orange" data-background-color="white" data-image="{{ asset('material') }}/img/sidebar-1.jpg">
+  <!--
+      Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+      Tip 2: you can also add an image using data-image tag
+  -->
   <div class="sidebar-wrapper">
     <ul class="nav mt-5">
-      @if ($activePanel == 'dashboard')
-        <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('websites') }}">
-            <i class="material-icons">laptop</i>
-              <p>@lang('app.websites')</p>
-          </a>
-        </li>
-        <li class="nav-item {{ $activePage == 'custom_websites' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('custom_websites') }}">
-            <i class="material-icons">laptop</i>
-              <p>{{ __('CM Websites') }}</p>
-          </a>
-        </li>
-        <li class="nav-item {{ $activePage == 'webshops' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('webshop.index') }}">
-            <i class="material-icons">shopping_cart</i>
-              <p>{{ __('app.webshops') }}</p>
-          </a>
-        </li>
-        <li class="nav-item {{ $activePage == 'custom-webshops' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('custom_webshop.index') }}">
-            <i class="material-icons">shopping_cart</i>
-              <p>{{ __('CM Webshops') }}</p>
-          </a>
-        </li>
-
-        <hr>
-        <li class="nav-item{{ $activePage == 'agenda' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('agenda') }}">
-            <i class="material-icons">event_available</i>
-            <span class="sidebar-normal"> {{ __('Agenda') }} </span>
-          </a>
-        </li>
-        @if (auth()->user()->is_admin())
-        <hr>
-        <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('show_users') }}">
-            <i class="material-icons">group</i>
-            <span class="sidebar-normal"> {{ __('Managers') }} </span>
-          </a>
-        </li>
-        <li class="nav-item{{ $activePage == 'settings' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('theme_settings') }}">
-            <i class="material-icons">settings</i>
-            <span class="sidebar-normal"> {{ __('Theme Settings') }} </span>
-          </a>
-        </li>
-        <hr>
-        <li class="nav-item{{ $activePage == 'resellers' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('reseller.index') }}">
-            <i class="material-icons">supervisor_account</i>
-            <span class="sidebar-normal">{{ __('Resellers') }} </span>
-          </a>
-        </li>
-        @endif
-      @elseif ($activePanel == 'service_desk')
-        <li class="nav-item{{ $activePage == 'open_tickets' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('open_tickets') }}">
-            <i class="material-icons">assignment</i>
-              <p>@lang('app.open_tickets')</p>
-          </a>
-        </li>
-        <li class="nav-item {{ $activePage == 'closed_tickets' ? ' active' : '' }}">
-          <a class="nav-link" href="{{ route('closed_tickets') }}">
-            <i class="material-icons">task_alt</i>
-              <p>{{ __('app.closed_tickets') }}</p>
-          </a>
-        </li>
-      @endif
+      <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('dashboard') }}">
+          <i class="material-icons">laptop</i>
+            <p>@lang('app.websites')</p>
+        </a>
+      </li>
+      
+      <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('profile.edit') }}">
+          <i class="material-icons">account_box</i>
+          <span class="sidebar-normal">{{ __('User profile') }} </span>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('user.index') }}">
+          <i class="material-icons">group</i>
+          <span class="sidebar-normal"> {{ __('User Management') }} </span>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'table' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('table') }}">
+          <i class="material-icons">content_paste</i>
+            <p>{{ __('Table List') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'typography' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('typography') }}">
+          <i class="material-icons">library_books</i>
+            <p>{{ __('Typography') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'icons' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('icons') }}">
+          <i class="material-icons">bubble_chart</i>
+          <p>{{ __('Icons') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'map' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('map') }}">
+          <i class="material-icons">location_ons</i>
+            <p>{{ __('Maps') }}</p>
+        </a>
+      </li>
+      <li class="nav-item{{ $activePage == 'notifications' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('notifications') }}">
+          <i class="material-icons">notifications</i>
+          <p>{{ __('Notifications') }}</p>
+        </a>
+      </li>
     </ul>
   </div>
 </div>

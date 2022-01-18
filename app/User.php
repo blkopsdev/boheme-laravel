@@ -16,9 +16,9 @@ class User extends Authenticatable
      *
      * @var array
      */
-    /* protected $fillable = [
+    protected $fillable = [
         'name', 'email', 'password',
-    ]; */
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -43,34 +43,5 @@ class User extends Authenticatable
             return true;
         }
         return false;
-    }
-
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
-    }
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    public function projects()
-    {
-        return $this->hasMany(Project::class);
-    }
-
-    public function calendars()
-    {
-        return $this->hasMany(Calendar::class);
-    }
-
-    public function todo($id)
-    {
-        $todo = TodoList::join('calendars', 'todo_lists.calendar_id', '=', 'calendars.id')
-        ->where('todo_lists.id', $id)
-        ->first();
-
-        return $todo;
     }
 }

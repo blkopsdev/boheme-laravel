@@ -1,4 +1,4 @@
-@extends('layouts.spaces.dashboard', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Material Dashboard')])
+@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('Material Dashboard')])
 
 @section('content')
 <div class="container" style="height: auto;">
@@ -8,8 +8,19 @@
         @csrf
 
         <div class="card card-login card-hidden mb-3">
-          <div class="card-header card-header-success text-center">
+          <div class="card-header card-header-primary text-center">
             <h4 class="card-title"><strong>{{ __('Login') }}</strong></h4>
+            {{-- <div class="social-line">
+              <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
+                <i class="fa fa-facebook-square"></i>
+              </a>
+              <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
+                <i class="fa fa-google-plus"></i>
+              </a>
+            </div> --}}
           </div>
           <div class="card-body">
             <div class="bmd-form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
@@ -52,7 +63,7 @@
             </div>
           </div>
           <div class="card-footer justify-content-center">
-            <button type="submit" class="btn btn-info btn-link btn-lg">@lang('auth.login')</button>
+            <button type="submit" class="btn btn-primary btn-link btn-lg">@lang('auth.login')</button>
           </div>
         </div>
       </form>

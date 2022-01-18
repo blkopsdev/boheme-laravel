@@ -3,12 +3,12 @@
         <nav class="float-left">
         <ul>
             <li>
-            <a href="https://www.iqscript.nl/over-ons/" target="_blank">
+            <a href="#">
                 {{ __('About Us') }}
             </a>
             </li>
             <li>
-            <a href="https://www.iqscript.nl/blog-2/" target="_blank">
+            <a href="#">
                 {{ __('Blog') }}
             </a>
             </li>
@@ -19,7 +19,7 @@
         <script>
             document.write(new Date().getFullYear())
         </script>, Powered by
-        <a href="https://www.iqscript.nl" target="_blank" class="text-success">IQ Script</a>
+        <a href="https://www.iqscript.nl" target="_blank">IQ Script</a>
         </div>
     </div>
 </footer>

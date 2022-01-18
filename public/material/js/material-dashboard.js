@@ -143,7 +143,7 @@ $(window).resize(function() {
   seq = seq2 = 0;
 
   setTimeout(function() {
-    
+    md.initDashboardPageCharts();
   }, 500);
 });
 

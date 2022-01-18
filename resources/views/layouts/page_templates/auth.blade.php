@@ -1,7 +1,7 @@
 <div class="wrapper ">
   @include('layouts.navbars.navs.auth')
   <div class="main-panel">
-    {{-- @include('flash_msg') --}}
+    @include('flash_msg')
     @include('layouts.navbars.sidebar')
     @yield('content')
     @include('layouts.footers.auth')

@@ -17,14 +17,9 @@
             <i class="material-icons">person_add</i> {{ __('Register') }}
           </a>
         </li> --}}
-        <li class="nav-item">
+        <li class="nav-item{{ $activePage == 'login' ? ' active' : '' }}">
           <a href="{{ route('login') }}" class="nav-link">
             <i class="material-icons">fingerprint</i> {{ __('Login') }}
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="{{ route('add_ticket') }}" class="nav-link">
-            <i class="material-icons text-success">support_agent</i> {{ __('Service desk') }}
           </a>
         </li>
       </ul>

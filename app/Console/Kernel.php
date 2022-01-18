@@ -2,8 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\CheckDeadline;
-
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        CheckDeadline::class
+        //
     ];
 
     /**
@@ -26,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('deadline:check')->daily();
+        // $schedule->command('inspire')->hourly();
     }
 
     /**

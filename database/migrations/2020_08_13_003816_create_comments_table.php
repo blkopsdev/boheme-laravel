@@ -15,10 +15,8 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->integer('project_id');
             $table->text('message');
-            $table->string('user_name');
-            $table->enum('type', [0, 1])->default(0);
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
