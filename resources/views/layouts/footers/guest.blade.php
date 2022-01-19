@@ -18,8 +18,7 @@
         &copy;
         <script>
             document.write(new Date().getFullYear())
-        </script>, Powered by
-        <a href="https://www.iqscript.nl" target="_blank">IQ Script</a>
+        </script>, Powered by blkopsdev
         </div>
     </div>
 </footer>

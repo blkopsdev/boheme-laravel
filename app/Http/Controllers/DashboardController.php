@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Project;
+// use App\Project;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -24,8 +24,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $title = trans('app.websites');
-        $projects = Project::get();
-        return view('dashboards.index', compact('title', 'projects'));
+        $title = "Dashboard";
+        // $projects = Project::get();
+        return view('dashboard', compact('title'));
     }
 }
