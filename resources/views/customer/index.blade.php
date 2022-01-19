@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'customer.index', 'titlePage' => __('Customers')])
+@extends('layouts.app', ['activePage' => 'customers', 'titlePage' => __('Customers')])
 
 @section('content')
   <div class="content">
@@ -8,7 +8,7 @@
           <h2>{{ $title }}</h2>
         </div>
         <div class="col-md-10">
-          <a href="{{ route('customer.create') }}" class="btn btn-success btn-rounded"><i class="material-icons">add</i>{{ __('New Customer') }}</a>
+          <a href="{{ route('customers.create') }}" class="btn btn-success btn-rounded"><i class="material-icons">add</i>{{ __('New Customer') }}</a>
         </div>
       </div>
       

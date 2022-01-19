@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'create_project'])
+@extends('layouts.app', ['activePage' => 'customer.create', 'titlePage' => "Add a New Customer"])
 
 @section('content')
   <div class="content">
@@ -11,26 +11,27 @@
       
       <div class="row">
         <div class="col-lg-6 col-md-6">
-          <form class="form" method="POST" action="">
+          <form class="form" method="POST" action="{{ route('customers.store') }}">
             @csrf
+            @method('POST')
             <div class="card py-5">
-              <div class="bmd-form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
+              <div class="bmd-form-group{{ $errors->has('first_name') ? ' has-danger' : '' }}">
                 <div class="input-group col-md-8 offset-md-1">
-                  <input type="text" name="name" class="form-control" placeholder="@lang('app.name')" value="{{ old('name') }}" required>
+                  <input type="text" name="first_name" class="form-control" placeholder="{{ __('First Name') }}" value="{{ old('first_name') }}" required>
                 </div>
-                @if ($errors->has('name'))
-                  <div id="name-error" class="error text-danger pl-3" for="name" style="display: block;">
-                    <strong>{{ $errors->first('name') }}</strong>
+                @if ($errors->has('first_name'))
+                  <div id="first-name-error" class="error text-danger pl-3" for="first_name" style="display: block;">
+                    <strong>{{ $errors->first('first_name') }}</strong>
                   </div>
                 @endif
               </div>
-              <div class="bmd-form-group{{ $errors->has('company_name') ? ' has-danger' : '' }} mt-3">
+              <div class="bmd-form-group{{ $errors->has('last_name') ? ' has-danger' : '' }} mt-3">
                 <div class="input-group col-md-8 offset-md-1">
-                  <input type="text" name="company_name" class="form-control" placeholder="@lang('app.company_name')" value="{{ old('company_name') }}" required>
+                  <input type="text" name="last_name" class="form-control" placeholder="{{ __('Last Name') }}" value="{{ old('last_name') }}" required>
                 </div>
-                @if ($errors->has('company_name'))
-                  <div id="company-name-error" class="error text-danger pl-3" for="company_name" style="display: block;">
-                    <strong>{{ $errors->first('company_name') }}</strong>
+                @if ($errors->has('last_name'))
+                  <div id="last-name-error" class="error text-danger pl-3" for="last_name" style="display: block;">
+                    <strong>{{ $errors->first('last_name') }}</strong>
                   </div>
                 @endif
               </div>
@@ -54,191 +55,38 @@
                   </div>
                 @endif
               </div>
-              <div class="col-md-8 offset-md-1 mt-5">
-                <h4><strong>@lang('app.timeline_activation')</strong></h4>
-              </div>
-              <div class="bmd-form-group mt-3">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="logo_design">@lang('app.logo_design')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="logo_design" id="logo_design" checked>
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="logo_version_1">@lang('app.logo_version_1')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="logo_version_1" id="logo_version_1">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="logo_version_2">@lang('app.logo_version_2')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="logo_version_2" id="logo_version_2">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="logo_completed">@lang('app.logo_completed')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="logo_completed" id="logo_completed">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div> 
-
-              <div class="col-md-8 offset-md-1 mt-2">
-                <hr class="underline-dotted">
-              </div>
-
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="text_writing">@lang('app.text_writing')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="text_writing" id="text_writing">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="text_version_1">@lang('app.text_version_1')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="text_version_1" id="text_version_1">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="text_version_2">@lang('app.text_version_2')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="text_version_2" id="text_version_2">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="text_completed">@lang('app.text_completed')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="text_completed" id="text_completed">
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div> 
-
-              <div class="col-md-8 offset-md-1 mt-2">
-                <hr class="underline-dotted">
-              </div>
-
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="first_version">@lang('app.first_version')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="first_version" id="first_version" checked>
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="deliver_text">@lang('app.deliver_text')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="deliver_text" id="deliver_text" checked>
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="first_feedback">@lang('app.first_feedback')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="first_feedback" id="first_feedback" checked>
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="final_feedback">@lang('app.final_feedback')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="final_feedback" id="final_feedback" checked>
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div> 
-              <div class="bmd-form-group mt-2">
-                <div class="input-group">
-                  <div class="col-md-6 offset-md-1">
-                    <label for="hosting">@lang('app.hosting')</label>
-                  </div>
-                  <div class="col-md-4">
-                    <label class="switch">
-                      <input type="checkbox" class="info" name="hosting" id="hosting" checked>
-                      <span class="slider round"></span>
-                    </label>
-                  </div>
-                </div>
-              </div> 
-              <div class="bmd-form-group mt-3 ">
+              <div class="bmd-form-group{{ $errors->has('contact_pref') ? ' has-danger' : '' }} mt-3">
                 <div class="col-md-8 offset-md-1">
-                  <button type="submit" class="btn btn-success btn-round">@lang('app.add_project')</button>
+                  <label for="contact_pref">{{ __('Trade-in notes') }}</label>
+                  <select class="selectpicker form-control" id="contact_pref" name="contact_pref" data-style="btn btn-primary text-white">
+                    <option value="normal">{{ __('Normal') }}</option>
+                    <option value="exceptional">{{ __('Exceptional') }}</option>
+                    <option value="maginal">{{ __('Maginal') }}</option>
+                  </select>
+                </div>
+                @if ($errors->has('contact_pref'))
+                  <div id="contact-pref-error" class="error text-danger pl-3" for="contact_pref" style="display: block;">
+                    <strong>{{ $errors->first('contact_pref') }}</strong>
+                  </div>
+                @endif
+              </div>
+              <div class="bmd-form-group{{ $errors->has('newsletter') ? ' has-danger' : '' }} mt-3">
+                <div class="col-md-8 offset-md-1">
+                  <label for="newsletter">{{ __('Receive Newsletter') }}</label>
+                  <select class="selectpicker form-control" id="newsletter" name="newsletter" data-style="btn btn-primary text-white">
+                    <option value="yes">{{ __('Yes') }}</option>
+                    <option value="no">{{ __('No') }}</option>
+                  </select>
+                </div>
+                @if ($errors->has('newsletter'))
+                  <div id="contact-pref-error" class="error text-danger pl-3" for="newsletter" style="display: block;">
+                    <strong>{{ $errors->first('newsletter') }}</strong>
+                  </div>
+                @endif
+              </div>
+              <div class="bmd-form-group mt-5">
+                <div class="col-md-8 offset-md-1">
+                  <button type="submit" class="btn btn-success btn-rounded">{{ __('Submit') }}</button>
                 </div>
               </div>
             </div>

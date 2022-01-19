@@ -13,8 +13,8 @@
         </a>
       </li>
 
-      <li class="nav-item{{ $activePage == 'customer.index' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('customer.index') }}">
+      <li class="nav-item{{ $activePage == 'customers' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('customers.index') }}">
           <i class="material-icons">people</i>
             <p>{{ __('Customers') }}</p>
         </a>

@@ -26,13 +26,6 @@ Route::get('/', 'DashboardController@index')->name('home')->middleware('auth');
 Route::post('/send_email/welcome', ['as'=>'email_welcome', 'uses' => 'EmailController@welcome']);
 Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 	Route::get('/', ['as'=>'dashboard', 'uses' => 'DashboardController@index']);
-	Route::group(['prefix'=>'projects'], function(){
-		Route::get('/', ['as'=>'projects', 'uses' => 'DashboardController@index']);
-		Route::get('create', ['as'=>'create_project', 'uses' => 'ProjectController@create']);
-		Route::post('create', ['uses' => 'ProjectController@store']);
-		Route::get('/{id}', ['as'=>'project', 'uses'=> 'ProjectController@show']);
-		Route::post('update/{id}', ['as'=>'update_project', 'uses'=> 'ProjectController@updateFields']);
-	});
 	Route::get('table-list', function () {
 		return view('pages.table_list');
 	})->name('table');
@@ -53,7 +46,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 		return view('pages.notifications');
 	})->name('notifications');
 
-	Route::resource('customer', 'CustomerController');
+	Route::resource('customers', 'CustomerController');
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('user/create', ['as'=>'add_user', 'uses' => 'UserController@create']);
 	Route::post('user/create', ['as'=>'add_user', 'uses' => 'UserController@store']);

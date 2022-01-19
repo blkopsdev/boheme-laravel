@@ -49,7 +49,17 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $customer = new Customer();
+
+        $data = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'contact_pref' => $request->contact_pref,
+            'newsletter' => $request->newsletter,
+        ];
+        
     }
 
     /**
