@@ -9,10 +9,17 @@
       <li class="nav-item{{ $activePage == 'dashboard' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('dashboard') }}">
           <i class="material-icons">laptop</i>
-            <p>@lang('app.websites')</p>
+            <p>{{ __('Dashboard') }}</p>
         </a>
       </li>
-      
+
+      <li class="nav-item{{ $activePage == 'customer.index' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('customer.index') }}">
+          <i class="material-icons">people</i>
+            <p>{{ __('Customers') }}</p>
+        </a>
+      </li>
+
       <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('profile.edit') }}">
           <i class="material-icons">account_box</i>

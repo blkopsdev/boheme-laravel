@@ -53,6 +53,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 		return view('pages.notifications');
 	})->name('notifications');
 
+	Route::resource('customer', 'CustomerController');
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('user/create', ['as'=>'add_user', 'uses' => 'UserController@create']);
 	Route::post('user/create', ['as'=>'add_user', 'uses' => 'UserController@store']);
