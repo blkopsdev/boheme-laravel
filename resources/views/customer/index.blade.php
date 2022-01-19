@@ -11,7 +11,7 @@
           <a href="{{ route('customers.create') }}" class="btn btn-success btn-rounded"><i class="material-icons">add</i>{{ __('New Customer') }}</a>
         </div>
       </div>
-      
+
       <div class="row">
         <div class="col-lg-12 col-md-12">
           <div class="card">
@@ -37,7 +37,7 @@
                     <td>{{$customer->email }}</td>
                     <td>{{$customer->customer_notes }}</td>
                     <td>
-                      <a href="" class="btn btn-primary btn-rounded p-2 mr-2"><i class="material-icons">visibility</i></a>
+                      <a href="{{ route('customers.show', $customer->id) }}" class="btn btn-primary btn-rounded p-2 mr-2"><i class="material-icons">visibility</i></a>
                       <a href="" class="btn btn-warning btn-rounded p-2"><i class="material-icons">edit</i></a>
                     </td>
                   </tr>

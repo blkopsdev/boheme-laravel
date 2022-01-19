@@ -13,7 +13,6 @@
         <div class="col-lg-6 col-md-6">
           <form class="form" method="POST" action="{{ route('customers.store') }}">
             @csrf
-            @method('POST')
             <div class="card py-5">
               <div class="bmd-form-group{{ $errors->has('first_name') ? ' has-danger' : '' }}">
                 <div class="input-group col-md-8 offset-md-1">

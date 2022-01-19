@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
-
+use App\Transaction;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -49,8 +49,6 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $customer = new Customer();
-
         $data = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -59,7 +57,10 @@ class CustomerController extends Controller
             'contact_pref' => $request->contact_pref,
             'newsletter' => $request->newsletter,
         ];
-        
+
+        $customer = Customer::create($data);
+
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
     }
 
     /**
@@ -70,7 +71,19 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = [
+            'avail_credit' => 0,
+            'avail_credit_unexpired_tally' => 0,
+            'avail_credit_expired_tally' => 0,
+            'purchases_over_one_year' => 0,
+            'expirationDate' => "",
+            'dateMinusYear' => strtotime(date("Y-m-d").' -1 year'),
+            'dateMinus6Months' => strtotime(date("2015-10-01").' -6 months'),
+            'expiredFlag' => 0,
+        ];
+        $customer = Customer::find($id);
+        $transactions = Transaction::whereCustomerId($id)->get();
+        return view('customer.show', compact('customer', 'transactions', 'data'));
     }
 
     /**
