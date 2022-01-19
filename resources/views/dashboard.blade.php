@@ -57,12 +57,13 @@
         <div class="col-lg-12 col-md-12">
           <div class="card">
             <div class="card-header card-header-warning">
-              <h4 class="card-title">New Transactions</h4>
+              <h4 class="card-title">Last 10 Transactions</h4>
             </div>
             <div class="card-body table-responsive">
               <table class="table table-hover">
                 <thead class="text-warning">
                   <th>ID</th>
+                  <th>Created At</th>
                   <th>Customer</th>
                   <th>Type</th>
                   <th>Purchased Items</th>
@@ -77,15 +78,16 @@
                   @foreach ($new_trans as $trans)
                   <tr>
                     <td>{{ $trans->id }}</td>
+                    <td>{{ date('d-m-Y', strtotime($trans->created_at)) }}</td>
                     <td>{{ $trans->customer->first_name . ' ' . $trans->customer->last_name }}</td>
                     <td>{{ $trans->transaction_type }}</td>
+                    <td>${{ $trans->purchased_items }}</td>
+                    <td>${{ $trans->tax }}</td>
+                    <td>${{ $trans->purchase_total }}</td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ $trans->comments }}</td>
                   </tr>    
                   @endforeach
                 </tbody>

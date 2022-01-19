@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $customers = Customer::get();
         $transactions = Transaction::get();
         $today_transactions = Transaction::whereDate('created_at', Carbon::today())->get();
-        $new_trans = Transaction::latest()->take(5)->get();
+        $new_trans = Transaction::latest()->take(10)->get();
         // $projects = Project::get();
         return view('dashboard', compact('title', 'customers', 'transactions', 'today_transactions', 'new_trans'));
     }

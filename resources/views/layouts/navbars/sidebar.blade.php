@@ -13,53 +13,42 @@
         </a>
       </li>
 
-      <li class="nav-item{{ $activePage == 'customers' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('customers.index') }}">
+      <li class="nav-item @if (strpos($activePage, 'customer') !== false) echo ' active'; @endif">
+        <a class="nav-link" data-toggle="collapse" href="#navbar-customers" aria-expanded="true">
           <i class="material-icons">people</i>
-            <p>{{ __('Customers') }}</p>
+          <p>{{ __('Customer') }}
+            <b class="caret"></b>
+          </p>
+        </a>
+        <div class="collapse show" id="navbar-customers">
+          <ul class="nav">
+						<li class="nav-item{{ $activePage == 'customers.create' ? ' active' : '' }}">
+							<a class="nav-link" href="{{ route('customers.create') }}">
+								<i class="material-icons">add</i>
+								<span class="sidebar-normal"> {{ __('New Customer') }} </span>
+							</a>
+						</li>
+            <li class="nav-item{{ $activePage == 'customers' ? ' active' : '' }}">
+							<a class="nav-link" href="{{ route('customers.index') }}">
+								<span class="sidebar-mini"> C </span>
+								<span class="sidebar-normal"> {{ __('Customers Index') }} </span>
+							</a>
+						</li>
+						
+          </ul>
+        </div>
+      </li>
+      <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('user.index') }}">
+          <i class="material-icons">group</i>
+          <p>{{ __('User Management') }}</p>
         </a>
       </li>
 
       <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('profile.edit') }}">
           <i class="material-icons">account_box</i>
-          <span class="sidebar-normal">{{ __('User profile') }} </span>
-        </a>
-      </li>
-      <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('user.index') }}">
-          <i class="material-icons">group</i>
-          <span class="sidebar-normal"> {{ __('User Management') }} </span>
-        </a>
-      </li>
-      <li class="nav-item{{ $activePage == 'table' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('table') }}">
-          <i class="material-icons">content_paste</i>
-            <p>{{ __('Table List') }}</p>
-        </a>
-      </li>
-      <li class="nav-item{{ $activePage == 'typography' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('typography') }}">
-          <i class="material-icons">library_books</i>
-            <p>{{ __('Typography') }}</p>
-        </a>
-      </li>
-      <li class="nav-item{{ $activePage == 'icons' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('icons') }}">
-          <i class="material-icons">bubble_chart</i>
-          <p>{{ __('Icons') }}</p>
-        </a>
-      </li>
-      <li class="nav-item{{ $activePage == 'map' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('map') }}">
-          <i class="material-icons">location_ons</i>
-            <p>{{ __('Maps') }}</p>
-        </a>
-      </li>
-      <li class="nav-item{{ $activePage == 'notifications' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('notifications') }}">
-          <i class="material-icons">notifications</i>
-          <p>{{ __('Notifications') }}</p>
+          <p>{{ __('Profile') }}</p>
         </a>
       </li>
     </ul>

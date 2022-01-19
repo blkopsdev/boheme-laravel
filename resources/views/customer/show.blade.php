@@ -1,116 +1,263 @@
-@extends('layouts.app', ['activePage' => 'customer.show', 'titlePage' => __('Customer')])
+@extends('layouts.app', ['activePage' => 'customer.show', 'titlePage' => __('Customer Detail')])
 
 @section('content')
   <div class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-2">
-          <h2>{{ $customer->first_name }} {{ $customer->last_name }}</h2>
-        </div>
-        <div class="col-md-10">
-          <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
+        <div class="col-md-12">
+          <h2>{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded ml-3"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a></h2>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12 mb-3">
-          <div class="client-info my-3">
-            <h3 class="text-primary"><strong>{{ __('Customer Info') }}</strong></h3>
-            <table class="ml-2" style="width: 600px">
-              <tbody>
-                <tr>
-                  <td><strong>{{ __('First Name:') }}</strong></td>
-                  <td>{{$customer->first_name}}</td>
-                </tr>
-                <tr>
-                  <td><strong>{{ __('Last Name:') }}</strong></td>
-                  <td>{{$customer->last_name}}</td>
-                </tr>
-                <tr>
-                  <td><strong>{{ __('Phone Number:') }}</strong></td>
-                  <td>{{$customer->phone}}</td>
-                </tr>
-                <tr>
-                  <td><strong>{{ __('Email:') }}</strong></td>
-                  <td>{{$customer->email}}</td>
-                </tr>
-                <tr>
-                  <td><strong>{{ __('Trade-in Quality:') }}</strong></td>
-                  <td>{{ucfirst($customer->contact_pref)}}</td>
-                </tr>
-                <tr>
-                  <td><strong>{{ __('Newsletter:') }}</strong></td>
-                  <td>{{ucfirst($customer->newsletter)}}</td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="client-info">
+            <div class="card mt-5 pb-3">
+              <div class="card-header card-header-warning">
+                <h4 class="card-title">{{ __('Customer Information') }}</h4>
+              </div>
+              <div class="card-body table-responsive">
+                <table class="ml-2" style="width: 600px" class="table">
+                  <tbody>
+                    <tr>
+                      <td><strong>{{ __('First Name:') }}</strong></td>
+                      <td>{{$customer->first_name}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>{{ __('Last Name:') }}</strong></td>
+                      <td>{{$customer->last_name}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>{{ __('Phone Number:') }}</strong></td>
+                      <td>{{$customer->phone}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>{{ __('Email:') }}</strong></td>
+                      <td>{{$customer->email}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>{{ __('Trade-in Quality:') }}</strong></td>
+                      <td>{{ucfirst($customer->contact_pref)}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>{{ __('Newsletter:') }}</strong></td>
+                      <td>{{ucfirst($customer->newsletter)}}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>{{ __('Customer Notes') }}</strong></td>
+                      <td>{{ $customer->customer_notes }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
           <div class="new-transaction my-3">
-            <h3 class="text-primary"><strong>{{ __('Add Transaction') }}</strong></h3>
-            <form class="form" method="POST" action="">
-              @csrf
-              
-            </form>
+            <div class="card mt-5 pb-5">
+              <div class="card-header card-header-warning">
+                <h4 class="card-title">{{ __('Add Transaction') }}</h4>
+              </div>
+              <div class="card-body">
+                <form class="form add-transaction" method="POST" action="">
+                  @csrf
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="bmd-form-group{{ $errors->has('transaction_type') ? ' has-danger' : '' }} mt-3">
+                        <div class="col-md-8">
+                          <label for="transaction_type">{{ __('Transaction Type') }}</label>
+                          <select class="selectpicker form-control transaction-type" id="transaction_type" name="transaction_type" data-style="btn btn-primary text-white">
+                            <option value="Add store credit">{{ __('Add store credit') }}</option>
+                            <option value="Purchase">{{ __('Purchase') }}</option>
+                            <option value="Cash out for trade">{{ __('Cash out for TRADE-INS') }}</option>
+                            <option value="Cash out for store credit">{{ __('Cash out for store credit (We give HALF their store cerdit in cash)') }}</option>
+                          </select>
+                        </div>
+                        @if ($errors->has('contact_pref'))
+                          <div id="contact-pref-error" class="error text-danger pl-3" for="contact_pref" style="display: block;">
+                            <strong>{{ $errors->first('contact_pref') }}</strong>
+                          </div>
+                        @endif
+                      </div>
+                      <div class="transaction-purchase d-none">
+                        <div class="bmd-form-group{{ $errors->has('purchased_items') ? ' has-danger' : '' }} mt-3">
+                          <div class="input-group col-md-8">
+                            <label for="purchased_items" class="mb-0">{{ __('Amount of Sale ($): ') }}</label>
+                            <input type="number" step="0.01" name="purchased_items" class="" min="0" value="{{ old('purchased_items', 0) }}">
+                          </div>
+                          @if ($errors->has('purchased_items'))
+                            <div id="purchased-error" class="error text-danger pl-3" for="purchased_items" style="display: block;">
+                              <strong>{{ $errors->first('purchased_items') }}</strong>
+                            </div>
+                          @endif
+                        </div>
+                        <div class="bmd-form-group{{ $errors->has('tax') ? ' has-danger' : '' }} mt-3">
+                          <div class="input-group col-md-8">
+                            <label for="tax" class="mb-0">{{ __('Tax ($): ') }}</label>
+                            <input type="number" step="0.01" name="tax" min="0" value="{{ old('tax', 0) }}">
+                          </div>
+                          @if ($errors->has('tax'))
+                            <div id="tax-error" class="error text-danger pl-3" for="tax" style="display: block;">
+                              <strong>{{ $errors->first('tax') }}</strong>
+                            </div>
+                          @endif
+                        </div>
+                        <div class="bmd-form-group{{ $errors->has('purchase_total') ? ' has-danger' : '' }} mt-3">
+                          <div class="input-group col-md-8">
+                            <label for="purchase_total" class="mb-0">{{ __('Total ($)') }}</label>
+                            <input type="number" step="0.01" name="purchase_total" min="0" value="{{ old('purchase_total', 0) }}">
+                          </div>
+                          @if ($errors->has('purchase_total'))
+                            <div id="purchase-total-error" class="error text-danger pl-3" for="purchase_total" style="display: block;">
+                              <strong>{{ $errors->first('purchase_total') }}</strong>
+                            </div>
+                          @endif
+                        </div>
+                        <div class="bmd-form-group{{ $errors->has('store_credit') ? ' has-danger' : '' }} mt-3">
+                          <div class="input-group col-md-8">
+                            <label for="store_credit" class="mb-0">{{ __('Store Credit Used ($):') }}</label>
+                            <input type="number" step="0.01" name="store_credit" min="0" value="{{ old('store_credit', 0) }}">
+                          </div>
+                          @if ($errors->has('store_credit'))
+                            <div id="store-credit-error" class="error text-danger pl-3" for="store_credit" style="display: block;">
+                              <strong>{{ $errors->first('store_credit') }}</strong>
+                            </div>
+                          @endif
+                        </div>
+                        <div class="bmd-form-group{{ $errors->has('cash_in') ? ' has-danger' : '' }} mt-3">
+                          <div class="input-group col-md-8">
+                            <label for="cash_in" class="mb-0">{{ __('Amount due ($):') }}</label>
+                            <input type="number" step="0.01" name="cash_in" min="0" value="{{ old('cash_in', 0) }}">
+                          </div>
+                          @if ($errors->has('cash_in'))
+                            <div id="cash-in-error" class="error text-danger pl-3" for="cash_in" style="display: block;">
+                              <strong>{{ $errors->first('cash_in') }}</strong>
+                            </div>
+                          @endif
+                        </div>
+                      </div>
+                      <div class="transaction-no-purchase">
+                        <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
+                          <div class="input-group col-md-8">
+                            <label for="transaction_amount" class="mb-0">{{ __('Amount ($):') }}</label>
+                            <input type="number" step="0.01" name="transaction_amount" min="0" value="{{ old('transaction_amount', 0) }}">
+                          </div>
+                          @if ($errors->has('transaction_amount'))
+                              <div id="transaction-amount-error" class="error text-danger pl-3" for="transaction_amount" style="display: block;">
+                                <strong>{{ $errors->first('transaction_amount') }}</strong>
+                              </div>
+                            @endif
+                        </div>
+                        <div class="show-employee">
+                          <div class="bmd-form-group{{ $errors->has('employee') ? ' has-danger' : '' }} mt-3">
+                            <div class="col-md-8">
+                              <label for="employee">{{ __('Trade-in Processor') }}</label>
+                              <select class="selectpicker form-control" id="employee" name="employee" data-style="btn btn-primary text-white">
+                                <option value="Yelena">{{ __('Yelena') }}</option>
+                                <option value="Other">{{ __('Other') }}</option>
+                              </select>
+                            </div>
+                            @if ($errors->has('employee'))
+                              <div id="employee-error" class="error text-danger pl-3" for="employee" style="display: block;">
+                                <strong>{{ $errors->first('employee') }}</strong>
+                              </div>
+                            @endif
+                          </div>
+                        </div>
+                      </div>
+                      <div class="bmd-form-group mt-5">
+                        <div class="col-md-8">
+                          <button type="submit" class="btn btn-success btn-rounded">{{ __('Submit') }}</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="bmd-form-group{{ $errors->has('comments') ? ' has-danger' : '' }} mt-3">
+                        <div class="col-md-8">
+                          <h5 ><strong>{{ __('Transaction Comment (optional)') }}</strong></h5>
+                        </div>
+                        <div class="input-group col-md-8">
+                          <textarea name="comments" id="comments" class="form-control" placeholder="Comment..." rows="4"></textarea>
+                        </div>
+                        @if ($errors->has('comments'))
+                            <div id="comments-error" class="error text-danger pl-3" for="comments" style="display: block;">
+                              <strong>{{ $errors->first('comments') }}</strong>
+                            </div>
+                          @endif
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
-          <div class="transaction-history my-3">
-            <h3 class="text-primary"><strong>{{ __('Transaction History') }}</strong></h3>
-            <table class="col-md-12 ml-2 my-4 table table-hover">
-              <thead>
-                <tr>
-                  <th><strong>{{ __('Transaction ID') }}</strong></th>
-                  <th><strong>{{ __('Created At') }}</strong></th>
-                  <th><strong>{{ __('Expires At') }}</strong></th>
-                  <th><strong>{{ __('Type') }}</strong></th>
-                  <th><strong>{{ __('Purchased Items') }}</strong></th>
-                  <th><strong>{{ __('Tax') }}</strong></th>
-                  <th><strong>{{ __('Purchase Total') }}</strong></th>
-                  <th><strong>{{ __('Store Credit') }}</strong></th>
-                  <th><strong>{{ __('Cash') }}</strong></th>
-                  <th><strong>{{ __('Credit Balance') }}</strong></th>
-                  <th><strong>{{ __('Comments') }}</strong></th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($transactions as $trans)
-                  @php
-                    $createdAt = strtotime($trans->created_at);
-
-                    // if ($trans->transaction_type == 'Add store credit') {
-                    //   if($createdAt <= strtotime('2015-05-05')) {
-
-                    //   } else {}
-                    // } else if ($trans->transaction_type == 'Purchase') {
-
-                    // } else if ($trans->transaction_type == 'Cash out for store credit') {
-                    // }
-                    if ($trans->transaction_type == 'Purchase') {
-                      $store_credit = "-$" . $trans->store_credit;
-                    } else {
-                      $store_credit = "$" . $trans->store_credit;
-                    }
-
-                    $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit, 2, '.', '');
-                    if ($trans->transaction_type == "Cash out for store credit" || $trans->transaction_type == "Cash out for trade"){
-                      $cash = "-$" .$cash;
-                    } else {
-                      $cash = "$" .$cash;
-                    }
-                    @endphp
-                  <tr>
-                    <td>{{ $trans->id }}</td>
-                    <td>{{ date('d-m-Y', strtotime($trans->created_at)) }}</td>
-                    <td></td>
-                    <td>{{ $trans->transaction_type }}</td>
-                    <td>${{ $trans->purchased_items }}</td>
-                    <td>${{ $trans->tax }}</td>
-                    <td>${{ $trans->purchase_total }}</td>
-                    <td>{{ $store_credit }}</td>
-                    <td>{{ $cash }}</td>
-                    <td></td>
-                    <td>{{ $trans->comments }}</td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
+          <div class="transaction-history mt-5">
+            <div class="card">
+              <div class="card-header card-header-warning">
+                <h4 class="card-title">{{ __('Transaction History') }}</h4>
+              </div>
+              <div class="card-body table-responsive">
+                <table class="col-md-12 ml-2 table table-hover">
+                  <thead>
+                    <tr>
+                      <th><strong>{{ __('Transaction ID') }}</strong></th>
+                      <th><strong>{{ __('Created At') }}</strong></th>
+                      <th><strong>{{ __('Expires At') }}</strong></th>
+                      <th><strong>{{ __('Type') }}</strong></th>
+                      <th><strong>{{ __('Purchased Items') }}</strong></th>
+                      <th><strong>{{ __('Tax') }}</strong></th>
+                      <th><strong>{{ __('Purchase Total') }}</strong></th>
+                      <th><strong>{{ __('Store Credit') }}</strong></th>
+                      <th><strong>{{ __('Cash') }}</strong></th>
+                      <th><strong>{{ __('Credit Balance') }}</strong></th>
+                      <th><strong>{{ __('Comments') }}</strong></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($transactions as $trans)
+                      @php
+                        $createdAt = strtotime($trans->created_at);
+    
+                        // if ($trans->transaction_type == 'Add store credit') {
+                        //   if($createdAt <= strtotime('2015-05-05')) {
+    
+                        //   } else {}
+                        // } else if ($trans->transaction_type == 'Purchase') {
+    
+                        // } else if ($trans->transaction_type == 'Cash out for store credit') {
+                        // }
+                        if ($trans->transaction_type == 'Purchase') {
+                          if ($trans->store_credit != 0) {
+                            $store_credit = "-$" . $trans->store_credit;
+                          }
+                        } else {
+                          $store_credit = "$" . $trans->store_credit;
+                        }
+    
+                        $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit, 2, '.', '');
+                        if ($trans->transaction_type == "Cash out for store credit" || $trans->transaction_type == "Cash out for trade"){
+                          $cash = "-$" .$cash;
+                        } else {
+                          $cash = "$" .$cash;
+                        }
+                        @endphp
+                      <tr>
+                        <td>{{ $trans->id }}</td>
+                        <td>{{ date('d-m-Y', strtotime($trans->created_at)) }}</td>
+                        <td></td>
+                        <td>{{ $trans->transaction_type }}</td>
+                        <td>${{ $trans->purchased_items }}</td>
+                        <td>${{ $trans->tax }}</td>
+                        <td>${{ $trans->purchase_total }}</td>
+                        <td>{{ $store_credit }}</td>
+                        <td>{{ $cash }}</td>
+                        <td></td>
+                        <td>{{ $trans->comments }}</td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+                {{ $transactions->links() }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -119,7 +266,30 @@
 @endsection
 
 @push('js')
+<script>
+  $(document).ready(function() {
+    $('.selectpicker').selectpicker();
+    $('select.transaction-type').on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
+      var value = $(this).val();
+      $('.add-transaction input').each(function() {
+        $(this).val(0)
+      });
+      if (value == 'Purchase') {
+        $('.transaction-purchase').removeClass('d-none');
+        $('.transaction-no-purchase').addClass('d-none');
 
+      } else {
+        $('.transaction-purchase').addClass('d-none');
+        $('.transaction-no-purchase').removeClass('d-none');
+        if(value == 'Cash out for store credit') {
+          $('.show-employee').addClass('d-none');
+        } else {
+          $('.show-employee').removeClass('d-none');
+        }
+      }
+    });
+  });
+</script>
 <script>
   @if(session('success'))
       toastr.success('{{ session('success') }}', '{{ trans('app.success') }}', toastr_options);

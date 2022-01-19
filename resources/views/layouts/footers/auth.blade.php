@@ -4,8 +4,7 @@
       &copy;
       <script>
           document.write(new Date().getFullYear())
-      </script>, Powered by
-      <a href="https://www.iqscript.nl" target="_blank">IQ Script</a>
-      </div>
+      </script>, Powered by  <strong class="text-primary">blkopsdev</strong>
+      
   </div>
 </footer>

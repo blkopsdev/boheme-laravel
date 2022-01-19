@@ -26,7 +26,7 @@
                   <th>{{ __('Phone') }}</th>
                   <th>{{ __('Email') }}</th>
                   <th>{{ __('Notes') }}</th>
-                  <th>{{ __('View/Edit') }}</th>
+                  <th></th>
                 </thead>
                 <tbody>
                   @foreach ($customers as $customer)
@@ -37,8 +37,7 @@
                     <td>{{$customer->email }}</td>
                     <td>{{$customer->customer_notes }}</td>
                     <td>
-                      <a href="{{ route('customers.show', $customer->id) }}" class="btn btn-primary btn-rounded p-2 mr-2"><i class="material-icons">visibility</i></a>
-                      <a href="" class="btn btn-warning btn-rounded p-2"><i class="material-icons">edit</i></a>
+                      <a href="{{ route('customers.show', $customer->id) }}" class="btn btn-primary btn-round mr-2"><i class="material-icons">visibility</i> View</a>
                     </td>
                   </tr>
                   @endforeach

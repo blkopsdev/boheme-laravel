@@ -100,6 +100,11 @@ input:checked+.slider:before {
     line-height: 35px;
 }
 
+.new-transaction .input-group{
+    display: flex;
+    align-items: center !important;
+    justify-content: space-between;
+}
 @media only screen and (max-width: 768px) {
     .main-panel .content {
         margin-top: 220px;
@@ -110,4 +115,7 @@ input:checked+.slider:before {
     .close-layer {
         display: none;
     }
+}
+.alert.alert-success {
+    display: none;
 }

@@ -56,6 +56,7 @@ class CustomerController extends Controller
             'email' => $request->email,
             'contact_pref' => $request->contact_pref,
             'newsletter' => $request->newsletter,
+            'customer_notes' => $request->customer_notes
         ];
 
         $customer = Customer::create($data);
@@ -82,7 +83,7 @@ class CustomerController extends Controller
             'expiredFlag' => 0,
         ];
         $customer = Customer::find($id);
-        $transactions = Transaction::whereCustomerId($id)->get();
+        $transactions = Transaction::whereCustomerId($id)->paginate(10);
         return view('customer.show', compact('customer', 'transactions', 'data'));
     }
 
@@ -94,7 +95,9 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        //
+        $title = __("Edit Customer");
+        $customer = Customer::find($id);
+        return view('customer.edit', compact('title', 'customer'));
     }
 
     /**
@@ -106,7 +109,9 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $customer = Customer::find($id);
+        $customer->update($request->all());
+        return redirect()->route('customers.show', $id)->with('success', 'Customer updated successfully.');
     }
 
     /**
