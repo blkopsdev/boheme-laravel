@@ -46,6 +46,10 @@
                       <td><strong>{{ __('Customer Notes') }}</strong></td>
                       <td>{{ $customer->customer_notes }}</td>
                     </tr>
+                    <tr>
+                      <td><strong>{{ __('Available Credit') }}</strong></td>
+                      <td>$<span>{{ $available_credit }}</span></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -57,8 +61,9 @@
                 <h4 class="card-title">{{ __('Add Transaction') }}</h4>
               </div>
               <div class="card-body">
-                <form class="form add-transaction" method="POST" action="">
+                <form class="form add-transaction" method="POST" action="{{ route('transactions.store') }}">
                   @csrf
+                  <input type="hidden" name="customer_id" value="{{ $customer->id }}">
                   <div class="row">
                     <div class="col-md-6">
                       <div class="bmd-form-group{{ $errors->has('transaction_type') ? ' has-danger' : '' }} mt-3">
@@ -81,7 +86,7 @@
                         <div class="bmd-form-group{{ $errors->has('purchased_items') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="purchased_items" class="mb-0">{{ __('Amount of Sale ($): ') }}</label>
-                            <input type="number" step="0.01" name="purchased_items" class="" min="0" value="{{ old('purchased_items', 0) }}">
+                            <input type="number" step="0.01" name="purchased_items" id="purchased_items" min="0" value="{{ old('purchased_items', 0) }}" onblur="calcTax();">
                           </div>
                           @if ($errors->has('purchased_items'))
                             <div id="purchased-error" class="error text-danger pl-3" for="purchased_items" style="display: block;">
@@ -92,7 +97,7 @@
                         <div class="bmd-form-group{{ $errors->has('tax') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="tax" class="mb-0">{{ __('Tax ($): ') }}</label>
-                            <input type="number" step="0.01" name="tax" min="0" value="{{ old('tax', 0) }}">
+                            <input type="number" step="0.01" name="tax" id="tax" min="0" value="{{ old('tax', 0) }}" readonly>
                           </div>
                           @if ($errors->has('tax'))
                             <div id="tax-error" class="error text-danger pl-3" for="tax" style="display: block;">
@@ -103,7 +108,7 @@
                         <div class="bmd-form-group{{ $errors->has('purchase_total') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="purchase_total" class="mb-0">{{ __('Total ($)') }}</label>
-                            <input type="number" step="0.01" name="purchase_total" min="0" value="{{ old('purchase_total', 0) }}">
+                            <input type="number" step="0.01" name="purchase_total" id="purchase_total" min="0" value="{{ old('purchase_total', 0) }}" readonly>
                           </div>
                           @if ($errors->has('purchase_total'))
                             <div id="purchase-total-error" class="error text-danger pl-3" for="purchase_total" style="display: block;">
@@ -114,7 +119,7 @@
                         <div class="bmd-form-group{{ $errors->has('store_credit') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="store_credit" class="mb-0">{{ __('Store Credit Used ($):') }}</label>
-                            <input type="number" step="0.01" name="store_credit" min="0" value="{{ old('store_credit', 0) }}">
+                            <input type="number" step="0.01" name="store_credit" id="store_credit" min="0" value="{{ old('store_credit', 0) }}" onblur="calcCashNeeded()">
                           </div>
                           @if ($errors->has('store_credit'))
                             <div id="store-credit-error" class="error text-danger pl-3" for="store_credit" style="display: block;">
@@ -125,7 +130,7 @@
                         <div class="bmd-form-group{{ $errors->has('cash_in') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="cash_in" class="mb-0">{{ __('Amount due ($):') }}</label>
-                            <input type="number" step="0.01" name="cash_in" min="0" value="{{ old('cash_in', 0) }}">
+                            <input type="number" step="0.01" name="cash_in" id="cash_in" min="0" value="{{ old('cash_in', 0) }}">
                           </div>
                           @if ($errors->has('cash_in'))
                             <div id="cash-in-error" class="error text-danger pl-3" for="cash_in" style="display: block;">
@@ -138,7 +143,7 @@
                         <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="transaction_amount" class="mb-0">{{ __('Amount ($):') }}</label>
-                            <input type="number" step="0.01" name="transaction_amount" min="0" value="{{ old('transaction_amount', 0) }}">
+                            <input type="number" step="0.01" name="transaction_amount" id="transaction_amount" min="0" value="{{ old('transaction_amount', 0) }}">
                           </div>
                           @if ($errors->has('transaction_amount'))
                               <div id="transaction-amount-error" class="error text-danger pl-3" for="transaction_amount" style="display: block;">
@@ -151,6 +156,7 @@
                             <div class="col-md-8">
                               <label for="employee">{{ __('Trade-in Processor') }}</label>
                               <select class="selectpicker form-control" id="employee" name="employee" data-style="btn btn-primary text-white">
+                                <option value="">{{ __('Choose Employee') }}</option>
                                 <option value="Yelena">{{ __('Yelena') }}</option>
                                 <option value="Other">{{ __('Other') }}</option>
                               </select>
@@ -289,6 +295,61 @@
       }
     });
   });
+
+  /* $(document).on('change', '#purchased_items', function(e) {
+    e.preventDefault();
+    debugger;
+  }) */
+
+  var CASalesTaxRate = 0.0825;
+  function calcTax() {
+    document.getElementById('tax').value = (document.getElementById('purchased_items').value * CASalesTaxRate).toFixed(2);
+    document.getElementById('purchase_total').value = (eval(document.getElementById('purchased_items').value) + eval(document.getElementById('tax').value)).toFixed(2);
+    calcCashNeeded();
+  }
+  function calcCashNeeded(){
+    debugger;
+    document.getElementById('cash_in').value = (document.getElementById('purchase_total').value - document.getElementById('store_credit').value).toFixed(2);
+  }
+
+  function validate() {
+    if(document.getElementById('transaction_type').value == 'Purchase') {
+      if (document.getElementById('purchased_items').value == 0) {
+        changeAlert('You must enter an Amount of Sales...');
+        return false;
+      }
+    } else {
+      if (document.getElementById('transaction_amount').value == 0) {
+        changeAlert('You must enter something in the Amount $ box...');
+        return false;
+      }
+    }
+
+    calcTax(document.getElementById('purchased_items'));
+
+    if(document.getElementById('transaction_type').value == 'Add store credit' || document.getElementById('transaction_type').value == 'Cash out for trade') {
+      if (document.getElementById('employee').value == '') {
+        changeAlert('You must select your name in the Employee dropdown menu...');
+        return false;
+      }
+    }
+
+    /* var avail_credit_value = document.saveuser.avail_credit.value.replace("$","");    
+
+    //var stringnumber = Math.round(avail_credit_value * 100) / 100;
+
+    if ((document.saveuser.salesbox_store_credit.value * 1) > (avail_credit_value * 1)){
+      changeAlert('Customer does NOT have this much store credit !!');
+      //alert(document.saveuser.salesbox_store_credit.value + ' > '+ avail_credit_value);
+        //alert(' 5' ); 
+      return false;
+    }
+
+    if ((document.saveuser.transaction_type[3].checked) && (document.saveuser.transaction_amount.value > avail_credit_value / 2)){
+      changeAlert('Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)');
+      return false;
+    } */
+  }
 </script>
 <script>
   @if(session('success'))

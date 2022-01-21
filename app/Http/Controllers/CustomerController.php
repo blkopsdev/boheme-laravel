@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Customer;
 use App\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -78,13 +79,14 @@ class CustomerController extends Controller
             'avail_credit_expired_tally' => 0,
             'purchases_over_one_year' => 0,
             'expirationDate' => "",
-            'dateMinusYear' => strtotime(date("Y-m-d").' -1 year'),
-            'dateMinus6Months' => strtotime(date("2015-10-01").' -6 months'),
             'expiredFlag' => 0,
         ];
+
         $customer = Customer::find($id);
-        $transactions = Transaction::whereCustomerId($id)->paginate(10);
-        return view('customer.show', compact('customer', 'transactions', 'data'));
+        $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'desc')->paginate(10);
+        $expiration_date = Carbon::now()->subMonths(6);
+        $available_credit = Transaction::whereCustomerId($id)->where('created_at', '>=', date('Y-m-d', strtotime($expiration_date)))->sum('store_credit');
+        return view('customer.show', compact('customer', 'transactions', 'data', 'available_credit'));
     }
 
     /**

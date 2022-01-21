@@ -19,34 +19,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'DashboardController@index')->name('home');
-Auth::routes();
-
 Route::get('/', 'DashboardController@index')->name('home')->middleware('auth');
 Route::post('/send_email/welcome', ['as'=>'email_welcome', 'uses' => 'EmailController@welcome']);
 Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 	Route::get('/', ['as'=>'dashboard', 'uses' => 'DashboardController@index']);
-	Route::get('table-list', function () {
-		return view('pages.table_list');
-	})->name('table');
-
-	Route::get('typography', function () {
-		return view('pages.typography');
-	})->name('typography');
-
-	Route::get('icons', function () {
-		return view('pages.icons');
-	})->name('icons');
-
-	Route::get('map', function () {
-		return view('pages.map');
-	})->name('map');
-
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
-
 	Route::resource('customers', 'CustomerController');
+	Route::resource('transactions', 'TransactionController');
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('user/create', ['as'=>'add_user', 'uses' => 'UserController@create']);
 	Route::post('user/create', ['as'=>'add_user', 'uses' => 'UserController@store']);
