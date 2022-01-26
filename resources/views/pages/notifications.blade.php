@@ -17,6 +17,7 @@
             <h4 class="card-title">Notifications Style</h4>
             <div class="alert alert-info">
               <span>This is a plain notification</span>
+              <span>Notification List</span>
             </div>
             <div class="alert alert-info">
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -36,6 +37,7 @@
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <i class="material-icons">close</i>
               </button>
+
               <span data-notify="message">This is a notification with close button and icon and have many lines. You can see that the icon and the close button are always vertically aligned. This is a beautiful notification. So you don't have to worry about the style.</span>
             </div>
           </div>

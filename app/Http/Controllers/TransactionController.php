@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\StoreCredit;
 use App\Transaction;
 use Illuminate\Http\Request;
 
@@ -46,7 +47,9 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $type = $request->transaction_type;
-        
+        $transaction = new Transaction;
+
+        echo "Hello";
         return;
     }
 

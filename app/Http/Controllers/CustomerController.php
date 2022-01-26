@@ -27,8 +27,9 @@ class CustomerController extends Controller
     public function index()
     {
         $title = __('Customers');
+        $total = Customer::count();
         $customers = Customer::paginate(15);
-        return view('customer.index', compact('title', 'customers'));
+        return view('customer.index', compact('title', 'customers', 'total'));
     }
 
     /**
@@ -85,8 +86,8 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'desc')->paginate(10);
         $expiration_date = Carbon::now()->subMonths(6);
-        $available_credit = Transaction::whereCustomerId($id)->where('created_at', '>=', date('Y-m-d', strtotime($expiration_date)))->sum('store_credit');
-        return view('customer.show', compact('customer', 'transactions', 'data', 'available_credit'));
+        // $available_credit = Transaction::whereCustomerId($id)->where('created_at', '>=', date('Y-m-d', strtotime($expiration_date)))->sum('store_credit');
+        return view('customer.show', compact('customer', 'transactions', 'data'));
     }
 
     /**

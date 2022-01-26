@@ -48,7 +48,9 @@
                     </tr>
                     <tr>
                       <td><strong>{{ __('Available Credit') }}</strong></td>
-                      <td>$<span>{{ $available_credit }}</span></td>
+                      <td>
+                        $<span class="store-credit">{{ number_format(store_credit($customer->id), 2) }}</span>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -76,6 +78,7 @@
                             <option value="Cash out for store credit">{{ __('Cash out for store credit (We give HALF their store cerdit in cash)') }}</option>
                           </select>
                         </div>
+                        <div class="col-md-2"></div>
                         @if ($errors->has('contact_pref'))
                           <div id="contact-pref-error" class="error text-danger pl-3" for="contact_pref" style="display: block;">
                             <strong>{{ $errors->first('contact_pref') }}</strong>
@@ -205,15 +208,14 @@
                   <thead>
                     <tr>
                       <th><strong>{{ __('Transaction ID') }}</strong></th>
-                      <th><strong>{{ __('Created At') }}</strong></th>
-                      <th><strong>{{ __('Expires At') }}</strong></th>
+                      <th><strong>{{ __('Created On') }}</strong></th>
+                      <th><strong>{{ __('Expires On') }}</strong></th>
                       <th><strong>{{ __('Type') }}</strong></th>
-                      <th><strong>{{ __('Purchased Items') }}</strong></th>
+                      <th><strong>{{ __('Purchase Subtotal') }}</strong></th>
                       <th><strong>{{ __('Tax') }}</strong></th>
                       <th><strong>{{ __('Purchase Total') }}</strong></th>
                       <th><strong>{{ __('Store Credit') }}</strong></th>
-                      <th><strong>{{ __('Cash') }}</strong></th>
-                      <th><strong>{{ __('Credit Balance') }}</strong></th>
+                      <th><strong>{{ __('Cash In/Out') }}</strong></th>
                       <th><strong>{{ __('Comments') }}</strong></th>
                     </tr>
                   </thead>
@@ -234,11 +236,13 @@
                           if ($trans->store_credit != 0) {
                             $store_credit = "-$" . $trans->store_credit;
                           }
+                        } else if ($trans->transaction_type == 'Cash out for store credit') {
+                          $store_credit = "-$" . $trans->cash_out_for_storecredit;
                         } else {
                           $store_credit = "$" . $trans->store_credit;
                         }
     
-                        $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit, 2, '.', '');
+                        $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit/2, 2, '.', '');
                         if ($trans->transaction_type == "Cash out for store credit" || $trans->transaction_type == "Cash out for trade"){
                           $cash = "-$" .$cash;
                         } else {
@@ -247,15 +251,18 @@
                         @endphp
                       <tr>
                         <td>{{ $trans->id }}</td>
-                        <td>{{ date('d-m-Y', strtotime($trans->created_at)) }}</td>
-                        <td></td>
+                        <td>{{ date('m/d/Y', strtotime($trans->created_at)) }}</td>
+                        <td>
+                          @if($trans->transaction_type == 'Add store credit')
+                            {{ date('m/d/Y', strtotime('+12 month', strtotime($trans->created_at))) }}
+                          @endif
+                        </td>
                         <td>{{ $trans->transaction_type }}</td>
                         <td>${{ $trans->purchased_items }}</td>
                         <td>${{ $trans->tax }}</td>
                         <td>${{ $trans->purchase_total }}</td>
                         <td>{{ $store_credit }}</td>
                         <td>{{ $cash }}</td>
-                        <td></td>
                         <td>{{ $trans->comments }}</td>
                       </tr>
                     @endforeach
@@ -296,10 +303,6 @@
     });
   });
 
-  /* $(document).on('change', '#purchased_items', function(e) {
-    e.preventDefault();
-    debugger;
-  }) */
 
   var CASalesTaxRate = 0.0825;
   function calcTax() {
@@ -311,7 +314,6 @@
     debugger;
     document.getElementById('cash_in').value = (document.getElementById('purchase_total').value - document.getElementById('store_credit').value).toFixed(2);
   }
-
   function validate() {
     if(document.getElementById('transaction_type').value == 'Purchase') {
       if (document.getElementById('purchased_items').value == 0) {
@@ -350,6 +352,10 @@
       return false;
     } */
   }
+
+  $(document).ready(function() {
+
+  })
 </script>
 <script>
   @if(session('success'))

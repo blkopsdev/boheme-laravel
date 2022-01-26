@@ -11,7 +11,7 @@
                 <i class="material-icons">people</i>
               </div>
               <p class="card-category">Customers</p>
-              <h3 class="card-title">{{ $customers->count() }}</h3>
+              <h3 class="card-title">{{ number_format($customers->count()) }}</h3>
             </div>
             <div class="card-footer">
               <div class="stats">
@@ -26,7 +26,7 @@
               <div class="card-icon">
                 <i class="material-icons">access_time</i>
               </div>
-              <p class="card-category">Today Transactions</p>
+              <p class="card-category">Today's Transactions</p>
               <h3 class="card-title">{{ $today_transactions->count() }}</h3>
             </div>
             <div class="card-footer">
@@ -42,7 +42,7 @@
               <div class="card-icon">
                 <i class="material-icons">payments</i>
               </div>
-              <p class="card-category">Total Transactions</p>
+              <p class="card-category">Total Available Store Credit</p>
               <h3 class="card-title">{{ $transactions->count() }}</h3>
             </div>
             <div class="card-footer">
@@ -63,14 +63,14 @@
               <table class="table table-hover">
                 <thead class="text-warning">
                   <th>ID</th>
-                  <th>Created At</th>
+                  <th>Created On</th>
                   <th>Customer</th>
                   <th>Type</th>
-                  <th>Purchased Items</th>
+                  <th>Purchase Subtotal</th>
                   <th>Tax</th>
                   <th>Purchase Total</th>
                   <th>Store Credit</th>
-                  <th>Cash</th>
+                  <th>Cash Out</th>
                   <th>Credit Balance</th>
                   <th>Comments</th>
                 </thead>
@@ -78,7 +78,7 @@
                   @foreach ($new_trans as $trans)
                   <tr>
                     <td>{{ $trans->id }}</td>
-                    <td>{{ date('d-m-Y', strtotime($trans->created_at)) }}</td>
+                    <td>{{ date('m/d/Y', strtotime($trans->created_at)) }}</td>
                     <td>{{ $trans->customer->first_name . ' ' . $trans->customer->last_name }}</td>
                     <td>{{ $trans->transaction_type }}</td>
                     <td>${{ $trans->purchased_items }}</td>
@@ -87,7 +87,11 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{ $trans->comments }}</td>
+                    <td>
+                      @if ($trans->comments)
+                      <a href="" class="btn btn-primary btn-rounded mr-2 p-2"><i class="material-icons">visibility</i></a>
+                      @endif
+                    </td>
                   </tr>    
                   @endforeach
                 </tbody>
