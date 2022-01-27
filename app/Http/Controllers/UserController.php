@@ -38,9 +38,10 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'user_type' => $request->user_type
         ];
         User::create($data);
-        return route('user.index')->withStatus(__('app.user_create_msg'));
+        return route('user.index')->with('success', "User created successfully.");
     }
     /**
      * Show the form for editing the profile.
@@ -63,10 +64,11 @@ class UserController extends Controller
         $user = User::find($id);
         $data = [
             'name'      => $request->name,
-            'email'     => $request->email
+            'email'     => $request->email,
+            'user_type' => $request->user_type
         ];
         $user->update($data);
-        return back()->withStatus(__('app.user_update_msg'));
+        return back()->with('success', 'User updated successfully');
     }
 
     /**
@@ -80,7 +82,7 @@ class UserController extends Controller
         $user = User::find($id);
         $user->update(['password' => Hash::make($request->get('password'))]);
 
-        return back()->withStatusPassword(__('app.password_update'));
+        return back()->with('success', __('Password has been updated successfully'));
     }
 
     public function destroy(Request $request) {

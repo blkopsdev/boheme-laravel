@@ -23,8 +23,8 @@ Route::get('/', 'DashboardController@index')->name('home')->middleware('auth');
 Route::post('/send_email/welcome', ['as'=>'email_welcome', 'uses' => 'EmailController@welcome']);
 Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 	Route::get('/', ['as'=>'dashboard', 'uses' => 'DashboardController@index']);
-	Route::resource('customers', 'CustomerController');
 	Route::resource('transactions', 'TransactionController');
+	Route::resource('customers', 'CustomerController');
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('user/create', ['as'=>'add_user', 'uses' => 'UserController@create']);
 	Route::post('user/create', ['as'=>'add_user', 'uses' => 'UserController@store']);

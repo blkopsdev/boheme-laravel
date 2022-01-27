@@ -15,7 +15,7 @@
 
       <li class="nav-item @if (strpos($activePage, 'customer') !== false) echo ' active'; @endif">
         <a class="nav-link" data-toggle="collapse" href="#navbar-customers" aria-expanded="true">
-          <i class="material-icons">people</i>
+          <i class="material-icons">groups</i>
           <p>{{ __('Customers') }}
             <b class="caret"></b>
           </p>
@@ -38,6 +38,12 @@
           </ul>
         </div>
       </li>
+      {{-- <li class="nav-item{{ $activePage == 'transactions' ? ' active' : '' }}">
+        <a class="nav-link" href="{{ route('transactions.index') }}">
+          <i class="material-icons">attach_money</i>
+          <p>{{ __('Transactions') }}</p>
+        </a>
+      </li> --}}
       <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('user.index') }}">
           <i class="material-icons">group</i>

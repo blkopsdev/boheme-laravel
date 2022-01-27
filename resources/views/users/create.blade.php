@@ -54,6 +54,20 @@
                   </div>
                 </div>
               </div>
+              <div class="row">
+                <label class="col-sm-2 col-form-label">{{ __('User Type') }}</label>
+                <div class="col-sm-7">
+                  <div class="form-group{{ $errors->has('user_type') ? ' has-danger' : '' }}">
+                    <select class="selectpicker form-control user-type" id="user_type" name="user_type" data-style="btn btn-primary text-white">
+                      <option value="admin">{{ __('Admin') }}</option>
+                      <option value="employee">{{ __('Employee') }}</option>
+                    </select>
+                    @if ($errors->has('user_type'))
+                      <span id="user-type-error" class="error text-danger" for="input-user-type">{{ $errors->first('user_type') }}</span>
+                    @endif
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-footer ml-auto mr-auto">
               <button type="submit" class="btn btn-primary">@lang('app.save')</button>

@@ -14,44 +14,34 @@
 							<div class="col-12 text-right">
 								<a href="{{ route('add_user') }}" class="btn btn-sm btn-primary">@lang('app.add_user')</a>
 							</div>
-            </div>
-            @if (session('status'))
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                      <i class="material-icons">close</i>
-                    </button>
-                    <span>{{ session('status') }}</span>
-                  </div>
-                </div>
-              </div>
-            @endif
+						</div>
 						<div class="table-responsive">
 							<table class="table">
 								<thead class=" text-primary">
 									<tr>
 										<th>@lang('app.name')</th>
 										<th>@lang('app.email')</th>
-										<th>@lang('app.created_at')</th>
+										<th>{{ __('User Type') }}</th>
+										<th>{{ __('Created On') }}</th>
 										<th class="text-right">@lang('app.action')</th>
 									</tr>
 								</thead>
 								<tbody>
-                  @foreach ($users as $user)
+									@foreach ($users as $user)
 									<tr>
-                    <td>{{$user->name}}</td>
-                    <td>{{$user->email}}</td>
-                    <td>{{date('m-d-Y h:i', strtotime($user->created_at))}}</td>
+										<td>{{$user->name}}</td>
+										<td>{{$user->email}}</td>
+										<td>{{ ucfirst($user->user_type) }}</td>
+										<td>{{date('m/d/Y', strtotime($user->created_at))}}</td>
 										<td class="td-actions text-right">
 											<a rel="tooltip" class="btn btn-success btn-link" href="{{route('edit_user', $user->id)}}"
 												data-original-title="" title="@lang('app.edit_user')">
 												<i class="material-icons">edit</i>
 												<div class="ripple-container"></div>
-                      </a>
+											</a>
 										</td>
 									</tr>
-                  @endforeach
+                  					@endforeach
 								</tbody>
 							</table>
 						</div>
@@ -62,3 +52,14 @@
 	</div>
 </div>
 @endsection
+@push('js')
+	
+<script>
+	@if(session('success'))
+		toastr.success('{{ session('success') }}', '{{ trans('app.success') }}', toastr_options);
+	@endif
+	@if(session('error'))
+		toastr.error('{{ session('error') }}', '{{ trans('app.error') }}', toastr_options);
+	@endif
+</script>
+@endpush

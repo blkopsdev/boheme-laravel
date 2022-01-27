@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserTypeToUsersTable extends Migration
+class CreateOptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class AddUserTypeToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('user_type', ['employee', 'admin'])->nullable();
+        Schema::create('options', function (Blueprint $table) {
+            $table->id();
+            $table->string('option_name');
+            $table->string('option_value');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class AddUserTypeToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('user_type');
-        });
+        Schema::dropIfExists('options');
     }
 }

@@ -70,12 +70,30 @@
                   <th>Tax</th>
                   <th>Purchase Total</th>
                   <th>Store Credit</th>
-                  <th>Cash Out</th>
+                  <th>{{ __('Cash In/Out') }}</th>
                   <th>Credit Balance</th>
                   <th>Comments</th>
                 </thead>
                 <tbody>
                   @foreach ($new_trans as $trans)
+                  @php
+                      if ($trans->transaction_type == 'Purchase') {
+                        if ($trans->store_credit != 0) {
+                          $store_credit = "-$" . $trans->store_credit;
+                        }
+                      } else if ($trans->transaction_type == 'Cash out for store credit') {
+                        $store_credit = "-$" . $trans->cash_out_for_storecredit;
+                      } else {
+                        $store_credit = "$" . $trans->store_credit;
+                      }
+  
+                      $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit/2, 2, '.', '');
+                      if ($trans->transaction_type == "Cash out for store credit" || $trans->transaction_type == "Cash out for trade"){
+                        $cash = "-$" .$cash;
+                      } else {
+                        $cash = "$" .$cash;
+                      }
+                  @endphp
                   <tr>
                     <td>{{ $trans->id }}</td>
                     <td>{{ date('m/d/Y', strtotime($trans->created_at)) }}</td>
@@ -84,8 +102,9 @@
                     <td>${{ $trans->purchased_items }}</td>
                     <td>${{ $trans->tax }}</td>
                     <td>${{ $trans->purchase_total }}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ $store_credit }}</td>
+                    <td>{{ $cash }}</td>
+                    <td>${{ store_credit($trans->customer_id) }}</td>
                     <td></td>
                     <td>
                       @if ($trans->comments)

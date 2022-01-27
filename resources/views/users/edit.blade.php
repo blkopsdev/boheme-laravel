@@ -40,9 +40,23 @@
                   <label class="col-sm-2 col-form-label">@lang('app.email')</label>
                   <div class="col-sm-7">
                     <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                      <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" id="input-email" type="email" placeholder="@lang('app.email')" value="{{ old('email', auth()->user()->email) }}" required />
+                      <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" id="input-email" type="email" placeholder="@lang('app.email')" value="{{ old('email', $user->email) }}" required />
                       @if ($errors->has('email'))
                         <span id="email-error" class="error text-danger" for="input-email">{{ $errors->first('email') }}</span>
+                      @endif
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{{ __('User Type') }}</label>
+                  <div class="col-sm-7">
+                    <div class="form-group{{ $errors->has('user_type') ? ' has-danger' : '' }}">
+                      <select class="selectpicker form-control user-type" id="user_type" name="user_type" data-style="btn btn-primary text-white">
+                        <option value="admin" {{ $user->user_type == 'admin' ? 'selected' : '' }}>{{ __('Admin') }}</option>
+                        <option value="employee" {{ $user->user_type == 'employee' ? 'selected' : '' }}>{{ __('Employee') }}</option>
+                      </select>
+                      @if ($errors->has('user_type'))
+                        <span id="user-type-error" class="error text-danger" for="input-user-type">{{ $errors->first('user_type') }}</span>
                       @endif
                     </div>
                   </div>
@@ -118,3 +132,14 @@
     </div>
   </div>
 @endsection
+
+@push('js')
+<script>
+	@if(session('success'))
+		toastr.success('{{ session('success') }}', '{{ trans('app.success') }}', toastr_options);
+	@endif
+	@if(session('error'))
+		toastr.error('{{ session('error') }}', '{{ trans('app.error') }}', toastr_options);
+	@endif
+</script>
+@endpush

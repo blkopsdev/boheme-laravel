@@ -49,7 +49,7 @@
                     <tr>
                       <td><strong>{{ __('Available Credit') }}</strong></td>
                       <td>
-                        $<span class="store-credit">{{ number_format(store_credit($customer->id), 2) }}</span>
+                        $<span class="store-credit">{{ number_format(store_credit_transaction($last_transaction->id)['store_credit'], 2) }}</span>
                       </td>
                     </tr>
                   </tbody>
@@ -216,6 +216,7 @@
                       <th><strong>{{ __('Purchase Total') }}</strong></th>
                       <th><strong>{{ __('Store Credit') }}</strong></th>
                       <th><strong>{{ __('Cash In/Out') }}</strong></th>
+                      <th><strong>{{ __('Credit Balance') }}</strong></th>
                       <th><strong>{{ __('Comments') }}</strong></th>
                     </tr>
                   </thead>
@@ -224,25 +225,17 @@
                       @php
                         $createdAt = strtotime($trans->created_at);
     
-                        // if ($trans->transaction_type == 'Add store credit') {
-                        //   if($createdAt <= strtotime('2015-05-05')) {
-    
-                        //   } else {}
-                        // } else if ($trans->transaction_type == 'Purchase') {
-    
-                        // } else if ($trans->transaction_type == 'Cash out for store credit') {
-                        // }
                         if ($trans->transaction_type == 'Purchase') {
                           if ($trans->store_credit != 0) {
                             $store_credit = "-$" . $trans->store_credit;
                           }
                         } else if ($trans->transaction_type == 'Cash out for store credit') {
-                          $store_credit = "-$" . $trans->cash_out_for_storecredit;
+                          $store_credit = "-$" . $trans->cash_out_for_storecredit*2;
                         } else {
                           $store_credit = "$" . $trans->store_credit;
                         }
     
-                        $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit/2, 2, '.', '');
+                        $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit, 2, '.', '');
                         if ($trans->transaction_type == "Cash out for store credit" || $trans->transaction_type == "Cash out for trade"){
                           $cash = "-$" .$cash;
                         } else {
@@ -254,7 +247,7 @@
                         <td>{{ date('m/d/Y', strtotime($trans->created_at)) }}</td>
                         <td>
                           @if($trans->transaction_type == 'Add store credit')
-                            {{ date('m/d/Y', strtotime('+12 month', strtotime($trans->created_at))) }}
+                            {{ date('m/d/Y', store_credit_transaction($trans->id)['expiration_date']) }}
                           @endif
                         </td>
                         <td>{{ $trans->transaction_type }}</td>
@@ -263,6 +256,7 @@
                         <td>${{ $trans->purchase_total }}</td>
                         <td>{{ $store_credit }}</td>
                         <td>{{ $cash }}</td>
+                        <td>${{ store_credit_transaction($trans->id)['store_credit'] }}</td>
                         <td>{{ $trans->comments }}</td>
                       </tr>
                     @endforeach
@@ -311,7 +305,6 @@
     calcCashNeeded();
   }
   function calcCashNeeded(){
-    debugger;
     document.getElementById('cash_in').value = (document.getElementById('purchase_total').value - document.getElementById('store_credit').value).toFixed(2);
   }
   function validate() {
@@ -336,26 +329,26 @@
       }
     }
 
-    /* var avail_credit_value = document.saveuser.avail_credit.value.replace("$","");    
+    // var avail_credit_value = document.saveuser.avail_credit.value.replace("$","");    
 
-    //var stringnumber = Math.round(avail_credit_value * 100) / 100;
+    // //var stringnumber = Math.round(avail_credit_value * 100) / 100;
 
-    if ((document.saveuser.salesbox_store_credit.value * 1) > (avail_credit_value * 1)){
-      changeAlert('Customer does NOT have this much store credit !!');
-      //alert(document.saveuser.salesbox_store_credit.value + ' > '+ avail_credit_value);
-        //alert(' 5' ); 
-      return false;
-    }
+    // if ((document.saveuser.salesbox_store_credit.value * 1) > (avail_credit_value * 1)){
+    //   changeAlert('Customer does NOT have this much store credit !!');
+    //   //alert(document.saveuser.salesbox_store_credit.value + ' > '+ avail_credit_value);
+    //     //alert(' 5' ); 
+    //   return false;
+    // }
 
-    if ((document.saveuser.transaction_type[3].checked) && (document.saveuser.transaction_amount.value > avail_credit_value / 2)){
-      changeAlert('Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)');
-      return false;
-    } */
+    // if ((document.saveuser.transaction_type[3].checked) && (document.saveuser.transaction_amount.value > avail_credit_value / 2)){
+    //   changeAlert('Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)');
+    //   return false;
+    // }
   }
 
-  $(document).ready(function() {
-
-  })
+  $(document).on('submit','.add-transaction', function() {
+    validate()
+  });
 </script>
 <script>
   @if(session('success'))
