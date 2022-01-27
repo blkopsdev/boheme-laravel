@@ -39,7 +39,6 @@ function store_credit_transaction($id) {
     $avail_credit_expired_tally = 0;
     $purchases_over_one_year = 0;
     $expirationDate = "";
-    $c = false;
 
     $transaction = \App\Transaction::find($id);
     
@@ -58,6 +57,7 @@ function store_credit_transaction($id) {
     } else if ($transaction->transaction_type == "Add store credit"){ 
         $expiredFlag = 1;
     } 
+
     if ($transaction->transaction_type == "Purchase" && $transactionDate >= $dateMinusYear){
         $purchases_over_one_year = $purchases_over_one_year + $transaction->store_credit;
     }
@@ -74,21 +74,15 @@ function store_credit_transaction($id) {
         $avail_credit_expired_tally = $transaction->store_credit;
         $avail_credit = $avail_credit - $avail_credit_expired_tally;
     }
-        
-    
 
     if ($expiredFlag == 1 && $transactionDate <= strtotime(date("2015-05-05")) && $transactionDate < $dateMinusYear) {
         $expirationDate = strtotime('12 months', $transactionDate); 
-        // echo "<td nowrap class='expired'>".$date->format('m-d-Y')."<br>expired</td>";
     } else if ($expiredFlag == 1 && $transactionDate > strtotime(date("2015-05-05")) && $transactionDate <= $dateMinus6Months) {
         $expirationDate = strtotime('6 months', $transactionDate); 
-        // echo "<td nowrap class='expired'>".$date->format('m-d-Y')."<br>expired</td>";
     } else if ($expiredFlag == 0 && $transactionDate <= strtotime(date("2015-05-05")) && $transactionDate > $dateMinusYear) {
         $expirationDate = strtotime('12 months', $transactionDate); 
-        // echo "<td>".$date->format('m-d-Y')."</td>";
     } else if ($expiredFlag == 0 && $transactionDate > strtotime(date("2015-05-05")) && $transactionDate > $dateMinus6Months) {
         $expirationDate = strtotime('6 months', $transactionDate); 
-        // echo "<td>".$date->format('m-d-Y')."</td>";
     } 
 
     $expiredFlag = 0;

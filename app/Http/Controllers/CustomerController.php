@@ -75,7 +75,7 @@ class CustomerController extends Controller
     public function show($id)
     {
         $customer = Customer::find($id);
-        $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'desc')->paginate(10);
+        $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'asc')->paginate(10);
         $last_transaction = Transaction::whereCustomerId($id)->orderBy('id', 'desc')->first();
         $expiration_date = Carbon::now()->subMonths(6);
         // $available_credit = Transaction::whereCustomerId($id)->where('created_at', '>=', date('Y-m-d', strtotime($expiration_date)))->sum('store_credit');

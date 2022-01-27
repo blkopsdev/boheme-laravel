@@ -221,33 +221,102 @@
                     </tr>
                   </thead>
                   <tbody>
+                    @php
+                        $avail_credit = 0;
+                        $avail_credit_unexpired_tally = 0;
+                        $avail_credit_expired_tally = 0;
+                        $purchases_over_one_year = 0;
+                        $expirationDate = "";
+                    @endphp
                     @foreach ($transactions as $trans)
                       @php
+                        $dateMinusYear = strtotime(date("Y-m-d").' -1 year');
+                        $dateMinus6Months = strtotime(date("2015-10-01").' -6 months'); // New 6 month expiration
+                        $transactionDate = strtotime($trans->created_at);
+
+                        $expiredFlag = 0;
+
+                        if ($trans->transaction_type == "Add store credit" && $transactionDate <= strtotime(date('2015-05-05')) && $transactionDate >= $dateMinusYear){
+                            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $trans->store_credit;
+                            $expiredFlag = 0;
+                        } else if ($trans->transaction_type == "Add store credit" && $transactionDate > strtotime(date('2015-05-05')) && $transactionDate >= $dateMinus6Months){
+                            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $trans->store_credit;
+                            $expiredFlag = 0;
+                        } else if ($trans->transaction_type == "Add store credit"){ 
+                            $expiredFlag = 1;
+                        } 
+
+                        if ($trans->transaction_type == "Purchase" && $transactionDate >= $dateMinusYear){
+                            $purchases_over_one_year = $purchases_over_one_year + $trans->store_credit;
+                        }
+                            
+                        if ($trans->transaction_type == "Cash out for store credit"){
+                            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally - $trans->cash_out_for_storecredit * 2;
+                        }
+                            
+                        $avail_credit_unexpired  = $avail_credit_unexpired_tally - $purchases_over_one_year; // doing nothing it seems.. not used elsewhere...
+                            
+                        // NEXT we calc the EXPIRED store credit tally so we can subtract it in the ledger in each subsequent transaction:
+                            
+                        if ($trans->transaction_type == "Add store credit" && $transactionDate < $dateMinusYear){
+                            $avail_credit_expired_tally = $trans->store_credit;
+                            $avail_credit = $avail_credit - $avail_credit_expired_tally;
+                        }
+
+                        if ($expiredFlag == 1 && $transactionDate <= strtotime(date("2015-05-05")) && $transactionDate < $dateMinusYear) {
+                            $expirationDate = strtotime('12 months', $transactionDate); 
+                        } else if ($expiredFlag == 1 && $transactionDate > strtotime(date("2015-05-05")) && $transactionDate <= $dateMinus6Months) {
+                            $expirationDate = strtotime('6 months', $transactionDate); 
+                        } else if ($expiredFlag == 0 && $transactionDate <= strtotime(date("2015-05-05")) && $transactionDate > $dateMinusYear) {
+                            $expirationDate = strtotime('12 months', $transactionDate); 
+                        } else if ($expiredFlag == 0 && $transactionDate > strtotime(date("2015-05-05")) && $transactionDate > $dateMinus6Months) {
+                            $expirationDate = strtotime('6 months', $transactionDate); 
+                        } 
+
+                        $expiredFlag = 0;
+
+                        if ($trans->transaction_type == "Add store credit") {
+                            $avail_credit = $avail_credit + $trans->store_credit;
+                        }
+                            
+                        if ( $trans->transaction_type == "Purchase"){
+                            $avail_credit = $avail_credit - $trans->store_credit;
+                        }
+                            
+                        if ( $trans->transaction_type == "Cash out for store credit"){
+                            $avail_credit = $avail_credit - (2 * $trans->cash_out_for_storecredit);
+                        }
+
+                        $cash = $trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit;
+                        $cash = number_format($cash, 2, '.', '');
+
+                        if (( $trans->transaction_type == "Cash out for store credit") || ( $trans->transaction_type == "Cash out for trade")){
+                            $cash = "-$" . $cash;
+                        }else{
+                            $cash = "$" . $cash;
+                        } 
+                        
+                        if ($avail_credit <= 0 ) {
+                            $avail_credit = 0.00 * 1;  // this is because 0 wasn't acting like a number so i tried this multiply trick...?
+                        }
                         $createdAt = strtotime($trans->created_at);
     
                         if ($trans->transaction_type == 'Purchase') {
                           if ($trans->store_credit != 0) {
-                            $store_credit = "-$" . $trans->store_credit;
+                            $store_credit = "-$" . number_format($trans->store_credit, 2);
                           }
                         } else if ($trans->transaction_type == 'Cash out for store credit') {
-                          $store_credit = "-$" . $trans->cash_out_for_storecredit*2;
+                          $store_credit = "-$" . number_format($trans->cash_out_for_storecredit*2, 2);
                         } else {
-                          $store_credit = "$" . $trans->store_credit;
-                        }
-    
-                        $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit, 2, '.', '');
-                        if ($trans->transaction_type == "Cash out for store credit" || $trans->transaction_type == "Cash out for trade"){
-                          $cash = "-$" .$cash;
-                        } else {
-                          $cash = "$" .$cash;
-                        }
+                          $store_credit = "$" . number_format($trans->store_credit, 2);
+                        } 
                         @endphp
                       <tr>
                         <td>{{ $trans->id }}</td>
                         <td>{{ date('m/d/Y', strtotime($trans->created_at)) }}</td>
                         <td>
                           @if($trans->transaction_type == 'Add store credit')
-                            {{ date('m/d/Y', store_credit_transaction($trans->id)['expiration_date']) }}
+                            {{ date('m/d/Y', $expirationDate) }}
                           @endif
                         </td>
                         <td>{{ $trans->transaction_type }}</td>
@@ -256,7 +325,7 @@
                         <td>${{ $trans->purchase_total }}</td>
                         <td>{{ $store_credit }}</td>
                         <td>{{ $cash }}</td>
-                        <td>${{ store_credit_transaction($trans->id)['store_credit'] }}</td>
+                        <td>${{ number_format($avail_credit, 2) }}</td>
                         <td>{{ $trans->comments }}</td>
                       </tr>
                     @endforeach
