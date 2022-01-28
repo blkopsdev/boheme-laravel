@@ -5,6 +5,17 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">{{ __('Home') }}</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('customers.index') }}">{{ __('Customers') }}</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{ __('Customer Detail') }}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
           <h2>{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded ml-3"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a></h2>
         </div>
       </div>
@@ -89,7 +100,7 @@
                         <div class="bmd-form-group{{ $errors->has('purchased_items') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="purchased_items" class="mb-0">{{ __('Amount of Sale ($): ') }}</label>
-                            <input type="number" step="0.01" name="purchased_items" id="purchased_items" min="0" value="{{ old('purchased_items', 0) }}" onblur="calcTax();">
+                            <input type="number" step="0.01" name="purchased_items" id="purchased_items" min="0" value="{{ old('purchased_items', 0) }}" onblur="calcTax();" required>
                           </div>
                           @if ($errors->has('purchased_items'))
                             <div id="purchased-error" class="error text-danger pl-3" for="purchased_items" style="display: block;">
@@ -100,7 +111,7 @@
                         <div class="bmd-form-group{{ $errors->has('tax') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="tax" class="mb-0">{{ __('Tax ($): ') }}</label>
-                            <input type="number" step="0.01" name="tax" id="tax" min="0" value="{{ old('tax', 0) }}" readonly>
+                            <input type="number" step="0.01" name="tax" id="tax" min="0" value="{{ old('tax', 0) }}" readonly required>
                           </div>
                           @if ($errors->has('tax'))
                             <div id="tax-error" class="error text-danger pl-3" for="tax" style="display: block;">
@@ -111,7 +122,7 @@
                         <div class="bmd-form-group{{ $errors->has('purchase_total') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="purchase_total" class="mb-0">{{ __('Total ($)') }}</label>
-                            <input type="number" step="0.01" name="purchase_total" id="purchase_total" min="0" value="{{ old('purchase_total', 0) }}" readonly>
+                            <input type="number" step="0.01" name="purchase_total" id="purchase_total" min="0" value="{{ old('purchase_total', 0) }}" readonly required>
                           </div>
                           @if ($errors->has('purchase_total'))
                             <div id="purchase-total-error" class="error text-danger pl-3" for="purchase_total" style="display: block;">
@@ -122,7 +133,7 @@
                         <div class="bmd-form-group{{ $errors->has('store_credit') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="store_credit" class="mb-0">{{ __('Store Credit Used ($):') }}</label>
-                            <input type="number" step="0.01" name="store_credit" id="store_credit" min="0" value="{{ old('store_credit', 0) }}" onblur="calcCashNeeded()">
+                            <input type="number" step="0.01" name="store_credit" id="store_credit" min="0" value="{{ old('store_credit', 0) }}" onblur="calcCashNeeded()" required>
                           </div>
                           @if ($errors->has('store_credit'))
                             <div id="store-credit-error" class="error text-danger pl-3" for="store_credit" style="display: block;">
@@ -133,7 +144,7 @@
                         <div class="bmd-form-group{{ $errors->has('cash_in') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="cash_in" class="mb-0">{{ __('Amount due ($):') }}</label>
-                            <input type="number" step="0.01" name="cash_in" id="cash_in" min="0" value="{{ old('cash_in', 0) }}">
+                            <input type="number" step="0.01" name="cash_in" id="cash_in" min="0" value="{{ old('cash_in', 0) }}" required>
                           </div>
                           @if ($errors->has('cash_in'))
                             <div id="cash-in-error" class="error text-danger pl-3" for="cash_in" style="display: block;">
@@ -146,13 +157,13 @@
                         <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="transaction_amount" class="mb-0">{{ __('Amount ($):') }}</label>
-                            <input type="number" step="0.01" name="transaction_amount" id="transaction_amount" min="0" value="{{ old('transaction_amount', 0) }}">
+                            <input type="number" step="0.01" name="transaction_amount" id="transaction_amount" min="0" value="{{ old('transaction_amount', 0) }}" required>
                           </div>
                           @if ($errors->has('transaction_amount'))
-                              <div id="transaction-amount-error" class="error text-danger pl-3" for="transaction_amount" style="display: block;">
-                                <strong>{{ $errors->first('transaction_amount') }}</strong>
-                              </div>
-                            @endif
+                            <div id="transaction-amount-error" class="error text-danger pl-3" for="transaction_amount" style="display: block;">
+                              <strong>{{ $errors->first('transaction_amount') }}</strong>
+                            </div>
+                          @endif
                         </div>
                         {{-- <div class="show-employee">
                           <div class="bmd-form-group{{ $errors->has('employee') ? ' has-danger' : '' }} mt-3">
@@ -228,69 +239,74 @@
                         $purchases_over_one_year = 0;
                         $expirationDate = "";
                     @endphp
-                    @foreach ($transactions as $trans)
+                    @foreach ($transactions as $transaction)
                       @php
                         $dateMinusYear = strtotime(date("Y-m-d").' -1 year');
                         $dateMinus6Months = strtotime(date("2015-10-01").' -6 months'); // New 6 month expiration
-                        $transactionDate = strtotime($trans->created_at);
+                        $transactionDate = strtotime($transaction->created_at);
 
                         $expiredFlag = 0;
 
-                        if ($trans->transaction_type == "Add store credit" && $transactionDate <= strtotime(date('2015-05-05')) && $transactionDate >= $dateMinusYear){
-                            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $trans->store_credit;
-                            $expiredFlag = 0;
-                        } else if ($trans->transaction_type == "Add store credit" && $transactionDate > strtotime(date('2015-05-05')) && $transactionDate >= $dateMinus6Months){
-                            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $trans->store_credit;
-                            $expiredFlag = 0;
-                        } else if ($trans->transaction_type == "Add store credit"){ 
-                            $expiredFlag = 1;
-                        } 
+                        if($transaction->transaction_type == "Add store credit") 
+                        {
+                          if ($transactionDate < strtotime(date("2022-01-01"))){
+                            if ($transactionDate >= $dateMinus6Months) {
+                              $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
+                              $expiredFlag = 0;
+                            } else {
+                              $expiredFlag = 1;
+                            }
+                          } else {
+                            if ($transactionDate >= $dateMinusYear) {
+                              $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
+                              $expiredFlag = 0;
+                            } else {
+                              $expiredFlag = 1;
+                            }
+                          }
+                        }
 
-                        if ($trans->transaction_type == "Purchase" && $transactionDate >= $dateMinusYear){
-                            $purchases_over_one_year = $purchases_over_one_year + $trans->store_credit;
+                        if ($transaction->transaction_type == "Purchase" && $transactionDate >= $dateMinusYear){
+                            $purchases_over_one_year = $purchases_over_one_year + $transaction->store_credit;
                         }
                             
-                        if ($trans->transaction_type == "Cash out for store credit"){
-                            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally - $trans->cash_out_for_storecredit * 2;
+                        if ($transaction->transaction_type == "Cash out for store credit"){
+                            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally - $transaction->cash_out_for_storecredit * 2;
                         }
                             
                         $avail_credit_unexpired  = $avail_credit_unexpired_tally - $purchases_over_one_year; // doing nothing it seems.. not used elsewhere...
                             
                         // NEXT we calc the EXPIRED store credit tally so we can subtract it in the ledger in each subsequent transaction:
                             
-                        if ($trans->transaction_type == "Add store credit" && $transactionDate < $dateMinusYear){
-                            $avail_credit_expired_tally = $trans->store_credit;
+                        if ($transaction->transaction_type == "Add store credit" && $transactionDate < $dateMinusYear){
+                            $avail_credit_expired_tally = $transaction->store_credit;
                             $avail_credit = $avail_credit - $avail_credit_expired_tally;
                         }
 
-                        if ($expiredFlag == 1 && $transactionDate <= strtotime(date("2015-05-05")) && $transactionDate < $dateMinusYear) {
-                            $expirationDate = strtotime('12 months', $transactionDate); 
-                        } else if ($expiredFlag == 1 && $transactionDate > strtotime(date("2015-05-05")) && $transactionDate <= $dateMinus6Months) {
-                            $expirationDate = strtotime('6 months', $transactionDate); 
-                        } else if ($expiredFlag == 0 && $transactionDate <= strtotime(date("2015-05-05")) && $transactionDate > $dateMinusYear) {
-                            $expirationDate = strtotime('12 months', $transactionDate); 
-                        } else if ($expiredFlag == 0 && $transactionDate > strtotime(date("2015-05-05")) && $transactionDate > $dateMinus6Months) {
-                            $expirationDate = strtotime('6 months', $transactionDate); 
+                        if ($transactionDate < strtotime(date("2015-05-05")) || $transactionDate >= strtotime(date("2022-01-01"))) {
+                          $expirationDate = strtotime('12 months', $transactionDate); 
+                        } else{
+                          $expirationDate = strtotime('6 months', $transactionDate); 
                         } 
-
+                        
                         $expiredFlag = 0;
 
-                        if ($trans->transaction_type == "Add store credit") {
-                            $avail_credit = $avail_credit + $trans->store_credit;
+                        if ($transaction->transaction_type == "Add store credit") {
+                            $avail_credit = $avail_credit + $transaction->store_credit;
                         }
                             
-                        if ( $trans->transaction_type == "Purchase"){
-                            $avail_credit = $avail_credit - $trans->store_credit;
+                        if ( $transaction->transaction_type == "Purchase"){
+                            $avail_credit = $avail_credit - $transaction->store_credit;
                         }
                             
-                        if ( $trans->transaction_type == "Cash out for store credit"){
-                            $avail_credit = $avail_credit - (2 * $trans->cash_out_for_storecredit);
+                        if ( $transaction->transaction_type == "Cash out for store credit"){
+                            $avail_credit = $avail_credit - (2 * $transaction->cash_out_for_storecredit);
                         }
 
-                        $cash = $trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit;
+                        $cash = $transaction->cash_in + $transaction->cash_out_for_trade + $transaction->cash_out_for_storecredit;
                         $cash = number_format($cash, 2, '.', '');
 
-                        if (( $trans->transaction_type == "Cash out for store credit") || ( $trans->transaction_type == "Cash out for trade")){
+                        if (( $transaction->transaction_type == "Cash out for store credit") || ( $transaction->transaction_type == "Cash out for trade")){
                             $cash = "-$" . $cash;
                         }else{
                             $cash = "$" . $cash;
@@ -299,40 +315,40 @@
                         if ($avail_credit <= 0 ) {
                             $avail_credit = 0.00 * 1;  // this is because 0 wasn't acting like a number so i tried this multiply trick...?
                         }
-                        $createdAt = strtotime($trans->created_at);
+                        $createdAt = strtotime($transaction->created_at);
     
-                        if ($trans->transaction_type == 'Purchase') {
-                          if ($trans->store_credit != 0) {
-                            $store_credit = "-$" . number_format($trans->store_credit, 2);
+                        if ($transaction->transaction_type == 'Purchase') {
+                          if ($transaction->store_credit != 0) {
+                            $store_credit = "-$" . number_format($transaction->store_credit, 2);
                           }
-                        } else if ($trans->transaction_type == 'Cash out for store credit') {
-                          $store_credit = "-$" . number_format($trans->cash_out_for_storecredit*2, 2);
+                        } else if ($transaction->transaction_type == 'Cash out for store credit') {
+                          $store_credit = "-$" . number_format($transaction->cash_out_for_storecredit*2, 2);
                         } else {
-                          $store_credit = "$" . number_format($trans->store_credit, 2);
+                          $store_credit = "$" . number_format($transaction->store_credit, 2);
                         } 
                         @endphp
                       <tr>
-                        <td>{{ $trans->id }}</td>
-                        <td>{{ date('m/d/Y', strtotime($trans->created_at)) }}</td>
+                        <td>{{ $transaction->id }}</td>
+                        <td>{{ date('m/d/Y', strtotime($transaction->created_at)) }}</td>
                         <td>
-                          @if($trans->transaction_type == 'Add store credit')
+                          @if($transaction->transaction_type == 'Add store credit')
                             {{ date('m/d/Y', $expirationDate) }}
                           @endif
                         </td>
-                        <td>{{ $trans->transaction_type }}</td>
-                        <td>${{ $trans->purchased_items }}</td>
-                        <td>${{ $trans->tax }}</td>
-                        <td>${{ $trans->purchase_total }}</td>
+                        <td>{{ $transaction->transaction_type }}</td>
+                        <td>${{ $transaction->purchased_items }}</td>
+                        <td>${{ $transaction->tax }}</td>
+                        <td>${{ $transaction->purchase_total }}</td>
                         <td>{{ $store_credit }}</td>
                         <td>{{ $cash }}</td>
                         <td>${{ number_format($avail_credit, 2) }}</td>
                         <td>
-                          <a rel="tooltip" class="btn btn-primary btn-rounded p-2" href="{{ route('transactions.show', $trans->id) }}" data-original-title="" title="{{ __('View') }}">
+                          <a rel="tooltip" class="btn btn-primary btn-rounded p-2" href="{{ route('transactions.show', $transaction->id) }}" data-original-title="" title="{{ __('View') }}">
                             <i class="material-icons">visibility</i>
                             <div class="ripple-container"></div>
                           </a>
                           @if (auth()->user()->user_type == "admin")
-                          <a rel="tooltip" class="btn btn-warning btn-rounded p-2" href="" data-original-title="" title="{{ __('Edit') }}">
+                          <a rel="tooltip" class="btn btn-warning btn-rounded p-2" href="{{ route('transactions.edit', $transaction->id) }}" data-original-title="" title="{{ __('Edit') }}">
                             <i class="material-icons">edit</i>
                             <div class="ripple-container"></div>
                           </a>
@@ -373,12 +389,6 @@
       } else {
         $('.transaction-purchase').addClass('d-none');
         $('.transaction-no-purchase').removeClass('d-none');
-        /* 
-        if(value == 'Cash out for store credit') {
-          $('.show-employee').addClass('d-none');
-        } else {
-          $('.show-employee').removeClass('d-none');
-        } */
       }
     });
   });
@@ -394,7 +404,6 @@
     document.getElementById('cash_in').value = (document.getElementById('purchase_total').value - document.getElementById('store_credit').value).toFixed(2);
   }
   function validate() {
-    debugger
     if(document.getElementById('transaction_type').value == 'Purchase') {
       if (document.getElementById('purchased_items').value == 0) {
         materialAlert("Error!", "You must enter an Amount of Sales...");

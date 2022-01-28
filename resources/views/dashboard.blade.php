@@ -80,6 +80,8 @@
                       if ($trans->transaction_type == 'Purchase') {
                         if ($trans->store_credit != 0) {
                           $store_credit = "-$" . $trans->store_credit;
+                        } else {
+                          $store_credit = "$0.00";
                         }
                       } else if ($trans->transaction_type == 'Cash out for store credit') {
                         $store_credit = "-$" . $trans->cash_out_for_storecredit;
@@ -106,9 +108,6 @@
                     <td>{{ $cash }}</td>
                     <td>${{ number_format(get_store_credit($trans->customer_id, $trans->id)['credit'], 2) }}</td>
                     <td>
-                      @if ($trans->comments)
-                      <a href="" class="btn btn-primary btn-rounded mr-2 p-2"><i class="material-icons">visibility</i></a>
-                      @endif
                     </td>
                   </tr>    
                   @endforeach
@@ -123,10 +122,4 @@
 @endsection
 
 @push('js')
-  <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      md.initDashboardPageCharts();
-    });
-  </script>
 @endpush

@@ -96,7 +96,9 @@ class TransactionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $title = __("Edit Transaction");
+        $transaction = Transaction::find($id);
+        return view('transactions.edit', compact('title', 'transaction'));
     }
 
     /**

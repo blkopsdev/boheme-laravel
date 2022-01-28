@@ -32,7 +32,7 @@ function unique_slug($title = '', $model = 'Project'){
   return $newSlug;
 }
 
-function get_store_credit($id, $transaction_id) {
+function get_store_credit($id, $transaction_id = null) {
     $results = 0;
     $avail_credit = 0;
     $avail_credit_unexpired_tally = 0;
@@ -44,20 +44,29 @@ function get_store_credit($id, $transaction_id) {
     foreach ($transactions as $transaction) {
         # code...
         $dateMinusYear = strtotime(date("Y-m-d").' -1 year');
-        $dateMinus6Months = strtotime(date("2015-10-01").' -6 months'); // New 6 month expiration
+        $dateMinus6Months = strtotime(date("Y-m-d").' -6 months'); // New 6 month expiration
         $transactionDate = strtotime($transaction->created_at);
     
         $expiredFlag = 0;
-    
-        if ($transaction->transaction_type == "Add store credit" && $transactionDate <= strtotime(date('2015-05-05')) && $transactionDate >= $dateMinusYear){
-            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
-            $expiredFlag = 0;
-        } else if ($transaction->transaction_type == "Add store credit" && $transactionDate > strtotime(date('2015-05-05')) && $transactionDate >= $dateMinus6Months){
-            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
-            $expiredFlag = 0;
-        } else if ($transaction->transaction_type == "Add store credit"){ 
-            $expiredFlag = 1;
-        } 
+        
+        if($transaction->transaction_type == "Add store credit") 
+        {
+            if ($transactionDate < strtotime(date("2022-01-01"))){
+                if ($transactionDate >= $dateMinus6Months) {
+                    $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
+                    $expiredFlag = 0;
+                } else {
+                    $expiredFlag = 1;
+                }
+            } else {
+                if ($transactionDate >= $dateMinusYear) {
+                    $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
+                    $expiredFlag = 0;
+                } else {
+                    $expiredFlag = 1;
+                }
+            }
+        }
     
         if ($transaction->transaction_type == "Purchase" && $transactionDate >= $dateMinusYear){
             $purchases_over_one_year = $purchases_over_one_year + $transaction->store_credit;
@@ -76,13 +85,9 @@ function get_store_credit($id, $transaction_id) {
             $avail_credit = $avail_credit - $avail_credit_expired_tally;
         }
     
-        if ($expiredFlag == 1 && $transactionDate <= strtotime(date("2015-05-05")) && $transactionDate < $dateMinusYear) {
+        if ($transactionDate < strtotime(date("2015-05-05")) || $transactionDate >= strtotime(date("2022-01-01"))) {
             $expirationDate = strtotime('12 months', $transactionDate); 
-        } else if ($expiredFlag == 1 && $transactionDate > strtotime(date("2015-05-05")) && $transactionDate <= $dateMinus6Months) {
-            $expirationDate = strtotime('6 months', $transactionDate); 
-        } else if ($expiredFlag == 0 && $transactionDate <= strtotime(date("2015-05-05")) && $transactionDate > $dateMinusYear) {
-            $expirationDate = strtotime('12 months', $transactionDate); 
-        } else if ($expiredFlag == 0 && $transactionDate > strtotime(date("2015-05-05")) && $transactionDate > $dateMinus6Months) {
+        } else{
             $expirationDate = strtotime('6 months', $transactionDate); 
         } 
     
@@ -113,14 +118,14 @@ function get_store_credit($id, $transaction_id) {
             $avail_credit = 0.00 * 1;  // this is because 0 wasn't acting like a number so i tried this multiply trick...?
         }
     
-        if ($transaction->id == $transaction_id) {
-            $results = [
-                'credit' => $avail_credit,
-                'expires_on' => $expirationDate
-            ];
+        if ($transaction_id != null && $transaction->id == $transaction_id) {
             break;
-        }
+        } 
     }
+    $results = [
+        'credit' => $avail_credit,
+        'expires_on' => $expirationDate
+    ];
 
     return $results;
 }

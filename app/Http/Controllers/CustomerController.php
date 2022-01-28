@@ -76,9 +76,8 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'asc')->paginate(10);
-        $last_transaction = Transaction::whereCustomerId($id)->orderBy('id', 'desc')->first();
-        if ($last_transaction) {
-            $store_credit = get_store_credit($id, $last_transaction->id)['credit'];
+        if ($transactions->count() > 0) {
+            $store_credit = get_store_credit($id)['credit'];
         } else {
             $store_credit = 0.00;
         }

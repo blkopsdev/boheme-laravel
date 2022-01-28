@@ -9,7 +9,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/">{{ __('Home') }}</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('customers.show', $transaction->customer_id) }}">{{ __('Customer') }}</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ __('Transaction Detail') }}</li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ __('Transaction') }}</li>
                     </ol>
                 </nav>
             </div>
