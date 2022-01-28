@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\StoreCredit;
 use App\Transaction;
 use Illuminate\Http\Request;
 
@@ -47,10 +46,32 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $type = $request->transaction_type;
-        $transaction = new Transaction;
+        $data = [];
+        if ($type == 'Add store credit') {
+            $data['store_credit'] = $request->transaction_amount;
+            $data['employee'] = $request->employee;
+        } else if ($type == 'Purchase') {
+            $data['purchased_items'] = $request->purchased_items;
+            $data['tax'] = $request->tax;
+            $data['purchase_total'] = $request->purchase_total;
+            $data['store_credit'] = $request->store_credit;
+            $data['cash_in'] = $request->cash_in;
+        } else if ($type == 'Cash out for trade') {
+            $data['cash_out_for_trade'] = $request->transaction_amount;
+        } else {
+            $data['cash_out_for_storecredit'] = $request->transaction_amount;
+        }
+        $data['transaction_type'] = $type;
+        $data['customer_id'] = $request->customer_id;
+        $data['comments'] = $request->comments;
+        $data['user_id'] = auth()->user()->id;
 
-        echo "Hello";
-        return;
+        $transaction = Transaction::create($data);
+        
+        if(!$transaction) {
+            return redirect()->back()->withErrors('msg', 'Something went wrong, please try again!');
+        }
+        return redirect()->back()->with('success', 'Transaction has been created successfully!');
     }
 
     /**
@@ -61,7 +82,10 @@ class TransactionController extends Controller
      */
     public function show($id)
     {
-        //
+        $transaction = Transaction::find($id);
+        $customer_id = $transaction->customer_id;
+        
+        return view('transactions.show', compact('transaction'));
     }
 
     /**

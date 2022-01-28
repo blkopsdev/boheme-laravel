@@ -72,7 +72,7 @@
                   <th>Store Credit</th>
                   <th>{{ __('Cash In/Out') }}</th>
                   <th>Credit Balance</th>
-                  <th>Comments</th>
+                  <th></th>
                 </thead>
                 <tbody>
                   @foreach ($new_trans as $trans)
@@ -104,8 +104,7 @@
                     <td>${{ $trans->purchase_total }}</td>
                     <td>{{ $store_credit }}</td>
                     <td>{{ $cash }}</td>
-                    <td>${{ store_credit($trans->customer_id) }}</td>
-                    <td></td>
+                    <td>${{ number_format(get_store_credit($trans->customer_id, $trans->id)['credit'], 2) }}</td>
                     <td>
                       @if ($trans->comments)
                       <a href="" class="btn btn-primary btn-rounded mr-2 p-2"><i class="material-icons">visibility</i></a>

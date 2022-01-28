@@ -16,7 +16,7 @@
                 <h4 class="card-title">{{ __('Customer Information') }}</h4>
               </div>
               <div class="card-body table-responsive">
-                <table class="ml-2" style="width: 600px" class="table">
+                <table class="ml-2 table table-striped" style="width: 600px">
                   <tbody>
                     <tr>
                       <td><strong>{{ __('First Name:') }}</strong></td>
@@ -49,7 +49,7 @@
                     <tr>
                       <td><strong>{{ __('Available Credit') }}</strong></td>
                       <td>
-                        $<span class="store-credit">{{ number_format(store_credit_transaction($last_transaction->id)['store_credit'], 2) }}</span>
+                        $<span id="storeCredit">{{ number_format($store_credit, 2) }}</span>
                       </td>
                     </tr>
                   </tbody>
@@ -79,9 +79,9 @@
                           </select>
                         </div>
                         <div class="col-md-2"></div>
-                        @if ($errors->has('contact_pref'))
-                          <div id="contact-pref-error" class="error text-danger pl-3" for="contact_pref" style="display: block;">
-                            <strong>{{ $errors->first('contact_pref') }}</strong>
+                        @if ($errors->has('transaction_type'))
+                          <div id="transaction-type-error" class="error text-danger pl-3" for="transaction_type" style="display: block;">
+                            <strong>{{ $errors->first('transaction_type') }}</strong>
                           </div>
                         @endif
                       </div>
@@ -154,7 +154,7 @@
                               </div>
                             @endif
                         </div>
-                        <div class="show-employee">
+                        {{-- <div class="show-employee">
                           <div class="bmd-form-group{{ $errors->has('employee') ? ' has-danger' : '' }} mt-3">
                             <div class="col-md-8">
                               <label for="employee">{{ __('Trade-in Processor') }}</label>
@@ -170,7 +170,7 @@
                               </div>
                             @endif
                           </div>
-                        </div>
+                        </div> --}}
                       </div>
                       <div class="bmd-form-group mt-5">
                         <div class="col-md-8">
@@ -207,7 +207,7 @@
                 <table class="col-md-12 ml-2 table table-hover">
                   <thead>
                     <tr>
-                      <th><strong>{{ __('Transaction ID') }}</strong></th>
+                      <th><strong>{{ __('ID') }}</strong></th>
                       <th><strong>{{ __('Created On') }}</strong></th>
                       <th><strong>{{ __('Expires On') }}</strong></th>
                       <th><strong>{{ __('Type') }}</strong></th>
@@ -217,7 +217,7 @@
                       <th><strong>{{ __('Store Credit') }}</strong></th>
                       <th><strong>{{ __('Cash In/Out') }}</strong></th>
                       <th><strong>{{ __('Credit Balance') }}</strong></th>
-                      <th><strong>{{ __('Comments') }}</strong></th>
+                      <th><strong>{{ __('Actions') }}</strong></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -326,7 +326,22 @@
                         <td>{{ $store_credit }}</td>
                         <td>{{ $cash }}</td>
                         <td>${{ number_format($avail_credit, 2) }}</td>
-                        <td>{{ $trans->comments }}</td>
+                        <td>
+                          <a rel="tooltip" class="btn btn-primary btn-rounded p-2" href="{{ route('transactions.show', $trans->id) }}" data-original-title="" title="{{ __('View') }}">
+                            <i class="material-icons">visibility</i>
+                            <div class="ripple-container"></div>
+                          </a>
+                          @if (auth()->user()->user_type == "admin")
+                          <a rel="tooltip" class="btn btn-warning btn-rounded p-2" href="" data-original-title="" title="{{ __('Edit') }}">
+                            <i class="material-icons">edit</i>
+                            <div class="ripple-container"></div>
+                          </a>
+                          <a rel="tooltip" class="btn btn-danger btn-rounded p-2" href="" data-original-title="" title="{{ __('Delete') }}">
+                            <i class="material-icons">delete</i>
+                            <div class="ripple-container"></div>
+                          </a>
+                          @endif
+                        </td>
                       </tr>
                     @endforeach
                   </tbody>
@@ -342,12 +357,13 @@
 @endsection
 
 @push('js')
+
 <script>
   $(document).ready(function() {
     $('.selectpicker').selectpicker();
     $('select.transaction-type').on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
       var value = $(this).val();
-      $('.add-transaction input').each(function() {
+      $('.add-transaction .row input').each(function() {
         $(this).val(0)
       });
       if (value == 'Purchase') {
@@ -357,17 +373,18 @@
       } else {
         $('.transaction-purchase').addClass('d-none');
         $('.transaction-no-purchase').removeClass('d-none');
+        /* 
         if(value == 'Cash out for store credit') {
           $('.show-employee').addClass('d-none');
         } else {
           $('.show-employee').removeClass('d-none');
-        }
+        } */
       }
     });
   });
 
 
-  var CASalesTaxRate = 0.0825;
+  var CASalesTaxRate = parseFloat({{ 0.0825 }}, 2);
   function calcTax() {
     document.getElementById('tax').value = (document.getElementById('purchased_items').value * CASalesTaxRate).toFixed(2);
     document.getElementById('purchase_total').value = (eval(document.getElementById('purchased_items').value) + eval(document.getElementById('tax').value)).toFixed(2);
@@ -377,46 +394,45 @@
     document.getElementById('cash_in').value = (document.getElementById('purchase_total').value - document.getElementById('store_credit').value).toFixed(2);
   }
   function validate() {
+    debugger
     if(document.getElementById('transaction_type').value == 'Purchase') {
       if (document.getElementById('purchased_items').value == 0) {
-        changeAlert('You must enter an Amount of Sales...');
+        materialAlert("Error!", "You must enter an Amount of Sales...");
         return false;
       }
     } else {
       if (document.getElementById('transaction_amount').value == 0) {
-        changeAlert('You must enter something in the Amount $ box...');
+        materialAlert("Error!", "You must enter something in the Amount $ box...");
         return false;
       }
     }
 
     calcTax(document.getElementById('purchased_items'));
 
-    if(document.getElementById('transaction_type').value == 'Add store credit' || document.getElementById('transaction_type').value == 'Cash out for trade') {
+    /* if(document.getElementById('transaction_type').value == 'Add store credit' || document.getElementById('transaction_type').value == 'Cash out for trade') {
       if (document.getElementById('employee').value == '') {
-        changeAlert('You must select your name in the Employee dropdown menu...');
+        materialAlert("Error!", "You must select your name in the Employee dropdown menu...");
         return false;
       }
+    } */
+
+    var avail_credit_value = document.getElementById('storeCredit').innerHTML;
+
+    if (document.getElementById('store_credit').value * 1 > avail_credit_value * 1){
+      materialAlert("Error!", "Customer does NOT have this much store credit !!");
+      return false;
     }
 
-    // var avail_credit_value = document.saveuser.avail_credit.value.replace("$","");    
-
-    // //var stringnumber = Math.round(avail_credit_value * 100) / 100;
-
-    // if ((document.saveuser.salesbox_store_credit.value * 1) > (avail_credit_value * 1)){
-    //   changeAlert('Customer does NOT have this much store credit !!');
-    //   //alert(document.saveuser.salesbox_store_credit.value + ' > '+ avail_credit_value);
-    //     //alert(' 5' ); 
-    //   return false;
-    // }
-
-    // if ((document.saveuser.transaction_type[3].checked) && (document.saveuser.transaction_amount.value > avail_credit_value / 2)){
-    //   changeAlert('Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)');
-    //   return false;
-    // }
+    if (document.getElementById('transaction_type').value == 'Cash out for store credit' && document.getElementById('transaction_amount').value > avail_credit_value / 2){
+      materialAlert("Error!", "Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)");
+      return false;
+    }
   }
 
   $(document).on('submit','.add-transaction', function() {
-    validate()
+    if(validate() == false) {
+      return false
+    } 
   });
 </script>
 <script>
