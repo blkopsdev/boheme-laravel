@@ -44,12 +44,14 @@
           <p>{{ __('Transactions') }}</p>
         </a>
       </li> --}}
+      @if (auth()->user()->user_type == 'admin')
       <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('user.index') }}">
           <i class="material-icons">group</i>
           <p>{{ __('User Management') }}</p>
         </a>
       </li>
+      @endif
 
       <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('profile.edit') }}">
