@@ -99,7 +99,7 @@
                   <tr>
                     <td>{{ $trans->id }}</td>
                     <td>{{ date('m/d/Y', strtotime($trans->created_at)) }}</td>
-                    <td>{{ $trans->customer->first_name . ' ' . $trans->customer->last_name }}</td>
+                    <td><a href="{{ route('customers.show', $trans->customer_id) }}" class="text-primary">{{ $trans->customer->first_name . ' ' . $trans->customer->last_name }}</a></td>
                     <td>{{ $trans->transaction_type }}</td>
                     <td>${{ $trans->purchased_items }}</td>
                     <td>${{ $trans->tax }}</td>

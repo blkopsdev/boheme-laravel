@@ -25,7 +25,6 @@
                   <th>{{ __('Name') }}</th>
                   <th>{{ __('Phone') }}</th>
                   <th>{{ __('Email') }}</th>
-                  <th></th>
                 </thead>
                 <tbody>
                   @foreach ($customers as $customer)
@@ -34,7 +33,6 @@
                     <td><a href="{{ route('customers.show', $customer->id) }}" class="text-primary">{{$customer->first_name }} {{$customer->last_name }}</a> </td>
                     <td>{{$customer->phone }}</td>
                     <td>{{$customer->email }}</td>
-                    <td>{{$customer->customer_notes }}</td>
                   </tr>
                   @endforeach
                   
