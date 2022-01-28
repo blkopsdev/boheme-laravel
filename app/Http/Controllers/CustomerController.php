@@ -28,7 +28,7 @@ class CustomerController extends Controller
     {
         $title = __('Customers');
         $total = Customer::count();
-        $customers = Customer::orderBy('id','desc')->paginate(15);
+        $customers = Customer::orderBy('id','desc')->get();
         return view('customer.index', compact('title', 'customers', 'total'));
     }
 
@@ -75,7 +75,7 @@ class CustomerController extends Controller
     public function show($id)
     {
         $customer = Customer::find($id);
-        $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'asc')->paginate(10);
+        $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'asc')->get();
         if ($transactions->count() > 0) {
             $store_credit = get_store_credit($id)['credit'];
         } else {

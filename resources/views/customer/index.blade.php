@@ -19,32 +19,27 @@
               <h4 class="card-title">{{ __('Total Customers:') }} <strong>{{ number_format($total) }}</strong></h4>
             </div>
             <div class="card-body table-responsive">
-              <table class="table table-hover">
+              <table class="table table-hover" id="customers">
                 <thead class="text-warning">
                   <th>{{ __('ID') }}</th>
                   <th>{{ __('Name') }}</th>
                   <th>{{ __('Phone') }}</th>
                   <th>{{ __('Email') }}</th>
-                  <th>{{ __('Notes') }}</th>
                   <th></th>
                 </thead>
                 <tbody>
                   @foreach ($customers as $customer)
                   <tr>
                     <td>{{$customer->id}}</td>
-                    <td>{{$customer->first_name }} {{$customer->last_name }}</td>
+                    <td><a href="{{ route('customers.show', $customer->id) }}" class="text-primary">{{$customer->first_name }} {{$customer->last_name }}</a> </td>
                     <td>{{$customer->phone }}</td>
                     <td>{{$customer->email }}</td>
                     <td>{{$customer->customer_notes }}</td>
-                    <td>
-                      <a href="{{ route('customers.show', $customer->id) }}" class="btn btn-primary btn-round mr-2"><i class="material-icons">visibility</i> View</a>
-                    </td>
                   </tr>
                   @endforeach
                   
                 </tbody>
               </table>
-              {{ $customers->links() }}
             </div>
           </div>
         </div>
@@ -56,7 +51,7 @@
 @push('js')
   <script>
     $(document).ready(function() {
-      md.initDashboardPageCharts();
+      $('#customers').DataTable()
     });
   </script>
 

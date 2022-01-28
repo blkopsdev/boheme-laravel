@@ -34,6 +34,8 @@
                         if ($transaction->transaction_type == 'Purchase') {
                             if ($transaction->store_credit != 0) {
                                 $store_credit = "-$" . number_format($transaction->store_credit, 2);
+                            } else {
+                                $store_credit = "$0.00";
                             }
                         } else if ($transaction->transaction_type == 'Cash out for store credit') {
                             $store_credit = "-$" . number_format($transaction->cash_out_for_storecredit*2, 2);

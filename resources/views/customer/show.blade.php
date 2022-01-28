@@ -100,7 +100,7 @@
                         <div class="bmd-form-group{{ $errors->has('purchased_items') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="purchased_items" class="mb-0">{{ __('Amount of Sale ($): ') }}</label>
-                            <input type="number" step="0.01" name="purchased_items" id="purchased_items" min="0" value="{{ old('purchased_items', 0) }}" onblur="calcTax();" required>
+                            <input type="number" step="0.01" name="purchased_items" id="purchased_items" min="0.01" value="{{ old('purchased_items', 0) }}" onblur="calcTax();" required>
                           </div>
                           @if ($errors->has('purchased_items'))
                             <div id="purchased-error" class="error text-danger pl-3" for="purchased_items" style="display: block;">
@@ -157,7 +157,7 @@
                         <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="transaction_amount" class="mb-0">{{ __('Amount ($):') }}</label>
-                            <input type="number" step="0.01" name="transaction_amount" id="transaction_amount" min="0" value="{{ old('transaction_amount', 0) }}" required>
+                            <input type="number" step="0.01" name="transaction_amount" id="transaction_amount" min="0.01" value="{{ old('transaction_amount', 0) }}" required>
                           </div>
                           @if ($errors->has('transaction_amount'))
                             <div id="transaction-amount-error" class="error text-danger pl-3" for="transaction_amount" style="display: block;">
@@ -215,7 +215,7 @@
                 <h4 class="card-title">{{ __('Transaction History') }}</h4>
               </div>
               <div class="card-body table-responsive">
-                <table class="col-md-12 ml-2 table table-hover">
+                <table class="col-md-12 ml-2 table table-hover" id="transaction_history">
                   <thead>
                     <tr>
                       <th><strong>{{ __('ID') }}</strong></th>
@@ -352,17 +352,16 @@
                             <i class="material-icons">edit</i>
                             <div class="ripple-container"></div>
                           </a>
-                          <a rel="tooltip" class="btn btn-danger btn-rounded p-2" href="" data-original-title="" title="{{ __('Delete') }}">
+                          {{-- <a rel="tooltip" class="btn btn-danger btn-rounded p-2" href="" data-original-title="" title="{{ __('Delete') }}">
                             <i class="material-icons">delete</i>
                             <div class="ripple-container"></div>
-                          </a>
+                          </a> --}}
                           @endif
                         </td>
                       </tr>
                     @endforeach
                   </tbody>
                 </table>
-                {{ $transactions->links() }}
               </div>
             </div>
           </div>
@@ -376,6 +375,9 @@
 
 <script>
   $(document).ready(function() {
+    $('#transaction_history').DataTable({
+      "order": [[ 0, "desc" ],[ 1, "desc" ]]
+    });
     $('.selectpicker').selectpicker();
     $('select.transaction-type').on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
       var value = $(this).val();
@@ -404,18 +406,6 @@
     document.getElementById('cash_in').value = (document.getElementById('purchase_total').value - document.getElementById('store_credit').value).toFixed(2);
   }
   function validate() {
-    if(document.getElementById('transaction_type').value == 'Purchase') {
-      if (document.getElementById('purchased_items').value == 0) {
-        materialAlert("Error!", "You must enter an Amount of Sales...");
-        return false;
-      }
-    } else {
-      if (document.getElementById('transaction_amount').value == 0) {
-        materialAlert("Error!", "You must enter something in the Amount $ box...");
-        return false;
-      }
-    }
-
     calcTax(document.getElementById('purchased_items'));
 
     /* if(document.getElementById('transaction_type').value == 'Add store credit' || document.getElementById('transaction_type').value == 'Cash out for trade') {

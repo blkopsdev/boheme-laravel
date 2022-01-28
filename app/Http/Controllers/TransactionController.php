@@ -49,7 +49,6 @@ class TransactionController extends Controller
         $data = [];
         if ($type == 'Add store credit') {
             $data['store_credit'] = $request->transaction_amount;
-            $data['employee'] = $request->employee;
         } else if ($type == 'Purchase') {
             $data['purchased_items'] = $request->purchased_items;
             $data['tax'] = $request->tax;
@@ -110,7 +109,29 @@ class TransactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $transaction = Transaction::find($id);
+        $type = $request->transaction_type;
+        $data = [];
+        if ($type == 'Add store credit') {
+            $data['store_credit'] = $request->transaction_amount;
+        } else if ($type == 'Purchase') {
+            $data['purchased_items'] = $request->purchased_items;
+            $data['tax'] = $request->tax;
+            $data['purchase_total'] = $request->purchase_total;
+            $data['store_credit'] = $request->store_credit;
+            $data['cash_in'] = $request->cash_in;
+        } else if ($type == 'Cash out for trade') {
+            $data['cash_out_for_trade'] = $request->transaction_amount;
+        } else {
+            $data['cash_out_for_storecredit'] = $request->transaction_amount;
+        }
+        $data['comments'] = $request->comments;
+        $update = $transaction->update($data);
+        if(!$update) {
+            return redirect()->back()->withError('msg', "Something went wrong, please try again!");
+        }
+
+        return redirect()->back()->with('success', "Transaction has been updated successfully");
     }
 
     /**

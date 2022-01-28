@@ -33,7 +33,7 @@
                     <label for="transaction_type" class="m-0">{{ __('Transaction Type:') }}</label>
                   </div>
                   <div class="input-group col-md-8">
-                    <input type="text" name="transaction_type" class="form-control" placeholder="{{ __('Transaction Type') }}" value="{{ $transaction->transaction_type }}" readonly>
+                    <input type="text" name="transaction_type" id="transaction_type" class="form-control" placeholder="{{ __('Transaction Type') }}" value="{{ $transaction->transaction_type }}" readonly>
                   </div>
                 </div>
               </div>
@@ -44,7 +44,7 @@
                     <label for="purchased_items" class="m-0">{{ __('Purchase Subtotal ($)') }}</label>
                   </div>
                   <div class="input-group col-md-8">
-                    <input type="number" class="form-control" step="0.01" name="purchased_items" id="purchased_items" min="0" value="{{ old('purchased_items', $transaction->purchased_items) }}" onblur="calcTax();" required>
+                    <input type="number" class="form-control" step="0.01" name="purchased_items" id="purchased_items" min="0.01" value="{{ old('purchased_items', $transaction->purchased_items) }}" onblur="calcTax();" required>
                   </div>
                 </div>
                 @if ($errors->has('purchased_items'))
@@ -59,7 +59,7 @@
                     <label for="tax" class="m-0">{{ __('Tax ($)') }}</label>
                   </div>
                   <div class="input-group col-md-8">
-                    <input type="number" class="form-control" step="0.01" name="tax" id="tax" min="0" value="{{ old('tax', $transaction->tax) }}" required>
+                    <input type="number" class="form-control" step="0.01" name="tax" id="tax" min="0" value="{{ old('tax', $transaction->tax) }}" required readonly>
                   </div>
                 </div>
                 @if ($errors->has('tax'))
@@ -74,7 +74,7 @@
                     <label for="purchase_total" class="m-0">{{ __('Purchase Total ($)') }}</label>
                   </div>
                   <div class="input-group col-md-8">
-                    <input type="number" class="form-control" step="0.01" name="purchase_total" id="purchase_total" min="0" value="{{ old('purchase_total', $transaction->purchase_total) }}" required>
+                    <input type="number" class="form-control" step="0.01" name="purchase_total" id="purchase_total" min="0" value="{{ old('purchase_total', $transaction->purchase_total) }}" required readonly>
                   </div>
                 </div>
                 @if ($errors->has('purchase_total'))
@@ -86,7 +86,14 @@
               <div class="bmd-form-group{{ $errors->has('store_credit') ? ' has-danger' : '' }} mt-3">
                 <div class="row">
                   <div class="col-md-4 d-flex align-items-center">
-                    <label for="store_credit" class="m-0">{{ __('Store Credit ($)') }}</label>
+                    @php
+                        $store_credit = number_format(get_store_credit($transaction->customer_id, $transaction->id)['credit'], 2);
+                        $used_credit = number_format($transaction->store_credit, 2);
+                        $available_credit = $store_credit + $used_credit;
+                    @endphp
+                    <label for="store_credit" class="m-0">{{ __('Store Credit ($)') }}</label> <button type="button" class="btn btn-primary btn-link btn-small p-0 ml-2" data-toggle="tooltip" data-placement="right" title="{{ __('Available store credit is $') . $available_credit }}">
+                      <i class="material-icons">help</i>
+                    </button>
                   </div>
                   <div class="input-group col-md-8">
                     <input type="number" class="form-control" step="0.01" name="store_credit" id="store_credit" min="0" value="{{ old('store_credit', $transaction->store_credit) }}" onblur="calcCashNeeded();" required>
@@ -207,24 +214,12 @@
   }
 
   function validate() {
-    if(document.getElementById('transaction_type').value == 'Purchase') {
-      if (document.getElementById('purchased_items').value == 0) {
-        materialAlert("Error!", "You must enter an Amount of Sales...");
-        return false;
-      }
-    } else {
-      if (document.getElementById('transaction_amount').value == 0) {
-        materialAlert("Error!", "You must enter something in the Amount $ box...");
-        return false;
-      }
-    }
 
     calcTax(document.getElementById('purchased_items'));
 
-    var avail_credit_value = {{ number_format(get_store_credit($transaction->customer_id, $transaction->id)['credit'], 2) }};
-
+    var avail_credit_value = {{ number_format(get_store_credit($transaction->customer_id, $transaction->id)['credit'], 2) + number_format($transaction->store_credit, 2) }};
     if (document.getElementById('store_credit').value * 1 > avail_credit_value * 1){
-      materialAlert("Error!", "Customer does NOT have this much store credit !!");
+      materialAlert("Error!", "Customer does NOT have this much store credit!! <br>Available store credit value is $" + avail_credit_value + ".");
       return false;
     }
 
@@ -233,6 +228,12 @@
       return false;
     }
   }
+
+  $(document).on('submit', 'form', function() {
+    if(validate() == false) {
+      return false
+    } 
+  });
 </script>
 <script>
   @if(session('success'))
