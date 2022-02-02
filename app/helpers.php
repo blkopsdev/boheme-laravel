@@ -92,7 +92,7 @@ function get_store_credit($id, $transaction_id = null) {
         } 
     
         $expiredFlag = 0;
-    
+      
         if ($transaction->transaction_type == "Add store credit") {
             $avail_credit = $avail_credit + $transaction->store_credit;
         }

@@ -396,7 +396,7 @@
   });
 
 
-  var CASalesTaxRate = parseFloat({{ 0.0825 }}, 2);
+  var CASalesTaxRate = parseFloat({{ get_option('tax_rate')/100 }}, 2);
   function calcTax() {
     document.getElementById('tax').value = (document.getElementById('purchased_items').value * CASalesTaxRate).toFixed(2);
     document.getElementById('purchase_total').value = (eval(document.getElementById('purchased_items').value) + eval(document.getElementById('tax').value)).toFixed(2);
