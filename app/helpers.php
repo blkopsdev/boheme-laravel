@@ -51,7 +51,7 @@ function get_store_credit($id, $transaction_id = null) {
         
         if($transaction->transaction_type == "Add store credit") 
         {
-            if ($transactionDate < strtotime(date("2022-01-01"))){
+            if ($transactionDate < strtotime(date("2021-01-01"))){
                 if ($transactionDate >= $dateMinus6Months) {
                     $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
                     $expiredFlag = 0;
@@ -85,7 +85,7 @@ function get_store_credit($id, $transaction_id = null) {
             $avail_credit = $avail_credit - $avail_credit_expired_tally;
         }
     
-        if ($transactionDate < strtotime(date("2015-05-05")) || $transactionDate >= strtotime(date("2022-01-01"))) {
+        if ($transactionDate < strtotime(date("2015-05-05")) || $transactionDate >= strtotime(date("2021-01-01"))) {
             $expirationDate = strtotime('12 months', $transactionDate); 
         } else{
             $expirationDate = strtotime('6 months', $transactionDate); 
