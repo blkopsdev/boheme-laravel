@@ -129,3 +129,8 @@ function get_store_credit($id, $transaction_id = null) {
 
     return $results;
 }
+
+function get_option($option_name) {
+    $option = \App\Option::whereOptionName($option_name)->first();
+    return $option->option_value;
+}

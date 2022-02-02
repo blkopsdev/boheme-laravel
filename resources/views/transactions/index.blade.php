@@ -1,8 +1,6 @@
 @extends('layouts.app', ['activePage' => 'transactions', 'titlePage' => __('Transactions')])
 
 @section('content')
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -60,8 +58,6 @@
 @endsection
 
 @push('js')
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#transactions').DataTable();

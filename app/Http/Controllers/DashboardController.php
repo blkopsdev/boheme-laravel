@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use App\Option;
 use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,5 +34,28 @@ class DashboardController extends Controller
         $new_trans = Transaction::latest()->take(10)->get();
         // $projects = Project::get();
         return view('dashboard', compact('title', 'customers', 'transactions', 'today_transactions', 'new_trans'));
+    }
+
+    /**
+     * Show the application settings.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function settings()
+    {
+        $title = "Settings";
+        return view('pages.settings', compact('title'));
+    }
+
+    public function settingsUpdate(Request $request)
+    {
+        $request->tax_rate;
+        $request->expiration_period;
+        $tax_rate = Option::whereOptionName('tax_rate')->first();
+        $expiration_period = Option::whereOptionName('expiration_period')->first();
+
+        $tax_rate = $tax_rate->update(['option_value' => $request->tax_rating]);
+        $expiration_period = $expiration_period->update(['option_value' => $request->expiration_period]);
+        return redirect()->back()->with('success', 'Settings has been updated successfully');
     }
 }

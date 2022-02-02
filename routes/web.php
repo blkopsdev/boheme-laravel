@@ -35,6 +35,8 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 		Route::get('user/edit/{id}', ['as'=>'edit_user', 'uses' => 'UserController@edit']);
 		Route::post('user/edit/{id}', ['as'=>'update_user', 'uses' => 'UserController@update']);
 		Route::post('user/password/{id}', ['as'=>'user_password', 'uses' =>  'UserController@updatePassword']);
+		Route::get('settings', ['as'=>'settings', 'uses'=>'DashboardController@settings']);
+		Route::post('settings', ['as'=>'update_settings', 'uses'=>'DashboardController@settingsUpdate']);
 	});
 });
 
