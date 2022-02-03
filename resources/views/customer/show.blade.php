@@ -335,7 +335,12 @@
                             {{ date('m/d/Y', $expirationDate) }}
                           @endif
                         </td>
-                        <td>{{ $transaction->transaction_type }}</td>
+                        <td>
+                          @if ($transaction->transaction_type == "Cash out")
+                          {{ __('Cash out for trade') }}
+                          @else
+                          {{ $transaction->transaction_type }}</td>
+                          @endif
                         <td>${{ $transaction->purchased_items }}</td>
                         <td>${{ $transaction->tax }}</td>
                         <td>${{ $transaction->purchase_total }}</td>
@@ -379,9 +384,10 @@
     $('#transaction_history').DataTable({
       rowReorder: true,
       columnDefs: [
-          { orderable: true, className: 'reorder', targets: 0 },
+          { orderable: true, className: 'reorder', targets: 0, orderSequence: "desc" },
           { orderable: false, targets: '_all' }
       ]
+      ,
     });
     $('.selectpicker').selectpicker();
     $('select.transaction-type').on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
