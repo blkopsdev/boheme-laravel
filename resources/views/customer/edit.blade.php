@@ -98,7 +98,7 @@
               </div>
               <div class="bmd-form-group{{ $errors->has('customer_notes') ? ' has-danger' : '' }} mt-3">
                 <div class="input-group col-md-8 offset-md-1">
-                  <textarea name="customer_notes" class="form-control" placeholder="{{ __('Customer Notes') }}"rows="5" required>{{ old('customer_notes', $customer->customer_notes) }}</textarea>
+                  <textarea name="customer_notes" class="form-control" placeholder="{{ __('Customer Notes') }}"rows="5">{{ old('customer_notes', $customer->customer_notes) }}</textarea>
                 </div>
                 @if ($errors->has('customer_notes'))
                   <div id="customer-notes-error" class="error text-danger pl-3" for="customer_notes" style="display: block;">
