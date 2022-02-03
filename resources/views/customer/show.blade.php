@@ -39,7 +39,16 @@
                     </tr>
                     <tr>
                       <td><strong>{{ __('Phone Number:') }}</strong></td>
-                      <td>{{$customer->phone}}</td>
+                      <td>
+                        @php
+                          $phone = str_replace('-', '', str_replace('.', '',$customer->phone));
+                          if(strlen($phone) == 7) {
+                            $phone = '530' . $phone;
+                          }
+                        @endphp
+                        {{ preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone) }}
+                        {{-- {{$customer->phone}} --}}
+                      </td>
                     </tr>
                     <tr>
                       <td><strong>{{ __('Email:') }}</strong></td>

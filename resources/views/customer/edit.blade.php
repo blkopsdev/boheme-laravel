@@ -32,7 +32,7 @@
                   <input type="text" name="first_name" class="form-control" placeholder="{{ __('First Name') }}" value="{{ old('first_name', $customer->first_name) }}" required>
                 </div>
                 @if ($errors->has('first_name'))
-                  <div id="first-name-error" class="error text-danger pl-3" for="first_name" style="display: block;">
+                  <div id="first-name-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="first_name" style="display: block;">
                     <strong>{{ $errors->first('first_name') }}</strong>
                   </div>
                 @endif
@@ -42,7 +42,7 @@
                   <input type="text" name="last_name" class="form-control" placeholder="{{ __('Last Name') }}" value="{{ old('last_name', $customer->last_name) }}" required>
                 </div>
                 @if ($errors->has('last_name'))
-                  <div id="last-name-error" class="error text-danger pl-3" for="last_name" style="display: block;">
+                  <div id="last-name-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="last_name" style="display: block;">
                     <strong>{{ $errors->first('last_name') }}</strong>
                   </div>
                 @endif
@@ -52,7 +52,7 @@
                   <input type="text" name="phone" class="form-control" placeholder="@lang('app.phone')" value="{{ old('phone', $customer->phone) }}" required>
                 </div>
                 @if ($errors->has('phone'))
-                  <div id="phone-error" class="error text-danger pl-3" for="phone" style="display: block;">
+                  <div id="phone-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="phone" style="display: block;">
                     <strong>{{ $errors->first('phone') }}</strong>
                   </div>
                 @endif
@@ -62,7 +62,7 @@
                   <input type="email" name="email" class="form-control" placeholder="@lang('auth.email')" value="{{ old('email', $customer->email) }}" required>
                 </div>
                 @if ($errors->has('email'))
-                  <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
+                  <div id="email-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="email" style="display: block;">
                     <strong>{{ $errors->first('email') }}</strong>
                   </div>
                 @endif
@@ -77,7 +77,7 @@
                   </select>
                 </div>
                 @if ($errors->has('contact_pref'))
-                  <div id="contact-pref-error" class="error text-danger pl-3" for="contact_pref" style="display: block;">
+                  <div id="contact-pref-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="contact_pref" style="display: block;">
                     <strong>{{ $errors->first('contact_pref') }}</strong>
                   </div>
                 @endif
@@ -91,7 +91,7 @@
                   </select>
                 </div>
                 @if ($errors->has('newsletter'))
-                  <div id="contact-pref-error" class="error text-danger pl-3" for="newsletter" style="display: block;">
+                  <div id="contact-pref-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="newsletter" style="display: block;">
                     <strong>{{ $errors->first('newsletter') }}</strong>
                   </div>
                 @endif
@@ -101,7 +101,7 @@
                   <textarea name="customer_notes" class="form-control" placeholder="{{ __('Customer Notes') }}"rows="5">{{ old('customer_notes', $customer->customer_notes) }}</textarea>
                 </div>
                 @if ($errors->has('customer_notes'))
-                  <div id="customer-notes-error" class="error text-danger pl-3" for="customer_notes" style="display: block;">
+                  <div id="customer-notes-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="customer_notes" style="display: block;">
                     <strong>{{ $errors->first('customer_notes') }}</strong>
                   </div>
                 @endif

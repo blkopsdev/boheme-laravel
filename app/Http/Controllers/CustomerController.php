@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Customer;
 use App\Transaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -51,6 +52,13 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'phone' => 'digits:10'
+        ];
+        $messages = [
+            'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
+        ];
+        $this->validate($request, $rules, $messages);
         $data = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -107,6 +115,14 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $rules = [
+            'phone' => 'digits:10'
+        ];
+        $messages = [
+            'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
+        ];
+        $this->validate($request, $rules, $messages);
+
         $customer = Customer::find($id);
         $customer->update($request->all());
         return redirect()->route('customers.show', $id)->with('success', 'Customer updated successfully.');

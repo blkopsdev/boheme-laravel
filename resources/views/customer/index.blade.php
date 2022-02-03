@@ -31,8 +31,16 @@
                   <tr>
                     <td>{{$customer->id}}</td>
                     <td><a href="{{ route('customers.show', $customer->id) }}" class="text-primary">{{$customer->first_name }} {{$customer->last_name }}</a> </td>
-                    <td>{{$customer->phone }}</td>
-                    <td>{{$customer->email }}</td>
+                    <td>
+                      @php
+                        $phone = str_replace('-', '', str_replace('.', '',$customer->phone));
+                        if(strlen($phone) == 7) {
+                          $phone = '530' . $phone;
+                        }
+                      @endphp
+                      {{ preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone) }}
+                    </td>
+                    <td>{{ $customer->email }}</td>
                   </tr>
                   @endforeach
                   
