@@ -14,7 +14,7 @@
               @csrf
               <div class="row d-flex align-items-center">
                 <div class="col-md-4">
-                  <h5 class="mb-0"><strong>{{ __('Tax Rating (%):') }}</strong></h5>
+                  <h5 class="mb-0"><strong>{{ __('Tax Rate (%):') }}</strong></h5>
                 </div>
                 <div class="col-md-4">
                   <div class="bmd-form-group{{ $errors->has('tax_rating') ? ' has-danger' : '' }}">
