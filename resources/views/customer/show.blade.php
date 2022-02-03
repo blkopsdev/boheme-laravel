@@ -214,7 +214,7 @@
               <div class="card-header card-header-warning">
                 <h4 class="card-title">{{ __('Transaction History') }}</h4>
               </div>
-              <div class="card-body table-responsive">
+              <div class="card-body">
                 <table class="col-md-12 ml-2 table table-hover" id="transaction_history">
                   <thead>
                     <tr>
@@ -342,7 +342,7 @@
                         <td>{{ $store_credit }}</td>
                         <td>{{ $cash }}</td>
                         <td>${{ number_format($avail_credit, 2) }}</td>
-                        <td>
+                        <td class="d-flex">
                           <a rel="tooltip" class="btn btn-primary btn-rounded p-2" href="{{ route('transactions.show', $transaction->id) }}" data-original-title="" title="{{ __('View') }}">
                             <i class="material-icons">visibility</i>
                             <div class="ripple-container"></div>
@@ -352,10 +352,11 @@
                             <i class="material-icons">edit</i>
                             <div class="ripple-container"></div>
                           </a>
-                          {{-- <a rel="tooltip" class="btn btn-danger btn-rounded p-2" href="" data-original-title="" title="{{ __('Delete') }}">
-                            <i class="material-icons">delete</i>
-                            <div class="ripple-container"></div>
-                          </a> --}}
+                          <form action="{{ route('transactions.destroy',$transaction->id) }}" method="POST" >
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger p-2" onclick="return confirm('Are you sure you want to permanently delete this transaction')"><i class="material-icons">delete</i></button>
+                          </form>
                           @endif
                         </td>
                       </tr>
