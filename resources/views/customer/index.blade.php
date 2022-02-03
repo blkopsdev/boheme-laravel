@@ -57,7 +57,13 @@
 @push('js')
   <script>
     $(document).ready(function() {
-      $('#customers').DataTable()
+      $('#customers').DataTable({
+        "order": [[ 0, 'desc' ]],
+        "columnDefs": [
+          { "targets": [0], "orderable": true },
+          // { "orderable": false, targets: '_all' }
+        ]
+      })
     });
   </script>
 
