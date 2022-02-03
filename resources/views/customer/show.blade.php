@@ -376,7 +376,7 @@
 <script>
   $(document).ready(function() {
     $('#transaction_history').DataTable({
-      "order": [[ 0, "desc" ],[ 1, "desc" ]]
+      "ordering": false
     });
     $('.selectpicker').selectpicker();
     $('select.transaction-type').on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
