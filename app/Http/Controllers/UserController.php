@@ -41,7 +41,7 @@ class UserController extends Controller
             'user_type' => $request->user_type
         ];
         User::create($data);
-        return route('user.index')->with('success', "User created successfully.");
+        return redirect()->route('user.index')->with('success', "User created successfully.");
     }
     /**
      * Show the form for editing the profile.
