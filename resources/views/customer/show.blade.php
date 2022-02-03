@@ -306,7 +306,7 @@
                         $cash = $transaction->cash_in + $transaction->cash_out_for_trade + $transaction->cash_out_for_storecredit;
                         $cash = number_format($cash, 2, '.', '');
 
-                        if (( $transaction->transaction_type == "Cash out for store credit") || ( $transaction->transaction_type == "Cash out for trade")){
+                        if (str_contains( $transaction->transaction_type, 'Cash out')){
                             $cash = "-$" . $cash;
                         }else{
                             $cash = "$" . $cash;
