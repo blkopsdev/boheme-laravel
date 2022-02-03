@@ -382,12 +382,11 @@
 <script>
   $(document).ready(function() {
     $('#transaction_history').DataTable({
-      rowReorder: true,
-      columnDefs: [
-          { orderable: true, className: 'reorder', targets: 0, orderSequence: "desc" },
-          { orderable: false, targets: '_all' }
+      "order": [[ 0, 'desc' ]],
+      "columnDefs": [
+        { "targets": [0], "orderable": true },
+        { "orderable": false, targets: '_all' }
       ]
-      ,
     });
     $('.selectpicker').selectpicker();
     $('select.transaction-type').on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
