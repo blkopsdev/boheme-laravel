@@ -73,7 +73,7 @@
                   <select class="selectpicker form-control" id="contact_pref" name="contact_pref" data-style="btn btn-primary text-white">
                     <option value="normal" {{ strtolower($customer->contact_pref) == 'normal' ? 'selected' : '' }}>{{ __('Normal') }}</option>
                     <option value="exceptional" {{ strtolower($customer->contact_pref) == 'exceptional' ? 'selected' : '' }}>{{ __('Exceptional') }}</option>
-                    <option value="maginal" {{ strtolower($customer->contact_pref) == 'maginal' ? 'selected' : '' }}>{{ __('Maginal') }}</option>
+                    <option value="marginal" {{ strtolower($customer->contact_pref) == 'marginal' ? 'selected' : '' }}>{{ __('Marginal') }}</option>
                   </select>
                 </div>
                 @if ($errors->has('contact_pref'))

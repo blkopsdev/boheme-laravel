@@ -60,7 +60,7 @@
                   <select class="selectpicker form-control" id="contact_pref" name="contact_pref" data-style="btn btn-primary text-white">
                     <option value="normal">{{ __('Normal') }}</option>
                     <option value="exceptional">{{ __('Exceptional') }}</option>
-                    <option value="maginal">{{ __('Maginal') }}</option>
+                    <option value="marginal">{{ __('Marginal') }}</option>
                   </select>
                 </div>
                 @if ($errors->has('contact_pref'))
