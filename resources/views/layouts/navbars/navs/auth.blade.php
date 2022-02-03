@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-fixed fixed-top ">
   <div class="container-fluid">
     <div class="col-md-3">
-      <h3 class="m-2">Boheme Transactions Ledger</h3>
+      <h4 class="m-2">Boheme Transactions Ledger</h4>
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
       <span class="sr-only">Toggle navigation</span>
