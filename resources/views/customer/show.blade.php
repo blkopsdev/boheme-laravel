@@ -355,7 +355,7 @@
                           <form action="{{ route('transactions.destroy',$transaction->id) }}" method="POST" >
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger p-2" onclick="return confirm('Are you sure you want to permanently delete Transaction #{{ $transaction->id }}')"><i class="material-icons">delete</i></button>
+                            <button type="submit" class="btn btn-danger p-2" onclick="return confirm('Are you sure you want to permanently delete Transaction #{{ $transaction->id }}')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
                           </form>
                           @endif
                         </td>
