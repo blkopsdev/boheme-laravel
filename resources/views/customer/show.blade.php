@@ -355,7 +355,7 @@
                           <form action="{{ route('transactions.destroy',$transaction->id) }}" method="POST" >
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger p-2" onclick="return confirm('Are you sure you want to permanently delete Transaction [ID #{{ $transaction->id }}]')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
+                            <button type="submit" class="btn btn-danger p-2" onclick="return confirm('Are you sure you want to permanently delete Transaction #{{ $transaction->id }}')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
                           </form>
                           @endif
                         </td>
@@ -377,7 +377,11 @@
 <script>
   $(document).ready(function() {
     $('#transaction_history').DataTable({
-      "ordering": false
+      rowReorder: true,
+      columnDefs: [
+          { orderable: true, className: 'reorder', targets: 0 },
+          { orderable: false, targets: '_all' }
+      ]
     });
     $('.selectpicker').selectpicker();
     $('select.transaction-type').on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
