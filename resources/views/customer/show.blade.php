@@ -441,9 +441,11 @@
       return false;
     }
 
-    if (document.getElementById('transaction_type').value == 'Cash out for store credit' && document.getElementById('transaction_amount').value > avail_credit_value / 2){
-      materialAlert("Error!", "Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)");
-      return false;
+    if (document.getElementById('transaction_type').value == 'Cash out for store credit'){
+      if (document.getElementById('transaction_amount').value > avail_credit_value / 2) {
+        materialAlert("Error!", "Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)");
+        return false;
+      }
     }
   }
 
