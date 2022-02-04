@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TransactionController extends Controller
 {
@@ -58,6 +59,19 @@ class TransactionController extends Controller
     {
         $type = $request->transaction_type;
         $data = [];
+        if ($type == 'Purchase') {
+            $rules = [
+                'purchased_items' => 'required|numeric|min:0|not_in:0',
+                'tax' => 'required|numeric|min:0|not_in:0',
+                'purchase_total' => 'required|numeric|min:0|not_in:0',
+            ];
+        } else {
+            $rules = [
+                'transaction_amount' => 'required|numeric|min:0|not_in:0',
+            ];
+        }
+
+        $this->validate($request, $rules);
         if ($type == 'Add store credit') {
             $data['store_credit'] = $request->transaction_amount;
         } else if ($type == 'Purchase') {

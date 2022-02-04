@@ -72,9 +72,8 @@
         <!-- Library for adding dinamically elements -->
         <script src="{{ asset('material') }}/js/plugins/arrive.min.js"></script>
         <!--  Google Maps Plugin    -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE'"></script>
         <!-- Chartist JS -->
-        <script src="{{ asset('material') }}/js/plugins/chartist.min.js"></script>
+        {{-- <script src="{{ asset('material') }}/js/plugins/chartist.min.js"></script> --}}
         <!--  Notifications Plugin    -->
         <script src="{{ asset('material') }}/js/plugins/bootstrap-notify.js"></script>
         <script src="{{ asset('assets/js/toastr.min.js') }}"></script>

@@ -92,10 +92,10 @@
                         <div class="col-md-8">
                           <label for="transaction_type">{{ __('Transaction Type') }}</label>
                           <select class="selectpicker form-control transaction-type" id="transaction_type" name="transaction_type" data-style="btn btn-primary text-white">
-                            <option value="Add store credit">{{ __('Add store credit') }}</option>
-                            <option value="Purchase">{{ __('Purchase') }}</option>
-                            <option value="Cash out for trade">{{ __('Cash out for TRADE-INS') }}</option>
-                            <option value="Cash out for store credit">{{ __('Cash out for store credit (We give HALF their store cerdit in cash)') }}</option>
+                            <option value="Add store credit" {{ old('transaction_type') == 'Add store credit' ? 'selected' : '' }}>{{ __('Add store credit') }}</option>
+                            <option value="Purchase" {{ old('transaction_type') == 'Purchase' ? 'selected' : '' }}>{{ __('Purchase') }}</option>
+                            <option value="Cash out for trade" {{ old('transaction_type') == 'Cash out for trade' ? 'selected' : '' }}>{{ __('Cash out for TRADE-INS') }}</option>
+                            <option value="Cash out for store credit" {{ old('transaction_type') == 'Cash out for store credit' ? 'selected' : '' }}>{{ __('Cash out for store credit (We give HALF their store cerdit in cash)') }}</option>
                           </select>
                         </div>
                         <div class="col-md-2"></div>
@@ -105,11 +105,11 @@
                           </div>
                         @endif
                       </div>
-                      <div class="transaction-purchase d-none">
+                      <div class="transaction-purchase {{ old('transaction_type') == 'Purchase' ? '' : 'd-none' }}">
                         <div class="bmd-form-group{{ $errors->has('purchased_items') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="purchased_items" class="mb-0">{{ __('Amount of Sale ($): ') }}</label>
-                            <input type="number" step="0.01" name="purchased_items" id="purchased_items" min="0.01" value="{{ old('purchased_items', 0) }}" onblur="calcTax();" required>
+                            <input type="number" step="0.01" name="purchased_items" id="purchased_items" value="{{ old('purchased_items', 0) }}" onblur="calcTax();">
                           </div>
                           @if ($errors->has('purchased_items'))
                             <div id="purchased-error" class="error text-danger pl-3" for="purchased_items" style="display: block;">
@@ -120,7 +120,7 @@
                         <div class="bmd-form-group{{ $errors->has('tax') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="tax" class="mb-0">{{ __('Tax ($): ') }}</label>
-                            <input type="number" step="0.01" name="tax" id="tax" min="0" value="{{ old('tax', 0) }}" readonly required>
+                            <input type="number" step="0.01" name="tax" id="tax" min="0" value="{{ old('tax', 0) }}" readonly>
                           </div>
                           @if ($errors->has('tax'))
                             <div id="tax-error" class="error text-danger pl-3" for="tax" style="display: block;">
@@ -131,7 +131,7 @@
                         <div class="bmd-form-group{{ $errors->has('purchase_total') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="purchase_total" class="mb-0">{{ __('Total ($)') }}</label>
-                            <input type="number" step="0.01" name="purchase_total" id="purchase_total" min="0" value="{{ old('purchase_total', 0) }}" readonly required>
+                            <input type="number" step="0.01" name="purchase_total" id="purchase_total" min="0" value="{{ old('purchase_total', 0) }}" readonly>
                           </div>
                           @if ($errors->has('purchase_total'))
                             <div id="purchase-total-error" class="error text-danger pl-3" for="purchase_total" style="display: block;">
@@ -142,7 +142,7 @@
                         <div class="bmd-form-group{{ $errors->has('store_credit') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="store_credit" class="mb-0">{{ __('Store Credit Used ($):') }}</label>
-                            <input type="number" step="0.01" name="store_credit" id="store_credit" min="0" value="{{ old('store_credit', 0) }}" onblur="calcCashNeeded()" required>
+                            <input type="number" step="0.01" name="store_credit" id="store_credit" min="0" value="{{ old('store_credit', 0) }}" onblur="calcCashNeeded()">
                           </div>
                           @if ($errors->has('store_credit'))
                             <div id="store-credit-error" class="error text-danger pl-3" for="store_credit" style="display: block;">
@@ -153,7 +153,7 @@
                         <div class="bmd-form-group{{ $errors->has('cash_in') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="cash_in" class="mb-0">{{ __('Amount due ($):') }}</label>
-                            <input type="number" step="0.01" name="cash_in" id="cash_in" min="0" value="{{ old('cash_in', 0) }}" required>
+                            <input type="number" step="0.01" name="cash_in" id="cash_in" min="0" value="{{ old('cash_in', 0) }}">
                           </div>
                           @if ($errors->has('cash_in'))
                             <div id="cash-in-error" class="error text-danger pl-3" for="cash_in" style="display: block;">
@@ -162,11 +162,11 @@
                           @endif
                         </div>
                       </div>
-                      <div class="transaction-no-purchase">
+                      <div class="transaction-no-purchase {{ old('transaction_type') != 'Purchase' ? '' : 'd-none' }}">
                         <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="transaction_amount" class="mb-0">{{ __('Amount ($):') }}</label>
-                            <input type="number" step="0.01" name="transaction_amount" id="transaction_amount" min="0.01" value="{{ old('transaction_amount', 0) }}" required>
+                            <input type="number" step="0.01" name="transaction_amount" id="transaction_amount" value="{{ old('transaction_amount', 0) }}">
                           </div>
                           @if ($errors->has('transaction_amount'))
                             <div id="transaction-amount-error" class="error text-danger pl-3" for="transaction_amount" style="display: block;">
@@ -174,23 +174,6 @@
                             </div>
                           @endif
                         </div>
-                        {{-- <div class="show-employee">
-                          <div class="bmd-form-group{{ $errors->has('employee') ? ' has-danger' : '' }} mt-3">
-                            <div class="col-md-8">
-                              <label for="employee">{{ __('Trade-in Processor') }}</label>
-                              <select class="selectpicker form-control" id="employee" name="employee" data-style="btn btn-primary text-white">
-                                <option value="">{{ __('Choose Employee') }}</option>
-                                <option value="Yelena">{{ __('Yelena') }}</option>
-                                <option value="Other">{{ __('Other') }}</option>
-                              </select>
-                            </div>
-                            @if ($errors->has('employee'))
-                              <div id="employee-error" class="error text-danger pl-3" for="employee" style="display: block;">
-                                <strong>{{ $errors->first('employee') }}</strong>
-                              </div>
-                            @endif
-                          </div>
-                        </div> --}}
                       </div>
                       <div class="bmd-form-group mt-5">
                         <div class="col-md-8">
@@ -441,11 +424,9 @@
       return false;
     }
 
-    if (document.getElementById('transaction_type').value == 'Cash out for store credit'){
-      if (document.getElementById('transaction_amount').value > avail_credit_value / 2) {
-        materialAlert("Error!", "Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)");
-        return false;
-      }
+    if (document.getElementById('transaction_type').value == 'Cash out for store credit' && document.getElementById('transaction_amount').value > avail_credit_value / 2){
+      materialAlert("Error!", "Customer does NOT have this much store credit !! (Remember we can only give half the cash they have in store credit)");
+      return false;
     }
   }
 
