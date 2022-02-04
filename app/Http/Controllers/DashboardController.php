@@ -18,6 +18,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('only_admin_access')->only(['settings', 'settingsUpdate', 'availableCredits']);
     }
 
     /**
@@ -57,5 +58,18 @@ class DashboardController extends Controller
         $tax_rate = $tax_rate->update(['option_value' => $request->tax_rating]);
         $expiration_period = $expiration_period->update(['option_value' => $request->expiration_period]);
         return redirect()->back()->with('success', 'Settings has been updated successfully');
+    }
+
+    /**
+     * Show the available store credits.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function availableCredits()
+    {
+        $title = "Total Available Store Credit";
+        $available_store_credit = Customer::where('available_credit', '!=', 0)->sum('available_credit');
+        $customers_with_credit =  Customer::where('available_credit', '!=', 0)->get();
+        return view('pages.available_credits', compact('title', 'available_store_credit', 'customers_with_credit'));
     }
 }

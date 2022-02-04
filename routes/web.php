@@ -37,6 +37,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 		Route::post('user/password/{id}', ['as'=>'user_password', 'uses' =>  'UserController@updatePassword']);
 		Route::get('settings', ['as'=>'settings', 'uses'=>'DashboardController@settings']);
 		Route::post('settings', ['as'=>'update_settings', 'uses'=>'DashboardController@settingsUpdate']);
+		Route::get('available-credits', ['as' => 'available_credits', 'uses' => 'DashboardController@availableCredits']);
 	});
 });
 

@@ -15,7 +15,7 @@
             </div>
             <div class="card-footer">
               <div class="stats">
-                <a href="">View More</a>
+                <p></p>
               </div>
             </div>
           </div>
@@ -31,7 +31,7 @@
             </div>
             <div class="card-footer">
               <div class="stats">
-                <a href="">View More</a>
+                <p></p>
               </div>
             </div>
           </div>
