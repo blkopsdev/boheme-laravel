@@ -35,6 +35,7 @@
                   <th>{{ __('Name') }}</th>
                   <th>{{ __('Phone') }}</th>
                   <th>{{ __('Email') }}</th>
+                  <th>{{ __('Action') }}</th>
                 </thead>
                 <tbody>
                   @foreach ($customers as $customer)
@@ -51,9 +52,21 @@
                       {{ preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone) }}
                     </td>
                     <td>{{ $customer->email }}</td>
+                    <td class="d-flex">
+                      <a rel="tooltip" class="btn btn-warning btn-rounded p-2" href="{{ route('customers.edit', $customer->id) }}" data-original-title="" title="{{ __('Edit') }}">
+                        <i class="material-icons">edit</i>
+                        <div class="ripple-container"></div>
+                      </a>
+                      @if (auth()->user()->user_type == 'admin')
+                      <form action="{{ route('customers.destroy',$customer->id) }}" method="POST" >
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger p-2" onclick="return confirm('All transactions linked to this customer will be deleted. Are you sure you want to permanently DELETE Customer #{{ $customer->id }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
+                      </form>
+                      @endif
+                    </td>
                   </tr>
                   @endforeach
-                  
                 </tbody>
               </table>
             </div>

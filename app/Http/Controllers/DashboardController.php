@@ -18,7 +18,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('only_admin_access')->only(['settings', 'settingsUpdate', 'availableCredits']);
+        $this->middleware('only_admin_access')->only('settings');
     }
 
     /**

@@ -18,6 +18,7 @@ class CustomerController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('only_admin_access')->only('destroy');
     }
 
     /**
@@ -136,6 +137,15 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $customer = Customer::find($id);
+        $customer->delete();
+        $transactions = Transaction::whereCustomerId($id)->get();
+        if($transactions->count() > 0) {
+            foreach ($transactions as $transaction) {
+                $transaction->delete();
+            }
+        }
+
+        return redirect()->back()->with('success', 'Customer has been deleted successfully!');
     }
 }
