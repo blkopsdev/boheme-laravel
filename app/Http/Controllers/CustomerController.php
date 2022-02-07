@@ -84,6 +84,9 @@ class CustomerController extends Controller
     public function show($id)
     {
         $customer = Customer::find($id);
+        if(!$customer) {
+            return redirect()->route("customers.index")->with('error', 'Customer doesn\'t exist!');
+        }
         $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'asc')->get();
         if ($transactions->count() > 0) {
             $store_credit = get_store_credit($id)['credit'];
