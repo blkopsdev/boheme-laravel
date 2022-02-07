@@ -161,7 +161,7 @@ class CustomerController extends Controller
         $transactions = Transaction::whereCustomerId($id)->get();
 
         if($transactions->count() == 0) {
-            return redirect()->back()->with("error", "This Customer doesn\'t have any transactions to merge.");
+            return redirect()->route('customers.show', $id)->with("error", "This Customer doesn\'t have any transactions to merge.");
         }
 
         foreach ($transactions as $transaction) {
