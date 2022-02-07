@@ -189,7 +189,7 @@
               <div class="bmd-form-group mt-5">
                 <div class="row">
                   <div class="col-md-4">
-                    <button type="submit" class="btn btn-success btn-rounded">{{ __('Update') }}</button>
+                    <button type="submit" class="btn btn-primary btn-rounded">{{ __('Update') }}</button>
                   </div>
                 </div>
               </div>

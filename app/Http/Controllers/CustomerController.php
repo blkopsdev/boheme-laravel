@@ -130,6 +130,50 @@ class CustomerController extends Controller
     }
 
     /**
+     * Show the form for merging the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function merge($id)
+    {
+        $title = __("Merge Customer");
+        $customer = Customer::find($id);
+        $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'asc')->get();
+        if ($transactions->count() > 0) {
+            $store_credit = get_store_credit($id)['credit'];
+        } else {
+            $store_credit = 0.00;
+        }
+        return view('customer.merge', compact('title', 'customer', 'store_credit'));
+    }
+
+    public function mergeSubmit(Request $request, $id)
+    {
+        $target_id = $request->target_id;
+        $target_customer = Customer::find($target_id);
+        
+        if(!$target_customer) {
+            return redirect()->back()->with("error", "Target Customer doesn\'t exist.");
+        } 
+
+        $customer = Customer::find($id);
+        $transactions = Transaction::whereCustomerId($id)->get();
+
+        if($transactions->count() == 0) {
+            return redirect()->back()->with("error", "This Customer doesn\'t have any transactions to merge.");
+        }
+
+        foreach ($transactions as $transaction) {
+            $transaction->customer_id = $target_id;
+            $transaction->update();
+        }
+
+        return redirect()->route('customers.show', $target_id)->with('success', "Customer Transaction Data has been merged successfully!");
+    }
+
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id

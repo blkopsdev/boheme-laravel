@@ -16,7 +16,12 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <h2>{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded ml-3"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a></h2>
+          <h2>{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} 
+            <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded ml-3"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
+            @if (auth()->user()->user_type == "admin")
+            <a href="{{ route('merge', $customer->id) }}" class="btn btn-success btn-rounded ml-3"><i class="material-icons mr-2">merge</i>{{ __('Merge') }}</a>
+            @endif
+          </h2>
         </div>
       </div>
       <div class="row">

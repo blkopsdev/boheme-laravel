@@ -58,6 +58,10 @@
                         <div class="ripple-container"></div>
                       </a>
                       @if (auth()->user()->user_type == 'admin')
+                      <a rel="tooltip" class="btn btn-success btn-rounded p-2" href="{{ route('merge', $customer->id) }}" data-original-title="" title="{{ __('Merge') }}">
+                        <i class="material-icons">merge</i>
+                        <div class="ripple-container"></div>
+                      </a>
                       <form action="{{ route('customers.destroy',$customer->id) }}" method="POST" >
                         @csrf
                         @method('DELETE')

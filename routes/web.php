@@ -38,6 +38,8 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 		Route::get('settings', ['as'=>'settings', 'uses'=>'DashboardController@settings']);
 		Route::post('settings', ['as'=>'update_settings', 'uses'=>'DashboardController@settingsUpdate']);
 		Route::get('available-credits', ['as' => 'available_credits', 'uses' => 'DashboardController@availableCredits']);
+		Route::get('customers/merge/{id}', ['as' => 'merge', 'uses' => 'CustomerController@merge']);
+		Route::post('customers/merge/{id}', ['as' => 'merge_submit', 'uses' => 'CustomerController@mergeSubmit']);
 	});
 });
 
