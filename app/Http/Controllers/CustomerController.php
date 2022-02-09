@@ -29,9 +29,8 @@ class CustomerController extends Controller
     public function index()
     {
         $title = __('Customers');
-        $total = Customer::count();
         $customers = Customer::orderBy('id','desc')->get();
-        return view('customer.index', compact('title', 'customers', 'total'));
+        return view('customer.index', compact('title', 'customers'));
     }
 
     /**

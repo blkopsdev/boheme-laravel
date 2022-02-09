@@ -26,7 +26,7 @@
         <div class="col-lg-12 col-md-12">
           <div class="card">
             <div class="card-header card-header-warning">
-              <h4 class="card-title">{{ __('Total Customers:') }} <strong>{{ number_format($total) }}</strong></h4>
+              <h4 class="card-title">{{ __('Total Customers:') }} <strong>{{ number_format($customers->count()) }}</strong></h4>
             </div>
             <div class="card-body table-responsive">
               <table class="table table-hover" id="customers">
@@ -89,7 +89,7 @@
         "columnDefs": [
           { "targets": [0], "orderable": true },
           // { "orderable": false, targets: '_all' }
-        ]
+        ],
       })
     });
   </script>
