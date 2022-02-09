@@ -29,7 +29,7 @@ class CustomerController extends Controller
     public function index()
     {
         $title = __('Customers');
-        $customers = Customer::orderBy('id','desc')->get();
+        $customers = Customer::select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id','desc')->get();
         return view('customer.index', compact('title', 'customers'));
     }
 
