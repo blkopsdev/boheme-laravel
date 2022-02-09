@@ -7,6 +7,7 @@ use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use DB;
 
 class CustomerController extends Controller
 {
@@ -29,7 +30,8 @@ class CustomerController extends Controller
     public function index()
     {
         $title = __('Customers');
-        $customers = Customer::select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id','desc')->get();
+        // $customers = Customer::select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id','desc')->get();
+        $customers = DB::table('customers')->select(['id', 'first_name', 'last_name', 'phone', 'email'])->get();
         return view('customer.index', compact('title', 'customers'));
     }
 
