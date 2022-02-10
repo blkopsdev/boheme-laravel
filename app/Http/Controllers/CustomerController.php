@@ -133,7 +133,7 @@ class CustomerController extends Controller
 
         $customer = Customer::find($id);
         $customer->update($request->all());
-        return redirect()->route('customers.show', $id)->with('success', 'Customer updated successfully.');
+        return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
     }
 
     /**
