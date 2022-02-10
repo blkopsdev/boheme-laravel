@@ -70,8 +70,13 @@
             {data: 'id', name: 'id'},
             {data: 'first_name', name: 'first_name'},
             {data: 'last_name', name: 'last_name'},
+            {
+              data: 'phone_number', 
+              name: 'phone_number',
+              orderable: true, 
+              searchable: true
+            },
             {data: 'email', name: 'email'},
-            {data: 'phone', name: 'phone'},
             {
                 data: 'action', 
                 name: 'action', 

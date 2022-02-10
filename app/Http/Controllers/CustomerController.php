@@ -42,6 +42,14 @@ class CustomerController extends Controller
             $data = DB::table('customers')->latest()->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('phone_number', function($row){
+                    $phone = str_replace('-', '', str_replace('.', '',$row->phone));
+                    if(strlen($phone) == 7) {
+                      $phone = '530' . $phone;
+                    }
+                    $phone = preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone);
+                    return $phone;
+                })
                 ->addColumn('action', function($row){
                     $actions = 
                     '<a href="' . route('customers.edit', $row->id) . '" class="btn btn-primary btn-sm" rel="tooltip" data-original-title="" title="Edit"><i class="material-icons">edit</i></a>
@@ -53,7 +61,7 @@ class CustomerController extends Controller
                     </form>';
                     return $actions;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['phone_number','action'])
                 ->make(true);
         }
     }
