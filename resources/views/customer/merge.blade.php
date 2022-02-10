@@ -33,6 +33,7 @@
                   <div class="row">
                     <div class="col-md-4">
                       <div class="form-group">
+                        <label for="target_id">Enter Target Customer ID Here...</label>
                         <input type="number" name="target_id" step="1" min="1" id="target_id" class="form-control" placeholder="Fill Target Customer ID Here..." required>
                       </div>
                       <div class="form-group">

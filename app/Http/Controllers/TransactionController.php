@@ -156,7 +156,7 @@ class TransactionController extends Controller
             return redirect()->back()->withError('msg', "Something went wrong, please try again!");
         }
 
-        return redirect()->back()->with('success', "Transaction has been updated successfully");
+        return redirect()->route('customers.show', $transaction->customer_id)->with('success', "Transaction has been updated successfully");
     }
 
     /**
