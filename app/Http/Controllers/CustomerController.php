@@ -56,7 +56,7 @@ class CustomerController extends Controller
     {
         $rules = [
             'phone' => 'digits:10',
-            'email' => 'email'
+            'email' => 'email|regex:/(.+)@(.+)\.(.+)/i'
         ];
         $messages = [
             'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
@@ -123,7 +123,7 @@ class CustomerController extends Controller
     {
         $rules = [
             'phone' => 'digits:10',
-            'email' => 'email'
+            'email' => 'email|regex:/(.+)@(.+)\.(.+)/i'
         ];
         $messages = [
             'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
