@@ -32,6 +32,7 @@
                   <th>ID</th>
                   <th>Name</th>
                   <th>Phone</th>
+                  <th>Email</th>
                   <th>Available Credit</th>
                 </thead>
                 <tbody>
@@ -47,6 +48,9 @@
                         }
                       @endphp
                       {{ preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone) }}
+                    </td>
+                    <td>
+                      {{ $customer->email }}
                     </td>
                     <td class="text-primary">
                       ${{ number_format($customer->available_credit, 2) }}
