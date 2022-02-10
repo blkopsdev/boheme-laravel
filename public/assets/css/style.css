@@ -119,3 +119,8 @@ input:checked+.slider:before {
 .alert.alert-success {
     display: none;
 }
+
+#customers tbody td:last-child {
+    display: flex;
+    align-items: center;
+}

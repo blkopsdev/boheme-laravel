@@ -7,6 +7,7 @@ use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
 use DB;
 
 class CustomerController extends Controller
@@ -31,8 +32,30 @@ class CustomerController extends Controller
     {
         $title = __('Customers');
         // $customers = Customer::select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id','desc')->get();
-        $customers = DB::table('customers')->select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id', 'desc')->get();
-        return view('customer.index', compact('title', 'customers'));
+        // $customers = DB::table('customers')->select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id', 'desc')->get();
+        return view('customer.index', compact('title'));
+    }
+
+    public function customers(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = DB::table('customers')->latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $actions = 
+                    '<a href="' . route('customers.edit', $row->id) . '" class="btn btn-primary btn-sm" rel="tooltip" data-original-title="" title="Edit">Edit</a>
+                    <a href="' . route('merge', $row->id) . '" class="btn btn-success btn-sm" rel="tooltip" data-original-title="" title="Merge">Merge</a>
+                    <form action="' . route('customers.destroy',$row->id) . '" method="POST">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'All transactions linked to this customer will be deleted. Are you sure you want to permanently DELETE Customer #' . $row->id . '?\')" rel="tooltip" data-original-title="" title="Delete">Delete</button>
+                    </form>';
+                    return $actions;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
     }
 
     /**

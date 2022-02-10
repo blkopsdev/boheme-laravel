@@ -20,7 +20,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/', 'DashboardController@index')->name('home')->middleware('auth');
-Route::post('/send_email/welcome', ['as'=>'email_welcome', 'uses' => 'EmailController@welcome']);
 Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 	Route::get('/', ['as'=>'dashboard', 'uses' => 'DashboardController@index']);
 	Route::resource('transactions', 'TransactionController');
@@ -42,5 +41,5 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 		Route::post('customers/merge/{id}', ['as' => 'merge_submit', 'uses' => 'CustomerController@mergeSubmit']);
 	});
 });
-
+Route::get('customer_ajax', 'CustomerController@customers');
 

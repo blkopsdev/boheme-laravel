@@ -27,7 +27,7 @@
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-hover" id="customers">
+              <table class="table table-hover" id="available_customers">
                 <thead class=" text-primary">
                   <th>ID</th>
                   <th>Name</th>
@@ -67,7 +67,7 @@
 @push('js')
     <script>
       $(document).ready(function() {
-        $('#customers').DataTable({
+        $('#available_customers').DataTable({
           "columnDefs": [
             { "targets": [0], "orderable": true },
             // { "orderable": false, targets: '_all' }

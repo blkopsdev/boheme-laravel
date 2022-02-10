@@ -26,51 +26,20 @@
         <div class="col-lg-12 col-md-12">
           <div class="card">
             <div class="card-header card-header-warning">
-              <h4 class="card-title">{{ __('Total Customers:') }} <strong>{{ number_format($customers->count()) }}</strong></h4>
+              <h4 class="card-title">{{ __('Total Customers:') }} <strong></strong></h4>
             </div>
             <div class="card-body table-responsive">
               <table class="table table-hover" id="customers">
                 <thead class="text-warning">
                   <th>{{ __('ID') }}</th>
-                  <th>{{ __('Name') }}</th>
+                  <th>{{ __('First Name') }}</th>
+                  <th>{{ __('Last Name') }}</th>
                   <th>{{ __('Phone') }}</th>
                   <th>{{ __('Email') }}</th>
                   <th>{{ __('Action') }}</th>
                 </thead>
                 <tbody>
-                  @foreach ($customers as $customer)
-                  <tr>
-                    <td>{{$customer->id}}</td>
-                    <td><a href="{{ route('customers.show', $customer->id) }}" class="text-primary">{{$customer->first_name }} {{$customer->last_name }}</a> </td>
-                    <td>
-                      @php
-                        $phone = str_replace('-', '', str_replace('.', '',$customer->phone));
-                        if(strlen($phone) == 7) {
-                          $phone = '530' . $phone;
-                        }
-                      @endphp
-                      {{ preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $phone) }}
-                    </td>
-                    <td>{{ $customer->email }}</td>
-                    <td class="d-flex">
-                      <a rel="tooltip" class="btn btn-warning btn-rounded p-2" href="{{ route('customers.edit', $customer->id) }}" data-original-title="" title="{{ __('Edit') }}">
-                        <i class="material-icons">edit</i>
-                        <div class="ripple-container"></div>
-                      </a>
-                      @if (auth()->user()->user_type == 'admin')
-                      <a rel="tooltip" class="btn btn-success btn-rounded p-2" href="{{ route('merge', $customer->id) }}" data-original-title="" title="{{ __('Merge') }}">
-                        <i class="material-icons">merge</i>
-                        <div class="ripple-container"></div>
-                      </a>
-                      <form action="{{ route('customers.destroy',$customer->id) }}" method="POST" >
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger p-2" onclick="return confirm('All transactions linked to this customer will be deleted. Are you sure you want to permanently DELETE Customer #{{ $customer->id }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
-                      </form>
-                      @endif
-                    </td>
-                  </tr>
-                  @endforeach
+                  
                 </tbody>
               </table>
             </div>
@@ -93,6 +62,25 @@
       //   "pageLength" : 50,
       //   // "paging": false
       // })
+      $('#customers').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ url('customer_ajax') }}",
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'first_name', name: 'first_name'},
+            {data: 'last_name', name: 'last_name'},
+            {data: 'email', name: 'email'},
+            {data: 'phone', name: 'phone'},
+            {
+                data: 'action', 
+                name: 'action', 
+                orderable: true, 
+                searchable: true
+            },
+        ],
+        "pageLength" : 50,
+      })
     });
   </script>
 
