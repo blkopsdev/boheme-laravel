@@ -73,6 +73,7 @@
                   @endforeach
                 </tbody>
               </table>
+              {{ $customers->links() }}
             </div>
           </div>
         </div>
@@ -90,6 +91,7 @@
           { "targets": [0], "orderable": true },
           // { "orderable": false, targets: '_all' }
         ],
+        "pageLength" : 50
       })
     });
   </script>

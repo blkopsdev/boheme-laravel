@@ -31,7 +31,7 @@ class CustomerController extends Controller
     {
         $title = __('Customers');
         // $customers = Customer::select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id','desc')->get();
-        $customers = DB::table('customers')->select(['id', 'first_name', 'last_name', 'phone', 'email'])->get();
+        $customers = DB::table('customers')->select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id', 'desc')->paginate(50);
         return view('customer.index', compact('title', 'customers'));
     }
 
