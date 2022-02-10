@@ -16,9 +16,7 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <h2>
-                {{ __('Transaction ID: ') . $transaction->id }} 
-                </h2>
+                <h2>{{ __('Transaction ID: ') . $transaction->id }} </h2>
             </div>
             <div class="col-md-6 d-flex justify-content-end align-items-center">
                 @if (auth()->user()->user_type == 'admin')

@@ -26,7 +26,7 @@
         <div class="col-lg-12 col-md-12">
           <div class="card">
             <div class="card-header card-header-warning">
-              <h4 class="card-title">{{ __('Total Customers:') }} <strong></strong></h4>
+              <h4 class="card-title">{{ __('Total Customers:') }} <strong class="text-primary">{{ number_format($total) }}</strong></h4>
             </div>
             <div class="card-body table-responsive">
               <table class="table table-hover" id="customers">
@@ -53,15 +53,6 @@
 @push('js')
   <script>
     $(document).ready(function() {
-      // $('#customers').DataTable({
-      //   "order": [[ 0, 'desc' ]],
-      //   "columnDefs": [
-      //     { "targets": [0], "orderable": true },
-      //     // { "orderable": false, targets: '_all' }
-      //   ],
-      //   "pageLength" : 50,
-      //   // "paging": false
-      // })
       $('#customers').DataTable({
         processing: true,
         serverSide: true,

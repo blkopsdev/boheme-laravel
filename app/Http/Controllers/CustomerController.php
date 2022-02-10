@@ -31,9 +31,9 @@ class CustomerController extends Controller
     public function index()
     {
         $title = __('Customers');
-        // $customers = Customer::select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id','desc')->get();
-        // $customers = DB::table('customers')->select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id', 'desc')->get();
-        return view('customer.index', compact('title'));
+        $total = Customer::select('id')->orderBy('id','desc')->get()->count();
+        
+        return view('customer.index', compact('title', 'total'));
     }
 
     public function customers(Request $request)
