@@ -14,10 +14,10 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-3">
           <h2>{{ $title }}</h2>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-9 d-flex align-items-center">
           <a href="{{ route('customers.create') }}" class="btn btn-success btn-rounded"><i class="material-icons">add</i>{{ __('New Customer') }}</a>
         </div>
       </div>
