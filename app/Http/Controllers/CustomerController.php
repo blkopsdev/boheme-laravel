@@ -31,7 +31,7 @@ class CustomerController extends Controller
     {
         $title = __('Customers');
         // $customers = Customer::select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id','desc')->get();
-        $customers = DB::table('customers')->select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id', 'desc')->paginate(50);
+        $customers = DB::table('customers')->select(['id', 'first_name', 'last_name', 'phone', 'email'])->orderBy('id', 'desc')->get();
         return view('customer.index', compact('title', 'customers'));
     }
 
@@ -59,10 +59,7 @@ class CustomerController extends Controller
             'phone' => 'required|unique:customers|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/',
             'email' => 'email|unique:customers|regex:/(.+)@(.+)\.(.+)/i'
         ];
-        $messages = [
-            'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
-        ];
-        $this->validate($request, $rules, $messages);
+        $this->validate($request, $rules);
         $data = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -126,16 +123,17 @@ class CustomerController extends Controller
         $customer = Customer::find($id);
         
         $rules = [];
+        $rules = [
+            'phone' => 'required|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/',
+            'email' => 'email|unique:customers|regex:/(.+)@(.+)\.(.+)/i'
+        ];
         if($customer->phone != $request->phone) {
             $rules['phone'] = 'required|unique:customers|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/';
         }
         if($customer->email != $request->email) {
             $rules['email'] = 'email|unique:customers|regex:/(.+)@(.+)\.(.+)/i';
         }
-        $messages = [
-            'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
-        ];
-        $this->validate($request, $rules, $messages);
+        $this->validate($request, $rules);
 
         $customer->update($request->all());
         return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');

@@ -73,7 +73,6 @@
                   @endforeach
                 </tbody>
               </table>
-              {{ $customers->links() }}
             </div>
           </div>
         </div>
@@ -85,15 +84,15 @@
 @push('js')
   <script>
     $(document).ready(function() {
-      $('#customers').DataTable({
-        "order": [[ 0, 'desc' ]],
-        "columnDefs": [
-          { "targets": [0], "orderable": true },
-          // { "orderable": false, targets: '_all' }
-        ],
-        "pageLength" : 50,
-        "paging": false
-      })
+      // $('#customers').DataTable({
+      //   "order": [[ 0, 'desc' ]],
+      //   "columnDefs": [
+      //     { "targets": [0], "orderable": true },
+      //     // { "orderable": false, targets: '_all' }
+      //   ],
+      //   "pageLength" : 50,
+      //   // "paging": false
+      // })
     });
   </script>
 
