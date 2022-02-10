@@ -15,11 +15,14 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-            <h2>
+            <div class="col-md-6">
+                <h2>
                 {{ __('Transaction ID: ') . $transaction->id }} 
+                </h2>
+            </div>
+            <div class="col-md-6 d-flex justify-content-end">
                 @if (auth()->user()->user_type == 'admin')
-                <a href="{{ route('transactions.edit', $transaction->id) }}" class="btn btn-primary btn-rounded ml-3"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a></h2>
+                <a href="{{ route('transactions.edit', $transaction->id) }}" class="btn btn-primary btn-rounded ml-3"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
                 @endif
             </div>
         </div>
