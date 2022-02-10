@@ -84,7 +84,6 @@
                 searchable: true
             },
         ],
-        "pageLength" : 15,
       })
     });
   </script>
