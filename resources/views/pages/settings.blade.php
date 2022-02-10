@@ -8,7 +8,7 @@
         <h3 class="card-title">{{ $title }}</h3>
       </div>
       <div class="card-body">
-        <div class="row pt-5">
+        <div class="row py-5">
           <div class="col-md-12">
             <form class="form" method="POST" action="{{ route('update_settings') }}" enctype="multipart/form-data">
               @csrf
@@ -48,8 +48,8 @@
               </div>
               <div class="row">
                 <div class="col-md-8">
-                  <div class="bmd-form-group mt-3 ">
-                    <button type="submit" class="btn btn-success btn-round">{{ __('Save') }}</button>
+                  <div class="bmd-form-group mt-3">
+                    <button type="submit" class="btn btn-warning btn-rounded">{{ __('Save') }}</button>
                   </div>
                 </div>
               </div>
