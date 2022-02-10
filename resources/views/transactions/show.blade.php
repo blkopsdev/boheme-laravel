@@ -61,14 +61,14 @@
                                 <th><strong>{{ __('Created On:') }}</strong></th>
                                 <td>{{ date('m/d/Y',strtotime($transaction->created_at)) }}</td>
                             </tr>
+                            @if ($transaction->transaction_type == "Add store credit")
                             <tr>
                                 <th><strong>{{ __('Expires On:') }}</strong></th>
                                 <td>
-                                    @if ($transaction->transaction_type == "Add store credit")
-                                        {{ date('m/d/Y', get_store_credit($transaction->customer_id, $transaction->id)['expires_on']) }}
-                                    @endif
+                                    {{ date('m/d/Y', get_store_credit($transaction->customer_id, $transaction->id)['expires_on']) }}
                                 </td>
                             </tr>
+                            @endif
                             <tr>
                                 <th><strong>{{ __('Type:') }}</strong></th>
                                 <td>{{ $transaction->transaction_type }}</td>
@@ -103,10 +103,12 @@
                                     @endif
                                 </td>
                             </tr>
+                            @if ($transaction->comments)
                             <tr>
                                 <th><strong>{{ __('Comments:') }}</strong></th>
                                 <td>{{ $transaction->comments }}</td>
                             </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
