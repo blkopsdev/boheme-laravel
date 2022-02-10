@@ -23,10 +23,10 @@
             <div class="col-md-6 d-flex justify-content-end align-items-center">
                 @if (auth()->user()->user_type == 'admin')
                 <a href="{{ route('transactions.edit', $transaction->id) }}" class="btn btn-primary btn-rounded ml-3" rel="tooltip" data-original-title="" title="{{ __('Edit') }}"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
-                <form action="{{ route('transactions.destroy',$transaction->id) }}" method="POST" >
+                <form action="{{ route('transactions.destroy',$transaction->id) }}" method="POST" class="mb-1">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger p-2" onclick="return confirm('Are you sure you want to permanently delete Transaction #{{ $transaction->id }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to permanently delete Transaction #{{ $transaction->id }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i> Delete</button>
                 </form>
                 @endif
             </div>
