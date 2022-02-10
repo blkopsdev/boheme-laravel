@@ -55,7 +55,8 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'phone' => 'digits:10'
+            'phone' => 'digits:10',
+            'email' => 'email'
         ];
         $messages = [
             'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
@@ -121,7 +122,8 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'phone' => 'digits:10'
+            'phone' => 'digits:10',
+            'email' => 'email'
         ];
         $messages = [
             'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
