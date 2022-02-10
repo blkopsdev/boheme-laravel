@@ -22,7 +22,12 @@
             </div>
             <div class="col-md-6 d-flex justify-content-end align-items-center">
                 @if (auth()->user()->user_type == 'admin')
-                <a href="{{ route('transactions.edit', $transaction->id) }}" class="btn btn-primary btn-rounded ml-3"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
+                <a href="{{ route('transactions.edit', $transaction->id) }}" class="btn btn-primary btn-rounded ml-3" rel="tooltip" data-original-title="" title="{{ __('Edit') }}"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
+                <form action="{{ route('transactions.destroy',$transaction->id) }}" method="POST" >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger p-2" onclick="return confirm('Are you sure you want to permanently delete Transaction #{{ $transaction->id }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
+                </form>
                 @endif
             </div>
         </div>
