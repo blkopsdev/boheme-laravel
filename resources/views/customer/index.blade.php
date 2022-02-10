@@ -79,7 +79,7 @@
                 searchable: true
             },
         ],
-        "pageLength" : 50,
+        "pageLength" : 15,
       })
     });
   </script>
