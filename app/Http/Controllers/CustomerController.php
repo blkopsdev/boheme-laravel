@@ -52,7 +52,8 @@ class CustomerController extends Controller
                 })
                 ->addColumn('action', function($row){
                     $actions = 
-                    '<a href="' . route('customers.edit', $row->id) . '" class="btn btn-warning p-2" rel="tooltip" data-original-title="" title="Edit"><i class="material-icons">edit</i></a>
+                    '<a href="' . route('customers.show', $row->id) . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>
+                    <a href="' . route('customers.edit', $row->id) . '" class="btn btn-warning p-2" rel="tooltip" data-original-title="" title="Edit"><i class="material-icons">edit</i></a>
                     <a href="' . route('merge', $row->id) . '" class="btn btn-success p-2" rel="tooltip" data-original-title="" title="Merge"><i class="material-icons">merge</i></a>
                     <form action="' . route('customers.destroy',$row->id) . '" method="POST">
                     <input type="hidden" name="_token" value="' . csrf_token() . '">
