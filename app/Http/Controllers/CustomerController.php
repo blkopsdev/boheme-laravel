@@ -56,8 +56,8 @@ class CustomerController extends Controller
     {
 
         $rules = [
-            'phone' => 'required|unique|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/',
-            'email' => 'email|unique|regex:/(.+)@(.+)\.(.+)/i'
+            'phone' => 'required|unique:customers|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/',
+            'email' => 'email|unique:customers|regex:/(.+)@(.+)\.(.+)/i'
         ];
         $messages = [
             'phone.digits' => 'Phone number must inlude only 10 digits numbers.'
@@ -127,10 +127,10 @@ class CustomerController extends Controller
         
         $rules = [];
         if($customer->phone != $request->phone) {
-            $rules['phone'] = 'required|unique|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/';
+            $rules['phone'] = 'required|unique:customers|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/';
         }
         if($customer->email != $request->email) {
-            $rules['email'] = 'email|unique|regex:/(.+)@(.+)\.(.+)/i';
+            $rules['email'] = 'email|unique:customers|regex:/(.+)@(.+)\.(.+)/i';
         }
         $messages = [
             'phone.digits' => 'Phone number must inlude only 10 digits numbers.'

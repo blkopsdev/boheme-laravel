@@ -16,10 +16,17 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <h2>{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} 
+          <h2 class="d-flex align-items-center">{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} 
             <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded ml-3"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
             @if (auth()->user()->user_type == "admin")
             <a href="{{ route('merge', $customer->id) }}" class="btn btn-success btn-rounded ml-3"><i class="material-icons mr-2">merge</i>{{ __('Merge') }}</a>
+            <form action="{{ route('customers.destroy',$customer->id) }}" method="POST" class="mb-1">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-danger btn-rounded ml-3" onclick="return confirm('All transactions linked to this customer will be deleted. Are you sure you want to permanently DELETE Customer #{{ $customer->id }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}">
+                <i class="material-icons mr-2">delete</i>
+                Delete</button>
+            </form>
             @endif
           </h2>
         </div>
