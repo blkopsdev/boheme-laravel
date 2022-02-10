@@ -18,7 +18,7 @@
           <h2>{{ $title }}</h2>
         </div>
         <div class="col-md-9 d-flex align-items-center">
-          <a href="{{ route('customers.create') }}" class="btn btn-success btn-rounded"><i class="material-icons">add</i>{{ __('New Customer') }}</a>
+          <a href="{{ route('customers.create') }}" class="btn btn-warning btn-rounded" rel="tooltip" data-original-title="" title="{{ __('New') }}"><i class="material-icons mr-2">add</i>{{ __('New') }}</a>
         </div>
       </div>
 
