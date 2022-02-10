@@ -91,7 +91,8 @@
           { "targets": [0], "orderable": true },
           // { "orderable": false, targets: '_all' }
         ],
-        "pageLength" : 50
+        "pageLength" : 50,
+        "paging": false
       })
     });
   </script>
