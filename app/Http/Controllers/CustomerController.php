@@ -54,8 +54,9 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+
         $rules = [
-            'phone' => 'digits:10',
+            'phone' => 'required',
             'email' => 'email|regex:/(.+)@(.+)\.(.+)/i'
         ];
         $messages = [

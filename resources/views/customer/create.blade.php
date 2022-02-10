@@ -36,7 +36,7 @@
               </div>
               <div class="bmd-form-group{{ $errors->has('phone') ? ' has-danger' : '' }} mt-3">
                 <div class="input-group col-md-8 offset-md-1">
-                  <input type="text" name="phone" class="form-control" placeholder="@lang('app.phone')" value="{{ old('phone') }}" required>
+                  <input type="text" name="phone" class="form-control" id="phone" placeholder="@lang('app.phone')" value="{{ old('phone') }}" required>
                 </div>
                 @if ($errors->has('phone'))
                   <div id="phone-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="phone" style="display: block;">
@@ -46,7 +46,7 @@
               </div>
               <div class="bmd-form-group{{ $errors->has('email') ? ' has-danger' : '' }} mt-3">
                 <div class="input-group col-md-8 offset-md-1">
-                  <input type="email" name="email" class="form-control" placeholder="@lang('auth.email')" value="{{ old('email') }}">
+                  <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}">
                 </div>
                 @if ($errors->has('email'))
                   <div id="email-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="email" style="display: block;">
@@ -107,6 +107,11 @@
 @endsection
 
 @push('js')
+<script>
+  $(document).ready(function() {
+    $('#phone').mask('(000) 000-0000');
+  })
+</script>
 <script>
   @if(session('success'))
       toastr.success('{{ session('success') }}', '{{ trans('app.success') }}', toastr_options);
