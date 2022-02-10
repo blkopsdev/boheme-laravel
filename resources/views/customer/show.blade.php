@@ -17,9 +17,9 @@
       <div class="row">
         <div class="col-md-12">
           <h2 class="d-flex align-items-center">{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} 
-            <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded ml-3" rel="tooltip" data-original-title="" title="{{ __('Edit') }}">><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
+            <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded ml-3" rel="tooltip" data-original-title="" title="{{ __('Edit') }}"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
             @if (auth()->user()->user_type == "admin")
-            <a href="{{ route('merge', $customer->id) }}" class="btn btn-success btn-rounded ml-3" rel="tooltip" data-original-title="" title="{{ __('Merge') }}">><i class="material-icons mr-2">merge</i>{{ __('Merge') }}</a>
+            <a href="{{ route('merge', $customer->id) }}" class="btn btn-success btn-rounded ml-3" rel="tooltip" data-original-title="" title="{{ __('Merge') }}"><i class="material-icons mr-2">merge</i>{{ __('Merge') }}</a>
             <form action="{{ route('customers.destroy',$customer->id) }}" method="POST" class="mb-1">
               @csrf
               @method('DELETE')
