@@ -5,6 +5,17 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">{{ __('Home') }}</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('customers.index') }}">{{ __('Customers') }}</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{ __('New Customer') }}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
           <h2>{{ $title }}</h2>
         </div>
       </div>
