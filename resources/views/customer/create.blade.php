@@ -57,7 +57,7 @@
               <div class="bmd-form-group{{ $errors->has('contact_pref') ? ' has-danger' : '' }} mt-3">
                 <div class="col-md-8 offset-md-1">
                   <label for="contact_pref">{{ __('Trade-in notes') }}</label>
-                  <select class="selectpicker form-control" id="contact_pref" name="contact_pref" data-style="btn btn-primary text-white">
+                  <select class="selectpicker form-control" id="contact_pref" name="contact_pref" data-style="btn btn-warning text-white">
                     <option value="normal">{{ __('Normal') }}</option>
                     <option value="exceptional">{{ __('Exceptional') }}</option>
                     <option value="marginal">{{ __('Marginal') }}</option>
@@ -72,7 +72,7 @@
               <div class="bmd-form-group{{ $errors->has('newsletter') ? ' has-danger' : '' }} mt-3">
                 <div class="col-md-8 offset-md-1">
                   <label for="newsletter">{{ __('Receive Newsletter') }}</label>
-                  <select class="selectpicker form-control" id="newsletter" name="newsletter" data-style="btn btn-primary text-white">
+                  <select class="selectpicker form-control" id="newsletter" name="newsletter" data-style="btn btn-warning text-white">
                     <option value="yes">{{ __('Yes') }}</option>
                     <option value="no">{{ __('No') }}</option>
                   </select>
