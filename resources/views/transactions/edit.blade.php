@@ -91,8 +91,8 @@
                         $used_credit = number_format($transaction->store_credit, 2);
                         $available_credit = $store_credit + $used_credit;
                     @endphp
-                    <label for="store_credit" class="m-0">{{ __('Store Credit ($)') }}</label> <button type="button" class="btn btn-primary btn-link btn-small p-0 ml-2" data-toggle="tooltip" data-placement="right" title="{{ __('Available store credit is $') . $available_credit }}">
-                      <i class="material-icons">help</i>
+                    <label for="store_credit" class="m-0">{{ __('Store Credit ($)') }}</label> <button type="button" class="btn btn-primary btn-link btn-small p-0 ml-2">
+                      <i class="material-icons" rel="tooltip" data-placement="bottom" title="{{ __('Available store credit is $') . number_format($available_credit, 2) }}">help</i>
                     </button>
                   </div>
                   <div class="input-group col-md-8">
