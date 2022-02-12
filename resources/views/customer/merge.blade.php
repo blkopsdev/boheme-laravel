@@ -37,7 +37,7 @@
                         <input type="number" name="target_id" step="1" min="1" id="target_id" class="form-control" required>
                       </div>
                       <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-rounded" onclick="return confirm('You cannot revert this Merge Customers action. Please make sure you entered the correct Target Customer ID!')">{{ __('Submit') }}</button>
+                        <button type="submit" class="btn btn-primary btn-rounded" onclick="return confirm('You cannot revert this Merge Customers action. All current customer transactions will be moved to the Target Customer ID\'s account.  Please make sure you entered the correct Target Customer ID!')">{{ __('Submit') }}</button>
                       </div>
                     </div>
                   </div>
