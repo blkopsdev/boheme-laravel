@@ -77,17 +77,23 @@ class UserController extends Controller
      * @return \Illuminate\View\View
      */
     
-    public function updatePassword(PasswordRequest $request, $id)
+    public function updatePassword(Request $request, $id)
     {
+        $rules = [
+            'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6',
+        ];
+        $this->validate($request, $rules);
+
         $user = User::find($id);
         $user->update(['password' => Hash::make($request->get('password'))]);
 
-        return back()->with('success', __('Password has been updated successfully'));
+        return redirect()->back()->with('success', 'Password has been updated successfully');
     }
 
-    public function destroy(Request $request) {
-        $user = User::find($request->id);
+    public function destroy($id) {
+        $user = User::find($id);
         $user->delete();
-        return ['success'=>1, 'msg' => trans('app.user_delete_msg')];
+        return redirect()->back()->with('success', 'User has been deleted successfully');
     }
 }

@@ -12,7 +12,7 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-12 text-right">
-								<a href="{{ route('add_user') }}" class="btn btn-sm btn-primary">@lang('app.add_user')</a>
+								<a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">@lang('app.add_user')</a>
 							</div>
 						</div>
 						<div class="table-responsive">
@@ -33,12 +33,17 @@
 										<td>{{$user->email}}</td>
 										<td>{{ ucfirst($user->user_type) }}</td>
 										<td>{{date('m/d/Y', strtotime($user->created_at))}}</td>
-										<td class="td-actions text-right">
-											<a rel="tooltip" class="btn btn-success btn-link" href="{{route('edit_user', $user->id)}}"
+										<td class="td-actions text-right d-flex">
+											<a rel="tooltip" class="btn btn-success btn-link" href="{{route('users.edit', $user->id)}}"
 												data-original-title="" title="@lang('app.edit_user')">
 												<i class="material-icons">edit</i>
 												<div class="ripple-container"></div>
 											</a>
+											<form action="{{ route('users.destroy', $user->id) }}" method="POST" >
+												@csrf
+												@method('DELETE')
+												<button type="submit" class="btn btn-danger btn-link" onclick="return confirm('Are you sure you want to permanently delete User #{{ $user->id }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
+											</form>
 										</td>
 									</tr>
                   					@endforeach

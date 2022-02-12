@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-fixed fixed-top ">
   <div class="container-fluid">
     <div class="col-md-3">
-      <a href="/"><img src="{{ asset('assets/img/Logo.png') }}" alt="" height="50"></a>
+      <a href="/"><img src="{{ asset('assets/img/Logo.png') }}" alt="" height="50"> <span class="h3 ml-3 text-warning">Trade-In Database</span> </a>
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
       <span class="sr-only">Toggle navigation</span>

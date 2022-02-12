@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
-        <form method="post" action="{{ route('add_user') }}" autocomplete="off" class="form-horizontal">
+        <form method="post" action="{{ route('users.store') }}" autocomplete="off" class="form-horizontal">
           @csrf
 
           <div class="card ">

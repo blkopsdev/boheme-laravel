@@ -5,9 +5,9 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <form method="post" action="{{ route('update_user', $user->id) }}" autocomplete="off" class="form-horizontal">
+          <form method="post" action="{{ route('users.update', $user->id) }}" autocomplete="off" class="form-horizontal">
             @csrf
-
+            @method('PUT')
             <div class="card ">
               <div class="card-header card-header-primary">
                 <h4 class="card-title">@lang('app.edit_user')</h4>
@@ -73,35 +73,11 @@
         <div class="col-md-12">
           <form method="post" action="{{ route('user_password', $user->id) }}" class="form-horizontal">
             @csrf
-
             <div class="card ">
               <div class="card-header card-header-primary">
                 <h4 class="card-title">@lang('app.change_password')</h4>
               </div>
               <div class="card-body ">
-                @if (session('status_password'))
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <div class="alert alert-success">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                          <i class="material-icons">close</i>
-                        </button>
-                        <span>{{ session('status_password') }}</span>
-                      </div>
-                    </div>
-                  </div>
-                @endif
-                <div class="row">
-                  <label class="col-sm-2 col-form-label" for="input-current-password">{{ __('app.current_password') }}</label>
-                  <div class="col-sm-7">
-                    <div class="form-group{{ $errors->has('old_password') ? ' has-danger' : '' }}">
-                      <input class="form-control{{ $errors->has('old_password') ? ' is-invalid' : '' }}" input type="password" name="old_password" id="input-current-password" placeholder="{{ __('app.current_password') }}" value="" required />
-                      @if ($errors->has('old_password'))
-                        <span id="name-error" class="error text-danger" for="input-name">{{ $errors->first('old_password') }}</span>
-                      @endif
-                    </div>
-                  </div>
-                </div>
                 <div class="row">
                   <label class="col-sm-2 col-form-label" for="input-password">{{ __('app.new_password') }}</label>
                   <div class="col-sm-7">
