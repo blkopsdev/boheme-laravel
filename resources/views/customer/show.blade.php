@@ -15,11 +15,9 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12 d-flex align-items-center">
           <h2>{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} 
           </h2>
-        </div>
-        <div class="col-md-6 d-flex align-items-center justify-content-end">
           <a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-primary btn-rounded ml-3" rel="tooltip" data-original-title="" title="{{ __('Edit') }}"><i class="material-icons mr-2">edit</i>{{ __('Edit') }}</a>
             @if (auth()->user()->user_type == "admin")
             <a href="{{ route('merge', $customer->id) }}" class="btn btn-success btn-rounded ml-3" rel="tooltip" data-original-title="" title="{{ __('Merge') }}"><i class="material-icons mr-2">merge</i>{{ __('Merge') }}</a>
