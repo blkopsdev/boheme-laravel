@@ -59,7 +59,7 @@
               </div>
               <div class="bmd-form-group{{ $errors->has('email') ? ' has-danger' : '' }} mt-3">
                 <div class="input-group col-md-8 offset-md-1">
-                  <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email', $customer->email) }}" required>
+                  <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email', $customer->email) }}">
                 </div>
                 @if ($errors->has('email'))
                   <div id="email-error" class="error text-danger pl-3 col-md-8 offset-md-1" for="email" style="display: block;">

@@ -93,8 +93,10 @@ class CustomerController extends Controller
 
         $rules = [
             'phone' => 'required|unique:customers|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/',
-            'email' => 'email|unique:customers|regex:/(.+)@(.+)\.(.+)/i'
         ];
+        if($request->email != null) {
+            $rules['email'] = 'email|unique:customers|regex:/(.+)@(.+)\.(.+)/i';
+        }
         $this->validate($request, $rules);
         $data = [
             'first_name' => $request->first_name,
@@ -161,12 +163,11 @@ class CustomerController extends Controller
         $rules = [];
         $rules = [
             'phone' => 'required|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/',
-            'email' => 'email|regex:/(.+)@(.+)\.(.+)/i'
         ];
         if($customer->phone != $request->phone) {
             $rules['phone'] = 'required|unique:customers|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/';
         }
-        if($customer->email != $request->email) {
+        if($customer->email != $request->email && $request->email != null) {
             $rules['email'] = 'email|unique:customers|regex:/(.+)@(.+)\.(.+)/i';
         }
         $this->validate($request, $rules);
