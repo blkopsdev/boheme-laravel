@@ -125,3 +125,7 @@ input:checked+.slider:before {
     align-items: center;
     text-align: center;
 }
+
+.logo:hover {
+    color: #ff9800 !important;
+}
