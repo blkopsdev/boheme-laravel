@@ -31,7 +31,7 @@
                 <form id="merge_form" action="{{ route('merge_submit', $customer->id) }}" method="post">
                   @csrf
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                       <div class="form-group">
                         <label for="target_id">Enter Target Customer ID Here (move transactions to this ID)</label>
                         <input type="number" name="target_id" step="1" min="1" id="target_id" class="form-control" required>
