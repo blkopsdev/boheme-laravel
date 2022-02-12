@@ -136,22 +136,6 @@
                   </div>
                 @endif
               </div>
-              @elseif($transaction->transaction_type == "Cash out for trade")
-              <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
-                <div class="row">
-                  <div class="col-md-4 d-flex align-items-center">
-                    <label for="transaction_amount" class="m-0">{{ __('Amount ($)') }}</label>
-                  </div>
-                  <div class="input-group col-md-8">
-                    <input type="number" class="form-control" step="0.01" name="transaction_amount" id="transaction_amount" min="0" value="{{ old('transaction_amount', $transaction->cash_out_for_trade) }}" required>
-                  </div>
-                </div>
-                @if ($errors->has('transaction_amount'))
-                  <div id="transaction-amount-error" class="error text-danger pl-3" for="transaction_amount" style="display: block;">
-                    <strong>{{ $errors->first('transaction_amount') }}</strong>
-                  </div>
-                @endif
-              </div>
               @elseif($transaction->transaction_type == "Cash out for store credit")
               <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
                 <div class="row">
@@ -168,8 +152,38 @@
                   </div>
                 @endif
               </div>
+              @else
+              <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
+                <div class="row">
+                  <div class="col-md-4 d-flex align-items-center">
+                    <label for="transaction_amount" class="m-0">{{ __('Amount ($)') }}</label>
+                  </div>
+                  <div class="input-group col-md-8">
+                    <input type="number" class="form-control" step="0.01" name="transaction_amount" id="transaction_amount" min="0" value="{{ old('transaction_amount', $transaction->cash_out_for_trade) }}" required>
+                  </div>
+                </div>
+                @if ($errors->has('transaction_amount'))
+                  <div id="transaction-amount-error" class="error text-danger pl-3" for="transaction_amount" style="display: block;">
+                    <strong>{{ $errors->first('transaction_amount') }}</strong>
+                  </div>
+                @endif
+              </div>
               @endif
-              
+              <div class="bmd-form-group{{ $errors->has('employee') ? ' has-danger' : '' }} mt-3">
+                <div class="row">
+                  <div class="col-md-4 d-flex align-items-center">
+                    <label for="employee" class="m-0">{{ __('Employee Name:') }}</label>
+                  </div>
+                  <div class="input-group col-md-8">
+                    <input type="text" name="employee" id="employee" class="form-control" placeholder="{{ __('Employee Name') }}" value="{{ old('employee'), $transaction->employee }}" required>
+                  </div>
+                </div>
+                @if ($errors->has('employee'))
+                  <div id="employee-error" class="error text-danger pl-3" for="employee" style="display: block;">
+                    <strong>{{ $errors->first('employee') }}</strong>
+                  </div>
+                @endif
+              </div>
               <div class="bmd-form-group{{ $errors->has('comments') ? ' has-danger' : '' }} mt-3">
                 <div class="row">
                   <div class="col-md-4 d-flex align-items-center">

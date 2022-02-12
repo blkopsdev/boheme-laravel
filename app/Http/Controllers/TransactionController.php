@@ -88,7 +88,7 @@ class TransactionController extends Controller
         $data['transaction_type'] = $type;
         $data['customer_id'] = $request->customer_id;
         $data['comments'] = $request->comments;
-        $data['user_id'] = auth()->user()->id;
+        $data['employee'] = $request->employee;
 
         $transaction = Transaction::create($data);
         
@@ -145,12 +145,14 @@ class TransactionController extends Controller
             $data['purchase_total'] = $request->purchase_total;
             $data['store_credit'] = $request->store_credit;
             $data['cash_in'] = $request->cash_in;
-        } else if ($type == 'Cash out for trade') {
-            $data['cash_out_for_trade'] = $request->transaction_amount;
-        } else {
+        } else if ($type == 'Cash out for store_credit') {
             $data['cash_out_for_storecredit'] = $request->transaction_amount;
+        } else {
+            $data['transaction_type'] = 'Cash out for trade';
+            $data['cash_out_for_trade'] = $request->transaction_amount;
         }
         $data['comments'] = $request->comments;
+        $data['employee'] = $request->employee;
         $update = $transaction->update($data);
         if(!$update) {
             return redirect()->back()->withError('msg', "Something went wrong, please try again!");

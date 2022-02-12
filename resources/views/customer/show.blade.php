@@ -189,6 +189,17 @@
                           @endif
                         </div>
                       </div>
+                      <div class="bmd-form-group{{ $errors->has('employee') ? ' has-danger' : '' }} mt-3">
+                        <div class="input-group col-md-8">
+                          <label for="employee" class="mb-0">{{ __('Employee Name:') }}</label>
+                          <input type="text" name="employee" id="employee" value="{{ old('employee') }}" required>
+                        </div>
+                        @if ($errors->has('employee'))
+                          <div id="employee-error" class="error text-danger pl-3" for="employee" style="display: block;">
+                            <strong>{{ $errors->first('employee') }}</strong>
+                          </div>
+                        @endif
+                      </div>
                       <div class="bmd-form-group mt-5">
                         <div class="col-md-8">
                           <button type="submit" class="btn btn-success btn-rounded">{{ __('Submit') }}</button>

@@ -102,11 +102,7 @@
                             <tr>
                                 <th><strong>{{ __('Employee:') }}</strong></th>
                                 <td>
-                                    @if ($transaction->employee != null)
-                                        {{ $transaction->employee }}
-                                    @elseif($transaction->user_id != null)
-                                        {{ $transaction->user->name }}
-                                    @endif
+                                    {{ $transaction->employee }}
                                 </td>
                             </tr>
                             @if ($transaction->comments)
