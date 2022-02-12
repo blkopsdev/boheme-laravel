@@ -69,8 +69,9 @@
             },
             {data: 'email', name: 'email'},
             {
-                data: 'action', 
-                name: 'action', 
+              data: 'action', 
+              name: 'action', 
+              searchable: false
             },
         ],
       })
