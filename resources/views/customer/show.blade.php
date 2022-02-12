@@ -105,7 +105,8 @@
                       <div class="bmd-form-group{{ $errors->has('transaction_type') ? ' has-danger' : '' }} mt-3">
                         <div class="col-md-8">
                           <label for="transaction_type">{{ __('Transaction Type') }}</label>
-                          <select class="selectpicker form-control transaction-type" id="transaction_type" name="transaction_type" data-style="btn btn-primary text-white">
+                          <select class="selectpicker form-control transaction-type" id="transaction_type" name="transaction_type" data-style="btn btn-primary text-white" required>
+                            <option value="">{{ __('- Select one -') }}</option>
                             <option value="Add store credit" {{ old('transaction_type') == 'Add store credit' ? 'selected' : '' }}>{{ __('Add store credit') }}</option>
                             <option value="Purchase" {{ old('transaction_type') == 'Purchase' ? 'selected' : '' }}>{{ __('Purchase') }}</option>
                             <option value="Cash out for trade" {{ old('transaction_type') == 'Cash out for trade' ? 'selected' : '' }}>{{ __('Cash out for TRADE-INS') }}</option>
