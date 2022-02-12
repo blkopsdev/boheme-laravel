@@ -42,7 +42,7 @@
 											<form action="{{ route('users.destroy', $user->id) }}" method="POST" >
 												@csrf
 												@method('DELETE')
-												<button type="submit" class="btn btn-danger btn-link" onclick="return confirm('Are you sure you want to permanently delete User #{{ $user->id }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
+												<button type="submit" class="btn btn-danger btn-link" onclick="return confirm('Are you sure you want to permanently delete User {{ $user->name }}?')" rel="tooltip" data-original-title="" title="{{ __('Delete') }}"><i class="material-icons">delete</i></button>
 											</form>
 										</td>
 									</tr>
