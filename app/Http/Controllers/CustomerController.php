@@ -160,7 +160,6 @@ class CustomerController extends Controller
 
         $customer = Customer::find($id);
         
-        $rules = [];
         $rules = [
             'phone' => 'required|regex:/([0-9]{3}).*?([0-9]{3}).*?([0-9]{4})/',
         ];
