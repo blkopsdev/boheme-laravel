@@ -438,13 +438,6 @@
   function validate() {
     calcTax(document.getElementById('purchased_items'));
 
-    /* if(document.getElementById('transaction_type').value == 'Add store credit' || document.getElementById('transaction_type').value == 'Cash out for trade') {
-      if (document.getElementById('employee').value == '') {
-        materialAlert("Error!", "You must select your name in the Employee dropdown menu...");
-        return false;
-      }
-    } */
-
     var avail_credit_value = document.getElementById('storeCredit').innerHTML;
 
     if (document.getElementById('store_credit').value * 1 > avail_credit_value * 1){
