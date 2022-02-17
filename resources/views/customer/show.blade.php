@@ -120,7 +120,7 @@
                           </div>
                         @endif
                       </div>
-                      <div class="transaction-purchase {{ old('transaction_type') == 'Purchase' ? '' : 'd-none' }}">
+                      <div class="amount-input transaction-purchase {{ old('transaction_type') == 'Purchase' ? '' : 'd-none' }}">
                         <div class="bmd-form-group{{ $errors->has('purchased_items') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="purchased_items" class="mb-0">{{ __('Amount of Sale ($): ') }}</label>
@@ -177,7 +177,7 @@
                           @endif
                         </div>
                       </div>
-                      <div class="transaction-no-purchase {{ old('transaction_type') != 'Purchase' ? '' : 'd-none' }}">
+                      <div class="amount-input transaction-no-purchase {{ old('transaction_type') != 'Purchase' ? '' : 'd-none' }}">
                         <div class="bmd-form-group{{ $errors->has('transaction_amount') ? ' has-danger' : '' }} mt-3">
                           <div class="input-group col-md-8">
                             <label for="transaction_amount" class="mb-0">{{ __('Amount ($):') }}</label>
@@ -411,7 +411,7 @@
     $('.selectpicker').selectpicker();
     $('select.transaction-type').on("changed.bs.select", function(e, clickedIndex, newValue, oldValue) {
       var value = $(this).val();
-      $('.add-transaction .row input').each(function() {
+      $('.add-transaction .amount-input input').each(function() {
         $(this).val(0)
       });
       if (value == 'Purchase') {
