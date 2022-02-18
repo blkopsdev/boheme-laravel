@@ -28,7 +28,7 @@
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-hover" id="available_customers">
-                <thead class=" text-primary">
+                <thead class=" text-warning">
                   <th>ID</th>
                   <th>Name</th>
                   <th>Phone</th>
