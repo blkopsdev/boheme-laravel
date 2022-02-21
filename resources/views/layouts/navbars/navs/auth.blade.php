@@ -1,7 +1,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-fixed fixed-top ">
   <div class="container-fluid">
-    <div class="col-md-3">
+    <div class="col-md-6">
       <a href="/" class="h3 text-warning" id="logo"><img src="{{ asset('assets/img/Logo.png') }}" alt="" height="50" class="mr-3"> Trade-In Database </a>
     </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
