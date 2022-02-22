@@ -88,8 +88,19 @@ class TransactionController extends Controller
                     return $cash;
                 })
                 ->addColumn('action', function($row){
-                    $action = '<a href="/dashboard/transactions/' . $row->id . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>';
-                    return $action;
+                    $actions = 
+                        '<a href="' . route('transactions.show', $row->id) . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>
+                        ';
+
+                    if(auth()->user()->user_type == 'admin') {
+                        $actions = $actions . '<a href="' . route('transactions.edit', $row->id) . '" class="btn btn-warning p-2" rel="tooltip" data-original-title="" title="Edit"><i class="material-icons">edit</i></a>
+                        <form action="' . route('transactions.destroy',$row->id) . '" method="POST">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-danger p-2" onclick="return confirm(Are you sure you want to permanently delete Transaction #' . $row->id . '?\')" rel="tooltip" data-original-title="" title="Delete"><i class="material-icons">delete</i></button>
+                        </form>';
+                    }
+                    return $actions;
                 })
                 ->rawColumns([
                     'created_on', 
