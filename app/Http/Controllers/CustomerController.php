@@ -31,7 +31,7 @@ class CustomerController extends Controller
     public function index()
     {
         $title = __('Customers');
-        $total = Customer::select('id')->orderBy('id','desc')->get()->count();
+        $total = Customer::select('id')->get()->count();
         
         return view('customer.index', compact('title', 'total'));
     }

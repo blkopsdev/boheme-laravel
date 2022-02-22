@@ -43,4 +43,4 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 	});
 });
 Route::get('customer_ajax', 'CustomerController@customers');
-
+Route::get('transactions_ajax', 'TransactionController@transactions');
