@@ -76,7 +76,7 @@
             },
         ],
         "order": [[ 0, "desc" ]],
-        'pageLength': 50
+        'pageLength': 25
       })
     });
   </script>
