@@ -75,7 +75,8 @@
               orderable: false
             },
         ],
-        "order": [[ 0, "desc" ]]
+        "order": [[ 0, "desc" ]],
+        'paging': 50
       })
     });
   </script>
