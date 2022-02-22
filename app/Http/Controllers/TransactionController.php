@@ -96,7 +96,7 @@ class TransactionController extends Controller
                     'customer', 
                     'store_credit', 
                     'cash', 
-                    // 'action'
+                    'action'
                 ])
                 ->make(true);
         }
