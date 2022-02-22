@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         $rules = [
             'name'      => 'required|string|max:255',
-            'email'     => 'required|string|max:255|email|unique:users',
+            'email'     => 'required|string|max:255|email|unique:users|regex:/(.+)@(.+)\.(.+)/i',
             'password'  => 'required|string|min:8|confirmed'
         ];
         $this->validate($request, $rules);
@@ -58,7 +58,7 @@ class UserController extends Controller
     {
         $rules = [
             'name'      => 'required',
-            'email'     => 'required'
+            'email'     => 'required|regex:/(.+)@(.+)\.(.+)/i'
         ];
         $this->validate($request, $rules);
         $user = User::find($id);
