@@ -45,7 +45,7 @@ class CheckStoreCredit extends Command
                 $customer->available_credit = $credits['credit'];
                 
             } else {
-                $customer->available_credit = 0;
+                $customer->available_credit = 0.00;
             }
 
             $customer->update();
