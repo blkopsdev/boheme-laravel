@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'transactions', 'titlePage' => __('Transactions')])
+@extends('layouts.app', ['activePage' => 'reports', 'titlePage' => __('reports')])
 
 @section('content')
 <div class="content">
@@ -13,7 +13,7 @@
             <div class="col-lg-12 col-md-12">
                 <div class="card">
                     <div class="card-header card-header-warning">
-                        <h4 class="card-title">Transactions</h4>
+                        <h4 class="card-title">Reports</h4>
                     </div>
                     <div class="card-body table-responsive">
                         <form method="get" class="prettyform" action="{{ route('transactions.index') }}">

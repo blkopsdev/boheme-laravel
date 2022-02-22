@@ -23,7 +23,7 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function reports(Request $request)
     {
         $title = __('Reports');
         $start = $request->from_date;
@@ -36,7 +36,7 @@ class TransactionController extends Controller
         $store_credit_used = Transaction::where('created_at', '>=', $start)->where('created_at', '<=', $end)->whereTransactionType('Purchase')->sum('store_credit');
         $cash_out = Transaction::where('created_at', '>=', $start)->where('created_at', '<=', $end)->whereTransactionType('Cash out for trade')->sum('cash_out_for_trade');
         $cash_out_for_store_credit = Transaction::where('created_at', '>=', $start)->where('created_at', '<=', $end)->whereTransactionType('Cash out for store credit')->sum('cash_out_for_storecredit');
-        return view('transactions.index', compact('title', 'start', 'end', 'store_credit_given', 'store_credit_used', 'cash_out', 'cash_out_for_store_credit'));
+        return view('transactions.report', compact('title', 'start', 'end', 'store_credit_given', 'store_credit_used', 'cash_out', 'cash_out_for_store_credit'));
     }
 
     /**

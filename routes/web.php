@@ -39,6 +39,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'auth'], function(){
 		Route::get('customers/merge/{id}', ['as' => 'merge', 'uses' => 'CustomerController@merge']);
 		Route::post('customers/merge/{id}', ['as' => 'merge_submit', 'uses' => 'CustomerController@mergeSubmit']);
 		Route::resource('customers', 'CustomerController', ['only' => ['delete']]);
+		Route::get('reports', ['as' => 'reports', 'uses'=>'TransactionController@reports']);
 	});
 });
 Route::get('customer_ajax', 'CustomerController@customers');
