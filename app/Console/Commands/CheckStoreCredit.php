@@ -49,7 +49,6 @@ class CheckStoreCredit extends Command
             }
 
             $customer->update();
-            // echo $customer->id . "\n";
         }
         return 0;
     }
