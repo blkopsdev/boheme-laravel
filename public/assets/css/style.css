@@ -120,7 +120,8 @@ input:checked+.slider:before {
     display: none;
 }
 
-#customers tbody td:last-child {
+#customers tbody td:last-child,
+#transactions tbody td:last-child {
     display: flex;
     align-items: center;
     text-align: center;
