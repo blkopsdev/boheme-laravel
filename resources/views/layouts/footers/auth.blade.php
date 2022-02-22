@@ -4,7 +4,7 @@
       &copy;
       <script>
           document.write(new Date().getFullYear())
-      </script>, Powered by  <strong class="text-primary">blkopsdev</strong>
+      </script>, Powered by  <strong class="text-primary">Boheme Clothing & Gifts</strong>
       
   </div>
 </footer>
