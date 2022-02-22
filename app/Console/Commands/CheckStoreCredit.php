@@ -43,8 +43,12 @@ class CheckStoreCredit extends Command
             $credits = get_store_credit($customer->id);
             if($credits['credit'] != 0) {
                 $customer->available_credit = $credits['credit'];
-                $customer->update();
+                
+            } else {
+                $customer->available_credit = 0;
             }
+
+            $customer->update();
             // echo $customer->id . "\n";
         }
         return 0;
