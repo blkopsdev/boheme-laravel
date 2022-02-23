@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\CheckStoreCredit;
+use App\Console\Commands\DatabaseBackUp;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        CheckStoreCredit::class
+        CheckStoreCredit::class,
+        DatabaseBackUp::class
     ];
 
     /**
@@ -26,6 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('check-store-credit:run')->hourly();
+        $schedule->command('database:backup')->daily();
     }
 
     /**
