@@ -23,7 +23,7 @@
         <div class="card">
           <div class="card-header card-header-primary">
             <h4 class="card-title ">Customers with available store credit</h4>
-            <p class="card-category">This data is updated in every 2 hours.</p>
+            <p class="card-category">This data is updated every 2 hours.</p>
           </div>
           <div class="card-body">
             <div class="table-responsive">
