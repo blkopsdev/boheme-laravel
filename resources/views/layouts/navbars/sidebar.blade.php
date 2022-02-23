@@ -14,13 +14,13 @@
       </li>
 
       <li class="nav-item @if (strpos($activePage, 'customer') !== false) echo ' active'; @endif">
-        <a class="nav-link" data-toggle="collapse" href="#navbar-customers" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#navbar-customers" aria-expanded="{{ strpos($activePage, 'customers') !== false ? 'true' : 'false' }}">
           <i class="material-icons">groups</i>
           <p>{{ __('Customers') }}
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse show" id="navbar-customers">
+        <div class="collapse {{ strpos($activePage, 'customers') !== false ? 'show' : '' }}" id="navbar-customers">
           <ul class="nav">
 						<li class="nav-item{{ $activePage == 'customers.create' ? ' active' : '' }}">
 							<a class="nav-link" href="{{ route('customers.create') }}">
@@ -39,13 +39,13 @@
       </li>
 
       <li class="nav-item @if (strpos($activePage, 'transactions') !== false) echo ' active'; @endif">
-        <a class="nav-link" data-toggle="collapse" href="#navbar-transactions" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#navbar-transactions" aria-expanded="{{ strpos($activePage, 'transactions') !== false ? 'true' : 'false' }}">
           <i class="material-icons">payments</i>
           <p>{{ __('Transactions') }}
             <b class="caret"></b>
           </p>
         </a>
-        <div class="collapse show" id="navbar-transactions">
+        <div class="collapse {{ strpos($activePage, 'transactions') !== false ? 'show' : '' }}" id="navbar-transactions">
           <ul class="nav">
 						<li class="nav-item{{ $activePage == 'transactions.month' ? ' active' : '' }}">
 							<a class="nav-link" href="{{ route('transactions.month') }}">
