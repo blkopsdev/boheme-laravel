@@ -38,12 +38,12 @@
           </ul>
         </div>
       </li>
-      {{-- <li class="nav-item{{ $activePage == 'transactions' ? ' active' : '' }}">
+      <li class="nav-item{{ $activePage == 'transactions' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('transactions.index') }}">
           <i class="material-icons">payments</i>
           <p>{{ __('Transactions') }}</p>
         </a>
-      </li> --}}
+      </li>
       @if (auth()->user()->user_type == 'admin')
       <li class="nav-item{{ $activePage == 'reports' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('reports') }}">
