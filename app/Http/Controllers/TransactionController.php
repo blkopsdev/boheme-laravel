@@ -62,28 +62,28 @@ class TransactionController extends Controller
                     return $content;
                 })
                 ->addColumn('store_credit', function($row){
-                    $store_credit = 0;
+                    $store_credit = 0.00;
                     if ($row->transaction_type == 'Purchase') {
                         if ($row->store_credit != 0) {
-                          $store_credit = "-$" . $row->store_credit;
+                          $store_credit = "-" . $row->store_credit;
                         } else {
-                          $store_credit = "$0.00";
+                          $store_credit = "0.00";
                         }
                     } else if ($row->transaction_type == 'Cash out for store credit') {
-                        $store_credit = "-$" . $row->cash_out_for_storecredit;
+                        $store_credit = "-" . $row->cash_out_for_storecredit;
                     } else {
-                        $store_credit = "$" . $row->store_credit;
+                        $store_credit = $row->store_credit;
                     }
                     
                     return $store_credit;
                 })
                 ->addColumn('cash', function($row){
-                    $cash = 0;
+                    $cash = 0.00;
                     $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
                     if (strpos($row->transaction_type, 'Cash out') !== false){
-                        $cash = "-$" .$cash;
+                        $cash = "-" .$cash;
                     } else {
-                        $cash = "$" .$cash;
+                        $cash = "" .$cash;
                     }
                     
                     return $cash;
@@ -171,28 +171,28 @@ class TransactionController extends Controller
                     return $content;
                 })
                 ->addColumn('store_credit', function($row){
-                    $store_credit = 0;
+                    $store_credit = 0.00;
                     if ($row->transaction_type == 'Purchase') {
                         if ($row->store_credit != 0) {
-                          $store_credit = "-$" . $row->store_credit;
+                          $store_credit = "-" . $row->store_credit;
                         } else {
-                          $store_credit = "$0.00";
+                          $store_credit = "0.00";
                         }
                     } else if ($row->transaction_type == 'Cash out for store credit') {
-                        $store_credit = "-$" . $row->cash_out_for_storecredit;
+                        $store_credit = "-" . $row->cash_out_for_storecredit;
                     } else {
-                        $store_credit = "$" . $row->store_credit;
+                        $store_credit = $row->store_credit;
                     }
                     
                     return $store_credit;
                 })
                 ->addColumn('cash', function($row){
-                    $cash = 0;
+                    $cash = 0.00;
                     $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
                     if (strpos($row->transaction_type, 'Cash out') !== false){
-                        $cash = "-$" .$cash;
+                        $cash = "-" .$cash;
                     } else {
-                        $cash = "$" .$cash;
+                        $cash = "" .$cash;
                     }
                     
                     return $cash;
@@ -249,28 +249,28 @@ class TransactionController extends Controller
                     return $content;
                 })
                 ->addColumn('store_credit', function($row){
-                    $store_credit = 0;
+                    $store_credit = 0.00;
                     if ($row->transaction_type == 'Purchase') {
                         if ($row->store_credit != 0) {
-                          $store_credit = "-$" . $row->store_credit;
+                          $store_credit = "-" . $row->store_credit;
                         } else {
-                          $store_credit = "$0.00";
+                          $store_credit = "0.00";
                         }
                     } else if ($row->transaction_type == 'Cash out for store credit') {
-                        $store_credit = "-$" . $row->cash_out_for_storecredit;
+                        $store_credit = "-" . $row->cash_out_for_storecredit;
                     } else {
-                        $store_credit = "$" . $row->store_credit;
+                        $store_credit = $row->store_credit;
                     }
                     
                     return $store_credit;
                 })
                 ->addColumn('cash', function($row){
-                    $cash = 0;
+                    $cash = 0.00;
                     $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
                     if (strpos($row->transaction_type, 'Cash out') !== false){
-                        $cash = "-$" .$cash;
+                        $cash = "-" .$cash;
                     } else {
-                        $cash = "$" .$cash;
+                        $cash = "" .$cash;
                     }
                     
                     return $cash;
@@ -327,28 +327,28 @@ class TransactionController extends Controller
                     return $content;
                 })
                 ->addColumn('store_credit', function($row){
-                    $store_credit = 0;
+                    $store_credit = 0.00;
                     if ($row->transaction_type == 'Purchase') {
                         if ($row->store_credit != 0) {
-                          $store_credit = "-$" . $row->store_credit;
+                          $store_credit = "-" . $row->store_credit;
                         } else {
-                          $store_credit = "$0.00";
+                          $store_credit = "0.00";
                         }
                     } else if ($row->transaction_type == 'Cash out for store credit') {
-                        $store_credit = "-$" . $row->cash_out_for_storecredit;
+                        $store_credit = "-" . $row->cash_out_for_storecredit;
                     } else {
-                        $store_credit = "$" . $row->store_credit;
+                        $store_credit = $row->store_credit;
                     }
                     
                     return $store_credit;
                 })
                 ->addColumn('cash', function($row){
-                    $cash = 0;
+                    $cash = 0.00;
                     $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
                     if (strpos($row->transaction_type, 'Cash out') !== false){
-                        $cash = "-$" .$cash;
+                        $cash = "-" .$cash;
                     } else {
-                        $cash = "$" .$cash;
+                        $cash = "" .$cash;
                     }
                     
                     return $cash;

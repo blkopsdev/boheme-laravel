@@ -29,16 +29,16 @@
             <div class="card-body table-responsive">
               <table class="table table-hover" id="transactions">
                 <thead class="text-warning">
-                    <th>ID</th>
-                    <th>Created On</th>
-                    <th>Customer</th>
-                    <th>Type</th>
-                    <th>Purchase Subtotal</th>
-                    <th>Tax</th>
-                    <th>Purchase Total</th>
-                    <th>Store Credit</th>
-                    <th>Cash In/Out</th>
-                    <th></th>
+                  <th>ID</th>
+                  <th>Created On</th>
+                  <th>Customer</th>
+                  <th>Type</th>
+                  <th>Purchase Subtotal ($)</th>
+                  <th>Tax ($)</th>
+                  <th>Purchase Total ($)</th>
+                  <th>Store Credit ($)</th>
+                  <th>Cash In/Out ($)</th>
+                  <th></th>
                 </thead>
                 <tbody>
                   
