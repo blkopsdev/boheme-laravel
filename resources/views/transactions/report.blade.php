@@ -16,7 +16,7 @@
                         <h4 class="card-title">Reports</h4>
                     </div>
                     <div class="card-body table-responsive">
-                        <form method="get" class="prettyform" action="{{ route('transactions.index') }}">
+                        <form method="get" class="prettyform" action="{{ route('reports') }}">
                           @csrf
                           <p>{{ __('NOTE: Earliest data we have is from 2012-02-20') }}</p>
                           <p><strong><i>{{ __('Important!') }}</i> {{ __('please form dates like: MM/DD/YY') }}</strong></p>
