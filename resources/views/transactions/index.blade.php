@@ -62,21 +62,16 @@
             {data: 'id', name: 'id'},
             {data: 'created_on', name: 'created_on'},
             {data: 'customer', name: 'customer'},
-            {data: 'transaction_type', name: 'transaction_type'},
-            {data: 'purchased_items', name: 'purchased_items'},
-            {data: 'tax', name: 'tax'},
-            {data: 'purchase_total', name: 'purchase_total'},
+            {data: 'transaction_type', name: 'transaction_type', searchable: false},
+            {data: 'purchased_items', name: 'purchased_items', searchable: false},
+            {data: 'tax', name: 'tax', searchable: false},
+            {data: 'purchase_total', name: 'purchase_total', searchable: false},
             {data: 'store_credit', name: 'store_credit'},
-            {data: 'cash', name: 'cash'},
-            {
-              data: 'action', 
-              name: 'action', 
-              searchable: false,
-              orderable: false
-            },
+            {data: 'cash', name: 'cash', searchable: false},
+            {data: 'action', name: 'action', searchable: false, orderable: false},
         ],
         "order": [[ 0, "desc" ]],
-        'pageLength': 25
+        'pageLength': 10
       })
     });
   </script>
