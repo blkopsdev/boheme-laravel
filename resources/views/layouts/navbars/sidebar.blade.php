@@ -39,7 +39,7 @@
       </li>
 
       <li class="nav-item @if (strpos($activePage, 'transactions') !== false) echo ' active'; @endif">
-        <a class="nav-link" data-toggle="collapse" href="#navbar-transacions" aria-expanded="true">
+        <a class="nav-link" data-toggle="collapse" href="#navbar-transactions" aria-expanded="true">
           <i class="material-icons">payments</i>
           <p>{{ __('Transactions') }}
             <b class="caret"></b>
