@@ -34,15 +34,45 @@
 								<span class="sidebar-normal"> {{ __('Customer Index') }} </span>
 							</a>
 						</li>
-						
           </ul>
         </div>
       </li>
-      <li class="nav-item{{ $activePage == 'transactions' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('transactions.index') }}">
+
+      <li class="nav-item @if (strpos($activePage, 'transactions') !== false) echo ' active'; @endif">
+        <a class="nav-link" data-toggle="collapse" href="#navbar-transacions" aria-expanded="true">
           <i class="material-icons">payments</i>
-          <p>{{ __('Transactions') }}</p>
+          <p>{{ __('Transactions') }}
+            <b class="caret"></b>
+          </p>
         </a>
+        <div class="collapse show" id="navbar-transactions">
+          <ul class="nav">
+						<li class="nav-item{{ $activePage == 'transactions.month' ? ' active' : '' }}">
+							<a class="nav-link" href="{{ route('transactions.month') }}">
+								<i class="material-icons">remove</i>
+								<span class="sidebar-normal"> {{ __('This Month') }} </span>
+							</a>
+						</li>
+            <li class="nav-item{{ $activePage == 'transactions.this_year' ? ' active' : '' }}">
+							<a class="nav-link" href="{{ route('transactions.this_year') }}">
+								<i class="material-icons">remove</i>
+								<span class="sidebar-normal"> {{ __('This Year') }} </span>
+							</a>
+						</li>
+            <li class="nav-item{{ $activePage == 'transactions.last_year' ? ' active' : '' }}">
+							<a class="nav-link" href="{{ route('transactions.last_year') }}">
+								<i class="material-icons">remove</i>
+								<span class="sidebar-normal"> {{ __('Last Year') }} </span>
+							</a>
+						</li>
+            <li class="nav-item{{ $activePage == 'transactions.all' ? ' active' : '' }}">
+							<a class="nav-link" href="{{ route('transactions.all') }}">
+								<i class="material-icons">remove</i>
+								<span class="sidebar-normal"> {{ __('Complete History') }} </span>
+							</a>
+						</li>
+          </ul>
+        </div>
       </li>
       @if (auth()->user()->user_type == 'admin')
       <li class="nav-item{{ $activePage == 'reports' ? ' active' : '' }}">

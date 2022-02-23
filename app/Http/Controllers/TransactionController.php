@@ -7,6 +7,7 @@ use App\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
+use Carbon\Carbon;
 use DB;
 
 class TransactionController extends Controller
@@ -29,7 +30,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $title = __('Transactions');
+        $title = __('Complete History of Transactions');
         $total = Transaction::select('id')->get()->count();
         
         return view('transactions.index', compact('title', 'total'));
@@ -39,6 +40,271 @@ class TransactionController extends Controller
     {
         if ($request->ajax()) {
             $data = DB::table('transactions')->latest()->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('created_on', function($row){
+                    $created_on = date('m/d/Y', strtotime($row->created_at));
+                    return $created_on;
+                })
+                ->addColumn('customer', function($row){
+                    $content = '';
+                    try {
+                        if($row->customer_id) {
+                            $customer = Customer::whereId($row->customer_id)->select('first_name', 'last_name')->first();
+                            if($customer) {
+                                $first_name = $customer->first_name ? $customer->first_name : '';
+                                $last_name = $customer->last_name ? $customer->last_name : '';
+                                $content = '<a href="' . route('customers.show', $row->customer_id) . '" class="text-primary">' . $first_name . ' ' . $last_name . '</a>';
+                            }
+                        }
+                    } catch (Exception $ex) {
+                    }
+                    return $content;
+                })
+                ->addColumn('store_credit', function($row){
+                    $store_credit = 0;
+                    if ($row->transaction_type == 'Purchase') {
+                        if ($row->store_credit != 0) {
+                          $store_credit = "-$" . $row->store_credit;
+                        } else {
+                          $store_credit = "$0.00";
+                        }
+                    } else if ($row->transaction_type == 'Cash out for store credit') {
+                        $store_credit = "-$" . $row->cash_out_for_storecredit;
+                    } else {
+                        $store_credit = "$" . $row->store_credit;
+                    }
+                    
+                    return $store_credit;
+                })
+                ->addColumn('cash', function($row){
+                    $cash = 0;
+                    $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
+                    if (strpos($row->transaction_type, 'Cash out') !== false){
+                        $cash = "-$" .$cash;
+                    } else {
+                        $cash = "$" .$cash;
+                    }
+                    
+                    return $cash;
+                })
+                ->addColumn('action', function($row){
+                    $actions = 
+                        '<a href="' . route('transactions.show', $row->id) . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>
+                        ';
+
+                    if(auth()->user()->user_type == 'admin') {
+                        $actions = $actions . '<a href="' . route('transactions.edit', $row->id) . '" class="btn btn-warning p-2" rel="tooltip" data-original-title="" title="Edit"><i class="material-icons">edit</i></a>
+                        <form action="' . route('transactions.destroy',$row->id) . '" method="POST">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-danger p-2" onclick="return confirm(Are you sure you want to permanently delete Transaction #' . $row->id . '?\')" rel="tooltip" data-original-title="" title="Delete"><i class="material-icons">delete</i></button>
+                        </form>';
+                    }
+                    return $actions;
+                })
+                ->rawColumns([
+                    'created_on', 
+                    'customer', 
+                    'store_credit', 
+                    'cash', 
+                    'action'
+                ])
+                ->make(true);
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function month()
+    {
+        $title = __('Transactions of This Month');
+        $total = Transaction::where('created_at', '>=', date('Y-m-d', strtotime(date('Y-m-1'))))->select('id')->get()->count();
+        
+        return view('transactions.list.this_month', compact('title', 'total'));
+    }
+
+    public function thisYear()
+    {
+        $title = __('Transactions of This Year');
+        $total = Transaction::where('created_at', '>=', date('Y-m-d', strtotime(date('Y-1-1'))))->select('id')->get()->count();
+        
+        return view('transactions.list.this_year', compact('title', 'total'));
+    }
+
+    public function lastYear()
+    {
+        $last_year = date("Y",strtotime("-1 year"));
+
+        $title = __('Transactions of Last Year');
+        $total = Transaction::whereYear('created_at', Carbon::now()->subYear()->year)->select('id')->get()->count();
+        
+        return view('transactions.list.last_year', compact('title', 'total'));
+    }
+
+    public function transactionsMonth(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = DB::table('transactions')->where('created_at', '>=', date('Y-m-d', strtotime(date('Y-m-1'))))->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('created_on', function($row){
+                    $created_on = date('m/d/Y', strtotime($row->created_at));
+                    return $created_on;
+                })
+                ->addColumn('customer', function($row){
+                    $content = '';
+                    try {
+                        if($row->customer_id) {
+                            $customer = Customer::whereId($row->customer_id)->select('first_name', 'last_name')->first();
+                            if($customer) {
+                                $first_name = $customer->first_name ? $customer->first_name : '';
+                                $last_name = $customer->last_name ? $customer->last_name : '';
+                                $content = '<a href="' . route('customers.show', $row->customer_id) . '" class="text-primary">' . $first_name . ' ' . $last_name . '</a>';
+                            }
+                        }
+                    } catch (Exception $ex) {
+                    }
+                    return $content;
+                })
+                ->addColumn('store_credit', function($row){
+                    $store_credit = 0;
+                    if ($row->transaction_type == 'Purchase') {
+                        if ($row->store_credit != 0) {
+                          $store_credit = "-$" . $row->store_credit;
+                        } else {
+                          $store_credit = "$0.00";
+                        }
+                    } else if ($row->transaction_type == 'Cash out for store credit') {
+                        $store_credit = "-$" . $row->cash_out_for_storecredit;
+                    } else {
+                        $store_credit = "$" . $row->store_credit;
+                    }
+                    
+                    return $store_credit;
+                })
+                ->addColumn('cash', function($row){
+                    $cash = 0;
+                    $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
+                    if (strpos($row->transaction_type, 'Cash out') !== false){
+                        $cash = "-$" .$cash;
+                    } else {
+                        $cash = "$" .$cash;
+                    }
+                    
+                    return $cash;
+                })
+                ->addColumn('action', function($row){
+                    $actions = 
+                        '<a href="' . route('transactions.show', $row->id) . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>
+                        ';
+
+                    if(auth()->user()->user_type == 'admin') {
+                        $actions = $actions . '<a href="' . route('transactions.edit', $row->id) . '" class="btn btn-warning p-2" rel="tooltip" data-original-title="" title="Edit"><i class="material-icons">edit</i></a>
+                        <form action="' . route('transactions.destroy',$row->id) . '" method="POST">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-danger p-2" onclick="return confirm(Are you sure you want to permanently delete Transaction #' . $row->id . '?\')" rel="tooltip" data-original-title="" title="Delete"><i class="material-icons">delete</i></button>
+                        </form>';
+                    }
+                    return $actions;
+                })
+                ->rawColumns([
+                    'created_on', 
+                    'customer', 
+                    'store_credit', 
+                    'cash', 
+                    'action'
+                ])
+                ->make(true);
+        }
+    }
+
+    public function transactionsThisYear(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = DB::table('transactions')->where('created_at', '>=', date('Y-m-d', strtotime(date('Y-1-1'))))->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('created_on', function($row){
+                    $created_on = date('m/d/Y', strtotime($row->created_at));
+                    return $created_on;
+                })
+                ->addColumn('customer', function($row){
+                    $content = '';
+                    try {
+                        if($row->customer_id) {
+                            $customer = Customer::whereId($row->customer_id)->select('first_name', 'last_name')->first();
+                            if($customer) {
+                                $first_name = $customer->first_name ? $customer->first_name : '';
+                                $last_name = $customer->last_name ? $customer->last_name : '';
+                                $content = '<a href="' . route('customers.show', $row->customer_id) . '" class="text-primary">' . $first_name . ' ' . $last_name . '</a>';
+                            }
+                        }
+                    } catch (Exception $ex) {
+                    }
+                    return $content;
+                })
+                ->addColumn('store_credit', function($row){
+                    $store_credit = 0;
+                    if ($row->transaction_type == 'Purchase') {
+                        if ($row->store_credit != 0) {
+                          $store_credit = "-$" . $row->store_credit;
+                        } else {
+                          $store_credit = "$0.00";
+                        }
+                    } else if ($row->transaction_type == 'Cash out for store credit') {
+                        $store_credit = "-$" . $row->cash_out_for_storecredit;
+                    } else {
+                        $store_credit = "$" . $row->store_credit;
+                    }
+                    
+                    return $store_credit;
+                })
+                ->addColumn('cash', function($row){
+                    $cash = 0;
+                    $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
+                    if (strpos($row->transaction_type, 'Cash out') !== false){
+                        $cash = "-$" .$cash;
+                    } else {
+                        $cash = "$" .$cash;
+                    }
+                    
+                    return $cash;
+                })
+                ->addColumn('action', function($row){
+                    $actions = 
+                        '<a href="' . route('transactions.show', $row->id) . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>
+                        ';
+
+                    if(auth()->user()->user_type == 'admin') {
+                        $actions = $actions . '<a href="' . route('transactions.edit', $row->id) . '" class="btn btn-warning p-2" rel="tooltip" data-original-title="" title="Edit"><i class="material-icons">edit</i></a>
+                        <form action="' . route('transactions.destroy',$row->id) . '" method="POST">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-danger p-2" onclick="return confirm(Are you sure you want to permanently delete Transaction #' . $row->id . '?\')" rel="tooltip" data-original-title="" title="Delete"><i class="material-icons">delete</i></button>
+                        </form>';
+                    }
+                    return $actions;
+                })
+                ->rawColumns([
+                    'created_on', 
+                    'customer', 
+                    'store_credit', 
+                    'cash', 
+                    'action'
+                ])
+                ->make(true);
+        }
+    }
+
+    public function transactionsLastYear(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = DB::table('transactions')->whereYear('created_at', Carbon::now()->subYear()->year)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('created_on', function($row){

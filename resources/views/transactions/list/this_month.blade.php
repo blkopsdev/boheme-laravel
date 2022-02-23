@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'transactions.all', 'titlePage' => __('Complete History of Transactions')])
+@extends('layouts.app', ['activePage' => 'transactions.month', 'titlePage' => __('Transactions of This Month')])
 
 @section('content')
   <div class="content">
@@ -8,13 +8,14 @@
           <nav aria-label="breadcrumb" role="navigation">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/">{{ __('Home') }}</a></li>
-              <li class="breadcrumb-item active" aria-current="page">{{ __('Complete History of Transactions') }}</li>
+              <li class="breadcrumb-item"><a href="/">{{ __('Transactions') }}</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{ __('Transactions of This Month') }}</li>
             </ol>
           </nav>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-6">
           <h2>{{ $title }}</h2>
         </div>
       </div>
@@ -57,17 +58,17 @@
       $('#transactions').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ url('transactions_ajax') }}",
+        ajax: "{{ url('transactions_month_ajax') }}",
         columns: [
             {data: 'id', name: 'id'},
             {data: 'created_on', name: 'created_on'},
             {data: 'customer', name: 'customer'},
-            {data: 'transaction_type', name: 'transaction_type', searchable: false},
-            {data: 'purchased_items', name: 'purchased_items', searchable: false},
-            {data: 'tax', name: 'tax', searchable: false},
-            {data: 'purchase_total', name: 'purchase_total', searchable: false},
+            {data: 'transaction_type', name: 'transaction_type'},
+            {data: 'purchased_items', name: 'purchased_items'},
+            {data: 'tax', name: 'tax'},
+            {data: 'purchase_total', name: 'purchase_total'},
             {data: 'store_credit', name: 'store_credit'},
-            {data: 'cash', name: 'cash', searchable: false},
+            {data: 'cash', name: 'cash'},
             {data: 'action', name: 'action', searchable: false, orderable: false},
         ],
         "order": [[ 0, "desc" ]],
