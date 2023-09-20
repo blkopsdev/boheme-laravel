@@ -40,7 +40,7 @@ function get_store_credit($id, $transaction_id = null) {
     $purchases_over_one_year = 0;
     $expirationDate = "";
 
-    $transactions = \App\Transaction::whereCustomerId($id)->orderBy('id', 'asc')->get();
+    $transactions = \App\Transaction::whereCustomerId($id)->orderBy('created_at', 'asc')->get();
     foreach ($transactions as $transaction) {
         # code...
         $dateMinusYear = strtotime(date("Y-m-d").' -1 year');
