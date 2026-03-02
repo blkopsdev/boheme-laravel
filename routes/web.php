@@ -51,3 +51,5 @@ Route::get('transactions_ajax', 'TransactionController@transactions');
 Route::get('transactions_month_ajax', 'TransactionController@transactionsMonth');
 Route::get('transactions_this_year_ajax', 'TransactionController@transactionsThisYear');
 Route::get('transactions_last_year_ajax', 'TransactionController@transactionsLastYear');
+
+Route::get('mycron1/{customer_id}', 'TransactionController@mycron1');

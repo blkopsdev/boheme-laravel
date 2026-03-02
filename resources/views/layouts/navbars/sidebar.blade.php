@@ -81,7 +81,6 @@
           <p>{{ __('Reports') }}</p>
         </a>
       </li>
-
       <li class="nav-item{{ $activePage == 'available_credits' ? ' active' : '' }}">
         <a class="nav-link" href="{{ route('available_credits') }}">
           <i class="material-icons">account_balance</i>

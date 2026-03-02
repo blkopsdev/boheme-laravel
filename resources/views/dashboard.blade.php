@@ -79,19 +79,20 @@
                   @php
                       if ($trans->transaction_type == 'Purchase') {
                         if ($trans->store_credit != 0) {
-                          $store_credit = "-$" . $trans->store_credit;
+                          $store_credit = "-$" . number_format($trans->store_credit, 2, '.', '');
                         } else {
                           $store_credit = "$0.00";
                         }
                       } else if ($trans->transaction_type == 'Cash out for store credit') {
-                        $store_credit = "-$" . $trans->cash_out_for_storecredit;
+                        $store_credit = "-$" . number_format($trans->cash_out_for_storecredit*2, 2, '.', '');
                       } else {
-                        $store_credit = "$" . $trans->store_credit;
+                        $store_credit = "$" . number_format($trans->store_credit, 2, '.', '');
                       }
-  
+
+
                       $cash = number_format($trans->cash_in + $trans->cash_out_for_trade + $trans->cash_out_for_storecredit/2, 2, '.', '');
-                      if ($trans->transaction_type == "Cash out for store credit" || $trans->transaction_type == "Cash out for trade"){
-                        $cash = "-$" .$cash;
+                      if ($trans->transaction_type == 'Cash out for store credit' || $trans->transaction_type == 'Cash out for trade'){
+                        $cash = "-$" . number_format($trans->cash_out_for_storecredit, 2, '.', '');
                       } else {
                         $cash = "$" .$cash;
                       }
@@ -101,15 +102,14 @@
                     <td>{{ date('m/d/Y', strtotime($trans->created_at)) }}</td>
                     <td><a href="{{ route('customers.show', $trans->customer_id) }}" class="text-primary">{{ $trans->customer->first_name . ' ' . $trans->customer->last_name }}</a></td>
                     <td>{{ $trans->transaction_type }}</td>
-                    <td>${{ $trans->purchased_items }}</td>
-                    <td>${{ $trans->tax }}</td>
-                    <td>${{ $trans->purchase_total }}</td>
+                    <td>${{ number_format($trans->purchased_items, 2) }}</td>
+                    <td>${{ number_format($trans->tax, 2) }}</td>
+                    <td>${{ number_format($trans->purchase_total, 2) }}</td>
                     <td>{{ $store_credit }}</td>
                     <td>{{ $cash }}</td>
                     <td>${{ number_format(get_store_credit($trans->customer_id, $trans->id)['credit'], 2) }}</td>
-                    <td>
-                    </td>
-                  </tr>    
+                    <td></td>
+                  </tr>
                   @endforeach
                 </tbody>
               </table>

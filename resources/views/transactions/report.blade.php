@@ -31,7 +31,8 @@
                           <table class="table table-bordered" style="width: 100%">
                             <thead>
                               <th><strong>Time Period:</strong></th>
-                              <th><strong>Store credit given:</strong></th>
+                              <th><strong>Store Credit For TRADE INS:</strong></th>
+                              <th><strong>Store Credit For RETURNS:</strong></th>
                               <th><strong>Store credit used:</strong></th>
                               <th><strong>Store credit NOT used:</strong></th>
                               <th><strong>Cash paid out for Trade-Ins:</strong></th>
@@ -42,8 +43,9 @@
                                 {{ date('m-d-Y', strtotime($start)) }} to {{ date('m-d-Y', strtotime($end)) }}
                               </td>
                               <td>${{ number_format($store_credit_given, 2) }}</td>
+                              <td>${{ number_format($Return_Store_Credit, 2) }}</td>
                               <td>${{ number_format($store_credit_used, 2) }}</td>
-                              <td>${{ number_format(($store_credit_given - $store_credit_used), 2) }}</td>
+                              <td>${{ number_format((($store_credit_given + $Return_Store_Credit) - $store_credit_used), 2) }}</td>
                               <td>${{ number_format($cash_out, 2) }}</td>
                               <td>${{ number_format($cash_out_for_store_credit, 2) }}</td>
                             </tbody>

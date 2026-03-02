@@ -16,7 +16,7 @@
       </div>
       <div class="row">
         <div class="col-md-4">
-          <h2>{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }} 
+          <h2>{{ __('ID: ') . $customer->id }} | {{ $customer->first_name }} {{ $customer->last_name }}
           </h2>
         </div>
         <div class="col-md-6 d-flex align-items-center">
@@ -107,7 +107,8 @@
                           <label for="transaction_type">{{ __('Transaction Type') }}</label>
                           <select class="selectpicker form-control transaction-type" id="transaction_type" name="transaction_type" data-style="btn btn-primary text-white" required>
                             <option value="">{{ __('- Select one -') }}</option>
-                            <option value="Add store credit" {{ old('transaction_type') == 'Add store credit' ? 'selected' : '' }}>{{ __('Add store credit') }}</option>
+                            <option value="Add store credit" {{ old('transaction_type') == 'Add store credit' ? 'selected' : '' }}>{{ __('Add Store Credit For TRADE-IN') }}</option>
+                            <option value="Add Store Credit For RETURN" {{ old('transaction_type') == 'Add Store Credit For RETURN' ? 'selected' : '' }}>{{ __('Add Store Credit For RETURN') }}</option>
                             <option value="Purchase" {{ old('transaction_type') == 'Purchase' ? 'selected' : '' }}>{{ __('Purchase') }}</option>
                             <option value="Cash out for trade" {{ old('transaction_type') == 'Cash out for trade' ? 'selected' : '' }}>{{ __('Cash out for TRADE-INS') }}</option>
                             <option value="Cash out for store credit" {{ old('transaction_type') == 'Cash out for store credit' ? 'selected' : '' }}>{{ __('Cash out for store credit (We give HALF their store cerdit in cash)') }}</option>
@@ -251,109 +252,66 @@
                   </thead>
                   <tbody>
                     @php
-                        $avail_credit = 0;
-                        $avail_credit_unexpired_tally = 0;
-                        $avail_credit_expired_tally = 0;
-                        $purchases_over_one_year = 0;
-                        $expirationDate = "";
+                      $credit_balance = 0;
                     @endphp
                     @foreach ($transactions as $transaction)
                       @php
-                        $dateMinusYear = strtotime(date("Y-m-d").' -1 year');
-                        $dateMinus6Months = strtotime(date("2015-10-01").' -6 months'); // New 6 month expiration
-                        $transactionDate = strtotime($transaction->created_at);
+                        $transaction_date = strtotime($transaction->created_at);
+                        $expiration_date = "";
 
-                        $expiredFlag = 0;
+                        switch ($transaction->transaction_type) {
+                          case 'Add store credit':
+                            $expiration_date = strtotime('12 months', $transaction_date);
+                            $expiration_date = date('m/d/Y', $expiration_date);
+                            $store_credit = "$" . number_format($transaction->store_credit, 2);
+                            $credit_balance += number_format($transaction->store_credit, 2);
+                            break;
+                          case 'Add Store Credit For RETURN':
+                            $expiration_date = strtotime('12 months', $transaction_date);
+                            $expiration_date = date('m/d/Y', $expiration_date);
+                            $store_credit = "$" . number_format($transaction->store_credit, 2);
+                            $credit_balance += number_format($transaction->store_credit, 2);
+                            break;
+                          case 'Purchase':
+                            $store_credit = $transaction->store_credit != 0 ? "-$" . number_format($transaction->store_credit, 2) : "$0.00";
+                            $credit_balance -= number_format($transaction->store_credit, 2);
+                            break;
 
-                        if($transaction->transaction_type == "Add store credit") 
-                        {
-                          if ($transactionDate < strtotime(date("2021-01-01"))){
-                            if ($transactionDate >= $dateMinus6Months) {
-                              $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
-                              $expiredFlag = 0;
-                            } else {
-                              $expiredFlag = 1;
-                            }
-                          } else {
-                            if ($transactionDate >= $dateMinusYear) {
-                              $avail_credit_unexpired_tally = $avail_credit_unexpired_tally + $transaction->store_credit;
-                              $expiredFlag = 0;
-                            } else {
-                              $expiredFlag = 1;
-                            }
-                          }
-                        }
-
-                        if ($transaction->transaction_type == "Purchase" && $transactionDate >= $dateMinusYear){
-                            $purchases_over_one_year = $purchases_over_one_year + $transaction->store_credit;
-                        }
-                            
-                        if ($transaction->transaction_type == "Cash out for store credit"){
-                            $avail_credit_unexpired_tally = $avail_credit_unexpired_tally - $transaction->cash_out_for_storecredit * 2;
-                        }
-                            
-                        $avail_credit_unexpired  = $avail_credit_unexpired_tally - $purchases_over_one_year; // doing nothing it seems.. not used elsewhere...
-                            
-                        // NEXT we calc the EXPIRED store credit tally so we can subtract it in the ledger in each subsequent transaction:
-                            
-                        if ($transaction->transaction_type == "Add store credit" && $transactionDate < $dateMinusYear){
-                            $avail_credit_expired_tally = $transaction->store_credit;
-                            $avail_credit = $avail_credit - $avail_credit_expired_tally;
-                        }
-
-                        if ($transactionDate < strtotime(date("2015-05-05")) || $transactionDate >= strtotime(date("2021-01-01"))) {
-                          $expirationDate = strtotime('12 months', $transactionDate); 
-                        } else{
-                          $expirationDate = strtotime('6 months', $transactionDate); 
-                        } 
-                        
-                        $expiredFlag = 0;
-
-                        if ($transaction->transaction_type == "Add store credit") {
-                            $avail_credit = $avail_credit + $transaction->store_credit;
-                        }
-                            
-                        if ( $transaction->transaction_type == "Purchase"){
-                            $avail_credit = $avail_credit - $transaction->store_credit;
-                        }
-                            
-                        if ( $transaction->transaction_type == "Cash out for store credit"){
-                            $avail_credit = $avail_credit - (2 * $transaction->cash_out_for_storecredit);
-                        }
-
-                        $cash = $transaction->cash_in + $transaction->cash_out_for_trade + $transaction->cash_out_for_storecredit;
-                        $cash = number_format($cash, 2, '.', '');
-
-                        if (str_contains( $transaction->transaction_type, 'Cash out')){
-                            $cash = "-$" . $cash;
-                        }else{
-                            $cash = "$" . $cash;
-                        } 
-                        
-                        if ($avail_credit <= 0 ) {
-                            $avail_credit = 0.00 * 1;  // this is because 0 wasn't acting like a number so i tried this multiply trick...?
-                        }
-                        $createdAt = strtotime($transaction->created_at);
-    
-                        if ($transaction->transaction_type == 'Purchase') {
-                          if ($transaction->store_credit != 0) {
+                          case 'Cash out for store credit':
+                            $store_credit = "-$" . number_format($transaction->cash_out_for_storecredit * 2, 2);
+                            $credit_balance -= number_format($transaction->cash_out_for_storecredit * 2, 2);
+                            break;
+                          case 'Expired':
                             $store_credit = "-$" . number_format($transaction->store_credit, 2);
-                          } else {
-                            $store_credit = "$0.00";
-                          }
-                        } else if ($transaction->transaction_type == 'Cash out for store credit') {
-                          $store_credit = "-$" . number_format($transaction->cash_out_for_storecredit*2, 2);
-                        } else {
-                          $store_credit = "$" . number_format($transaction->store_credit, 2);
-                        } 
-                        @endphp
+                            $credit_balance -= number_format($transaction->store_credit, 2);
+                            break;
+                          case 'Expired store credit':
+                            $store_credit = "-$" . number_format($transaction->store_credit, 2);
+                            $credit_balance -= number_format($transaction->store_credit, 2);
+                            break;
+
+                          default:
+                            $store_credit = "$" . number_format($transaction->store_credit, 2);
+                            break;
+                        }
+
+                        $transaction_date = date('m/d/Y', $transaction_date);
+                      @endphp
                       <tr>
                         <td>{{ $transaction->id }}</td>
-                        <td>{{ date('m/d/Y', strtotime($transaction->created_at)) }}</td>
+                        <td>{{ $transaction_date }}</td>
+                        {{-- <td>{{ date('d-m-Y', strtotime($transaction_date)) }}</td> --}}
+                        <?php /* if($expiration_date){ ?>
+                          <td>
+                            <?php echo date('d-m-Y', strtotime($expiration_date)) ?>
+                          </td>
+                        <?php } else { ?>
+                          <td>
+                            {{ $expiration_date }}
+                          </td>
+                        <?php } */ ?>
                         <td>
-                          @if($transaction->transaction_type == 'Add store credit')
-                            {{ date('m/d/Y', $expirationDate) }}
-                          @endif
+                          {{ $expiration_date }}
                         </td>
                         <td>
                           @if ($transaction->transaction_type == "Cash out")
@@ -364,9 +322,20 @@
                         <td>${{ $transaction->purchased_items }}</td>
                         <td>${{ $transaction->tax }}</td>
                         <td>${{ $transaction->purchase_total }}</td>
-                        <td>{{ $store_credit }}</td>
-                        <td>{{ $cash }}</td>
-                        <td>${{ number_format($avail_credit, 2) }}</td>
+                        <td>
+                          {{ $store_credit }}
+                        </td>
+                        <td>
+                          @php
+                            $cash = $transaction->cash_in + $transaction->cash_out_for_trade + $transaction->cash_out_for_storecredit;
+                            $cash = number_format($cash, 2, '.', '');
+                            $cash = str_contains( $transaction->transaction_type, 'Cash out') ? "-$". $cash : "$" . $cash;
+                          @endphp
+                          {{ $cash }}
+                        </td>
+                        <td>
+                          ${{ number_format($credit_balance, 2) }}
+                        </td>
                         <td class="d-flex">
                           <a rel="tooltip" class="btn btn-primary btn-rounded p-2" href="{{ route('transactions.show', $transaction->id) }}" data-original-title="" title="{{ __('View') }}">
                             <i class="material-icons">visibility</i>
@@ -403,6 +372,7 @@
   $(document).ready(function() {
     $('#transaction_history').DataTable({
       "order": [[ 0, 'desc' ]],
+      // "pageLength": 50,
       "columnDefs": [
         { "targets": [0], "orderable": true },
         { "orderable": false, targets: '_all' }
@@ -454,7 +424,7 @@
   $(document).on('submit','.add-transaction', function() {
     if(validate() == false) {
       return false
-    } 
+    }
   });
 </script>
 <script>

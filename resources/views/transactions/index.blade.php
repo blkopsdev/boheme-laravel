@@ -71,7 +71,7 @@
             {data: 'action', name: 'action', searchable: false, orderable: false},
         ],
         "order": [[ 0, "desc" ]],
-        'pageLength': 10
+        'pageLength': 100
       })
     });
   </script>
