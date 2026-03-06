@@ -125,9 +125,11 @@ class CustomerController extends Controller
         if(!$customer) {
             return redirect()->route("customers.index")->with('error', 'Customer doesn\'t exist!');
         }
+        // $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'asc')->limit(15)->get();
         $transactions = Transaction::whereCustomerId($id)->orderBy('id', 'asc')->get();
         if ($transactions->count() > 0) {
-            $store_credit = get_store_credit($id)['credit'];
+            // $store_credit = get_store_credit($id)['credit'];
+            $store_credit = new_get_store_credit($id);
         } else {
             $store_credit = 0.00;
         }

@@ -37,7 +37,8 @@ class TransactionController extends Controller
     }
 
     public function transactions(Request $request)
-    {
+    {   
+       
         if ($request->ajax()) {
             $data = DB::table('transactions')->latest()->get();
             return Datatables::of($data)
@@ -179,26 +180,27 @@ class TransactionController extends Controller
                           $store_credit = "0.00";
                         }
                     } else if ($row->transaction_type == 'Cash out for store credit') {
-                        $store_credit = "-" . $row->cash_out_for_storecredit;
+                        $store_credit = "-" . $row->cash_out_for_storecredit*2;
                     } else {
                         $store_credit = $row->store_credit;
                     }
-                    
+
                     return $store_credit;
                 })
                 ->addColumn('cash', function($row){
                     $cash = 0.00;
                     $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
                     if (strpos($row->transaction_type, 'Cash out') !== false){
-                        $cash = "-" .$cash;
+                        // $cash = "-" .$cash;
+                        $cash = "-" . number_format($row->cash_out_for_storecredit, 2, '.', '');
                     } else {
                         $cash = "" .$cash;
                     }
-                    
+
                     return $cash;
                 })
                 ->addColumn('action', function($row){
-                    $actions = 
+                    $actions =
                         '<a href="' . route('transactions.show', $row->id) . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>
                         ';
 
@@ -213,10 +215,10 @@ class TransactionController extends Controller
                     return $actions;
                 })
                 ->rawColumns([
-                    'created_on', 
-                    'customer', 
-                    'store_credit', 
-                    'cash', 
+                    'created_on',
+                    'customer',
+                    'store_credit',
+                    'cash',
                     'action'
                 ])
                 ->make(true);
@@ -257,26 +259,26 @@ class TransactionController extends Controller
                           $store_credit = "0.00";
                         }
                     } else if ($row->transaction_type == 'Cash out for store credit') {
-                        $store_credit = "-" . $row->cash_out_for_storecredit;
+                        $store_credit = "-" . $row->cash_out_for_storecredit*2;
                     } else {
                         $store_credit = $row->store_credit;
                     }
-                    
+
                     return $store_credit;
                 })
                 ->addColumn('cash', function($row){
                     $cash = 0.00;
                     $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
                     if (strpos($row->transaction_type, 'Cash out') !== false){
-                        $cash = "-" .$cash;
+                        $cash = "-" . number_format($row->cash_out_for_storecredit, 2, '.', '');
                     } else {
                         $cash = "" .$cash;
                     }
-                    
+
                     return $cash;
                 })
                 ->addColumn('action', function($row){
-                    $actions = 
+                    $actions =
                         '<a href="' . route('transactions.show', $row->id) . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>
                         ';
 
@@ -291,10 +293,10 @@ class TransactionController extends Controller
                     return $actions;
                 })
                 ->rawColumns([
-                    'created_on', 
-                    'customer', 
-                    'store_credit', 
-                    'cash', 
+                    'created_on',
+                    'customer',
+                    'store_credit',
+                    'cash',
                     'action'
                 ])
                 ->make(true);
@@ -335,26 +337,26 @@ class TransactionController extends Controller
                           $store_credit = "0.00";
                         }
                     } else if ($row->transaction_type == 'Cash out for store credit') {
-                        $store_credit = "-" . $row->cash_out_for_storecredit;
+                        $store_credit = "-" . $row->cash_out_for_storecredit*2;
                     } else {
                         $store_credit = $row->store_credit;
                     }
-                    
+
                     return $store_credit;
                 })
                 ->addColumn('cash', function($row){
                     $cash = 0.00;
                     $cash = number_format($row->cash_in + $row->cash_out_for_trade + $row->cash_out_for_storecredit/2, 2, '.', '');
                     if (strpos($row->transaction_type, 'Cash out') !== false){
-                        $cash = "-" .$cash;
+                        $cash = "-" . number_format($row->cash_out_for_storecredit, 2, '.', '');
                     } else {
                         $cash = "" .$cash;
                     }
-                    
+
                     return $cash;
                 })
                 ->addColumn('action', function($row){
-                    $actions = 
+                    $actions =
                         '<a href="' . route('transactions.show', $row->id) . '" class="btn btn-primary p-2" rel="tooltip" data-original-title="" title="View"><i class="material-icons">visibility</i></a>
                         ';
 
@@ -369,10 +371,10 @@ class TransactionController extends Controller
                     return $actions;
                 })
                 ->rawColumns([
-                    'created_on', 
-                    'customer', 
-                    'store_credit', 
-                    'cash', 
+                    'created_on',
+                    'customer',
+                    'store_credit',
+                    'cash',
                     'action'
                 ])
                 ->make(true);
@@ -393,11 +395,32 @@ class TransactionController extends Controller
             $start = date('Y-m-d', strtotime(date('Y-m-1')));
             $end = date('Y-m-d');
         }
-        $store_credit_given = Transaction::where('created_at', '>=', $start)->where('created_at', '<=', $end)->whereTransactionType('Add store credit')->sum('store_credit');
-        $store_credit_used = Transaction::where('created_at', '>=', $start)->where('created_at', '<=', $end)->whereTransactionType('Purchase')->sum('store_credit');
-        $cash_out = Transaction::where('created_at', '>=', $start)->where('created_at', '<=', $end)->whereTransactionType('Cash out for trade')->sum('cash_out_for_trade');
-        $cash_out_for_store_credit = Transaction::where('created_at', '>=', $start)->where('created_at', '<=', $end)->whereTransactionType('Cash out for store credit')->sum('cash_out_for_storecredit');
-        return view('transactions.report', compact('title', 'start', 'end', 'store_credit_given', 'store_credit_used', 'cash_out', 'cash_out_for_store_credit'));
+        $store_credit_given = DB::table('transactions')
+                            ->whereDate('created_at', '>=', $start)
+                            ->whereDate('created_at', '<=', $end)
+                            ->where('transaction_type', 'Add store credit')
+                            ->sum('store_credit');
+        $store_credit_used = DB::table('transactions')
+                            ->whereDate('created_at', '>=', $start)
+                            ->whereDate('created_at', '<=', $end)
+                            ->where('transaction_type', 'Purchase')
+                            ->sum('store_credit');
+        $cash_out = DB::table('transactions')
+                    ->whereDate('created_at', '>=', $start)
+                    ->whereDate('created_at', '<=', $end)
+                    ->where('transaction_type', 'Cash out for trade')
+                    ->sum('cash_out_for_trade');
+        $cash_out_for_store_credit = DB::table('transactions')
+                    ->whereDate('created_at', '>=', $start)
+                    ->whereDate('created_at', '<=', $end)
+                    ->where('transaction_type', 'Cash out for store credit')
+                    ->sum('cash_out_for_storecredit');
+        $Return_Store_Credit = DB::table('transactions')
+                    ->whereDate('created_at', '>=', $start)
+                    ->whereDate('created_at', '<=', $end)
+                    ->where('transaction_type', 'Add Store Credit For RETURN')
+                    ->sum('store_credit');
+        return view('transactions.report', compact('title', 'start', 'end', 'store_credit_given', 'store_credit_used', 'cash_out', 'cash_out_for_store_credit', 'Return_Store_Credit'));
     }
 
     /**
@@ -435,6 +458,8 @@ class TransactionController extends Controller
         $this->validate($request, $rules);
         if ($type == 'Add store credit') {
             $data['store_credit'] = $request->transaction_amount;
+        } else if ($type == 'Add Store Credit For RETURN') {
+            $data['store_credit'] = $request->transaction_amount;
         } else if ($type == 'Purchase') {
             $data['purchased_items'] = $request->purchased_items;
             $data['tax'] = $request->tax;
@@ -452,7 +477,7 @@ class TransactionController extends Controller
         $data['employee'] = $request->employee;
 
         $transaction = Transaction::create($data);
-        
+
         if(!$transaction) {
             return redirect()->back()->withErrors('msg', 'Something went wrong, please try again!');
         }
@@ -503,7 +528,9 @@ class TransactionController extends Controller
         $data = [];
         if ($type == 'Add store credit') {
             $data['store_credit'] = $request->transaction_amount;
-        } else if ($type == 'Purchase') {
+        }else if ($type == 'Add Store Credit For RETURN') {
+            $data['store_credit'] = $request->transaction_amount;
+        }else if ($type == 'Purchase') {
             $data['purchased_items'] = $request->purchased_items;
             $data['tax'] = $request->tax;
             $data['purchase_total'] = $request->purchase_total;
@@ -539,5 +566,215 @@ class TransactionController extends Controller
         $transaction = Transaction::find($id);
         $transaction->delete();
         return redirect()->back()->with('success', 'Transaction #' . $id . ' has successfully been deleted.');
+    }
+
+    public function mycron1($customer_id)
+    {
+        // 95, 5021, 5333, 5323, 5228
+        // Customer::orderBy('id', 'asc')->chunk(100, function ($customers) {
+        Customer::whereIn('id', [$customer_id])->orderBy('id', 'asc')->chunk(100, function ($customers) {
+            foreach ($customers as $customer) {
+                $customerId = $customer->id;
+                $oneYearAgo = Carbon::now()->subYears(2)->subDay();
+                // $oneYearAgo = Carbon::now()->subYear()->subDay();
+
+                $transactions = Transaction::where('customer_id', $customerId)
+                    ->where('created_at', '>=', $oneYearAgo)
+                    ->orderBy('id', 'asc')
+                    ->get();
+
+                $storeCreditBalance = 0;
+                $storeCreditRecords = []; // Track store credit transactions
+
+                echo "<table border='1'>";
+                echo "<tr>";
+                echo "<td>Transaction ID:</td>";
+                echo "<td>Type:</td>";
+                echo "<td>Total:</td>";
+                echo "<td>Store Credit:</td>";
+                echo "<td>Cash In:</td>";
+                echo "<td>Cash Out:</td>";
+                echo "<td>Created At:</td>";
+                echo "<td>Store Credit Balance:</td>";
+                echo "</tr>";
+
+                foreach ($transactions as $transaction) {
+                    if ($transaction->transaction_type == 'Add store credit') {
+                        $storeCreditBalance += $transaction->store_credit;
+                        $storeCreditRecords[] = [
+                            'id' => $transaction->id,
+                            'amount' => $transaction->store_credit,
+                            'created_at' => $transaction->created_at,
+                            'expired' => false
+                        ];
+                    } elseif ($transaction->transaction_type == 'Purchase') {
+                        $storeCreditBalance -= $transaction->store_credit;
+                        foreach ($storeCreditRecords as &$record) {
+                            if (!$record['expired'] && $record['amount'] > 0) {
+                                if ($transaction->store_credit >= $record['amount']) {
+                                    $transaction->store_credit -= $record['amount'];
+                                    $record['amount'] = 0;
+                                } else {
+                                    $record['amount'] -= $transaction->store_credit;
+                                    break;
+                                }
+                            }
+                        }
+                    } elseif ($transaction->transaction_type == 'Cash out for store credit') {
+                        $storeCreditBalance -= ($transaction->cash_out_for_storecredit * 2);
+                    }
+
+                    echo "<tr>";
+                    echo "<td>" . $transaction->id . "</td>";
+                    echo "<td>" . $transaction->transaction_type . "</td>";
+                    echo "<td>" . $transaction->purchase_total . "</td>";
+                    echo "<td>" . $transaction->store_credit . "</td>";
+                    echo "<td>" . $transaction->cash_in . "</td>";
+                    echo "<td>" . $transaction->cash_out_for_storecredit . "</td>";
+                    echo "<td>" . $transaction->created_at . "</td>";
+                    echo "<td>" . round($storeCreditBalance, 2) . "</td>";
+                    echo "</tr>";
+                }
+
+                // Check for expired store credits
+                $today = Carbon::now();
+                foreach ($storeCreditRecords as &$record) {
+                    if (!$record['expired'] && $today->diffInDays($record['created_at']) >= 365 && $record['amount'] > 0) {
+                        $storeCreditBalance -= $record['amount'];
+                        $record['expired'] = true;
+
+                        /* Transaction::create([
+                            'customer_id' => $customerId,
+                            'transaction_type' => 'Expired store credit',
+                            'purchase_total' => 0,
+                            'store_credit' => $record['amount'],
+                            'cash_in' => 0,
+                            'cash_out_for_storecredit' => 0,
+                            'created_at' => Carbon::parse($record['created_at'])->addYear()->format('Y-m-d 23:59:59'),
+                            'updated_at' => Carbon::parse($record['created_at'])->addYear()->format('Y-m-d 23:59:59')
+                        ]);
+
+                        Customer::where('id', $customerId)
+                            ->update([
+                                'available_credit' => $customer->available_credit - $record['amount']
+                            ]); */
+                        
+                        echo "<tr style='color:red;'>";
+                        /*echo "<td>" . $record['id'] . "</td>";*/ echo "<td></td>";
+                        echo "<td>Expired store credit</td>";
+                        echo "<td>0.00</td>";
+                        echo "<td>-" . $record['amount'] . "</td>";
+                        echo "<td>0.00</td>";
+                        echo "<td>0.00</td>";
+                        echo "<td>" . Carbon::parse($record['created_at'])->addYear()->format('Y-m-d 23:59:59') . "</td>";
+                        echo "<td>" . round($storeCreditBalance, 2) . "</td>";
+                        echo "</tr>";
+                    }
+                }
+
+                echo "</table>";
+            }
+        });
+        
+        /* Customer::whereIn('id', [5228])->orderBy('id', 'asc')->chunk(100, function ($customers) {
+            foreach ($customers as $customer) {
+                $customerId = $customer->id;
+                $oneYearAgo = Carbon::now()->subYear()->subDay();
+    
+                $transactions = Transaction::where('customer_id', $customerId)
+                    ->where('created_at', '>=', $oneYearAgo)
+                    ->orderBy('id', 'asc')
+                    ->get();
+    
+                $storeCreditBalance = 0;
+                $storeCreditRecords = []; // Track store credit transactions
+    
+                echo "<table border='1'>";
+                echo "<tr>";
+                echo "<td>Transaction ID:</td>";
+                echo "<td>Type:</td>";
+                echo "<td>Total:</td>";
+                echo "<td>Store Credit:</td>";
+                echo "<td>Cash In:</td>";
+                echo "<td>Cash Out:</td>";
+                echo "<td>Created At:</td>";
+                echo "<td>Store Credit Balance:</td>";
+                echo "</tr>";
+    
+                foreach ($transactions as $transaction) {
+                    if ($transaction->transaction_type == 'Add store credit') {
+                        $storeCreditBalance += $transaction->store_credit;
+                        $storeCreditRecords[] = [
+                            'id' => $transaction->id,
+                            'amount' => $transaction->store_credit,
+                            'created_at' => $transaction->created_at,
+                            'expired' => false
+                        ];
+                    } elseif ($transaction->transaction_type == 'Purchase') {
+                        $storeCreditBalance -= $transaction->store_credit;
+                        foreach ($storeCreditRecords as &$record) {
+                            if (!$record['expired'] && $record['amount'] > 0) {
+                                if ($transaction->store_credit >= $record['amount']) {
+                                    $transaction->store_credit -= $record['amount'];
+                                    $record['amount'] = 0;
+                                } else {
+                                    $record['amount'] -= $transaction->store_credit;
+                                    break;
+                                }
+                            }
+                        }
+                    } elseif ($transaction->transaction_type == 'Cash out for store credit') {
+                        $storeCreditBalance -= ($transaction->cash_out_for_storecredit * 2);
+                    }
+    
+                    echo "<tr>";
+                    echo "<td>" . $transaction->id . "</td>";
+                    echo "<td>" . $transaction->transaction_type . "</td>";
+                    echo "<td>" . $transaction->purchase_total . "</td>";
+                    echo "<td>" . $transaction->store_credit . "</td>";
+                    echo "<td>" . $transaction->cash_in . "</td>";
+                    echo "<td>" . $transaction->cash_out_for_storecredit . "</td>";
+                    echo "<td>" . $transaction->created_at . "</td>";
+                    echo "<td>" . round($storeCreditBalance, 2) . "</td>";
+                    echo "</tr>";
+                }
+    
+                // Check for expired store credits and insert new transaction
+                $today = Carbon::now();
+                foreach ($storeCreditRecords as &$record) {
+                    if (!$record['expired'] && $today->diffInDays($record['created_at']) >= 365 && $record['amount'] > 0) {
+                        // Deduct expired amount
+                        $storeCreditBalance -= $record['amount'];
+                        $record['expired'] = true;
+    
+                        // Insert new expiration transaction in the database
+                        Transaction::create([
+                            'customer_id' => $customerId,
+                            'transaction_type' => 'Expired store credit',
+                            'purchase_total' => 0,
+                            'store_credit' => -$record['amount'],
+                            'cash_in' => 0,
+                            'cash_out_for_storecredit' => 0,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
+                        ]);
+    
+                        // Display expiration in table
+                        echo "<tr style='color:red;'>";
+                        echo "<td>" . $record['id'] . "</td>";
+                        echo "<td>Expired store credit</td>";
+                        echo "<td>0.00</td>";
+                        echo "<td>-" . $record['amount'] . "</td>";
+                        echo "<td>0.00</td>";
+                        echo "<td>0.00</td>";
+                        echo "<td>" . $record['created_at'] . "</td>";
+                        echo "<td>" . round($storeCreditBalance, 2) . "</td>";
+                        echo "</tr>";
+                    }
+                }
+    
+                echo "</table>";
+            }
+        }); */
     }
 }
