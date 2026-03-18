@@ -175,7 +175,7 @@
                     <label for="employee" class="m-0">{{ __('Employee Name:') }}</label>
                   </div>
                   <div class="input-group col-md-8">
-                    <input type="text" name="employee" id="employee" class="form-control" placeholder="{{ __('Employee Name') }}" value="{{ old('employee'), $transaction->employee }}" required>
+                    <input type="text" name="employee" id="employee" class="form-control" placeholder="{{ __('Employee Name') }}" value="{{ old('employee', $transaction->employee) }}" required>
                   </div>
                 </div>
                 @if ($errors->has('employee'))
